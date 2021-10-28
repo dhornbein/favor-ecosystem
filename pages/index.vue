@@ -1,39 +1,16 @@
 <template>
   <div class="container">
     <div>
-      <Logo />
+      <Header />
+
       <h1 class="title">
-        nuxt-express
+        Favor Solutions Network
       </h1>
       <div>
         {{ test }}
-        <div class="links">
-          <a
-            href="/users"
-            class="button--green"
-          >
-            Users List
-          </a>
-        </div>
+
       </div>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+
     </div>
   </div>
 </template>
@@ -85,7 +62,24 @@ export default {
   padding-bottom: 15px;
 }
 
+.submission-button {
+  font-size: .8rem;
+   margin: 2rem 0;
+    min-width: 40vw;
+    padding: 1.5rem;
+    color: white;
+    border-radius: 12px;
+    background-color: #601d46;
+}
+
+.submission-button:hover {
+
+  cursor: pointer;
+  background-color: #e79f39;
+}
+
 .links {
   padding-top: 15px;
+  margin: 5px
 }
 </style>

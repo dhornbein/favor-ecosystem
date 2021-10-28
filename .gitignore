@@ -38,6 +38,7 @@ build/Release
 node_modules/
 jspm_packages/
 
+
 # TypeScript v1 declaration files
 typings/
 
@@ -53,6 +54,7 @@ typings/
 # Output of 'npm pack'
 *.tgz
 
+
 # Yarn Integrity file
 .yarn-integrity
 
@@ -67,6 +69,7 @@ typings/
 
 # nuxt.js build output
 .nuxt
+.nuxt/node_modules
 
 # Nuxt generate
 dist
@@ -88,3 +91,6 @@ sw.*
 
 # Vim swap files
 *.swp
+
+.vercel
+node_modules
