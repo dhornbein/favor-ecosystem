@@ -7,7 +7,7 @@
         Favor Solutions Network
       </h1>
       <div>
-        {{ test }}
+        {{ stats.data.transactCount }}
 
       </div>
 
@@ -18,9 +18,9 @@
 <script>
 export default {
   async asyncData ({ $http }) {
-    const test = await $http.$get('/api/test')
+    const stats = await $http.$get('/api/stats')
     return {
-      test
+      stats
     }
   }
 }

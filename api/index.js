@@ -32,18 +32,32 @@ app.use(users)
 app.use(test)
 
 
-async function getData(req) {
-  var data = await email.url(req.body.sender)
+app.get('/stats', function (req, res) {
 
-    .then((emailArray) => {
-      (async function fin() {
+    const auth = new google.auth.GoogleAuth({
+      keyFile: path.join(__dirname, 'serviceaccount.json'),
+      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+    });
+    google.options({ auth });
+    await sheets.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: 'transactions!A:A',
+     }, (err, result) => {
+  if (err) {
+    // Handle error
+    console.log(err);
+  } else {
+    const numRows = result.values ? result.values.length : 0;
+    console.log(`${numRows} rows retrieved.`);
+    const transactCount = numRows - 1;
+
+  }
 
 
-        await appendToSheet(new (Date).toLocaleString, data)
 
-      })
-    })
-}
+  })()
+  res.json({transactCount: transactCount})
+})
 
 module.exports = app
 
