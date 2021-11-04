@@ -3,21 +3,22 @@
 
 
         <span id="summary-trigger" class="type__nav-item type__trigger"><a
-            href="/users"
+            href="/summary"
             class="submission-button">SUMMARY</a></span><span class="type__pipe"> | </span>
         <span id="ledger-trigger" class="type__nav-item type__trigger"><a
-            href="/users"
+            href="/ledger"
             class="submission-button">LEDGER</a></span><span class="type__pipe"> | </span>
         <span id="transaction-trigger" class="type__nav-item type__trigger"><a
-            href="/users"
+            href="/transaction"
             class="submission-button">TRANSACTION</a></span><span class="type__pipe"> | </span>
         <span id="members-trigger" class="type__nav-item type__trigger"><a
-            href="/users"
+            href="/members"
             class="submission-button">MEMBERS</a></span><span class="type__pipe"> | </span>
     </div><!-- NAV -->
     <div class="links">
-        <span class="type__subnav-link type__trigger">broker training videos</a></span> |
-        <span class="type__subnav-link type__trigger">help articles</a></span>
+        <span class="type__subnav-link type__trigger"><a
+            href="/training">broker training videos</a></span> |
+        <span class="type__subnav-link type__trigger"><a href="/help"> help articles</a></span>
     </div><!-- SUB NAV -->
 
     </div>

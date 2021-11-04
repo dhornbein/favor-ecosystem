@@ -1,1 +1,29 @@
-{"name":"nuxt-express","version":"1.0.0","private":true,"scripts":{"dev":"nuxt","build":"nuxt build","start":"nuxt start","generate":"nuxt generate","lint":"yarn lint:js","lint:js":"eslint --ext .js,.vue --ignore-path .gitignore ."},"dependencies":{"@nuxt/core":"^2.15.8","@nuxt/http":"latest","@nuxtjs/eslint-module":"^3.0.2","body-parser":"^1.19.0","child-process":"^1.0.2","cors":"^2.8.5","express":"latest","googleapis":"^89.0.0","nuxt":"^2.15.8","path":"^0.12.7","vue-client-only":"^2.1.0","vue-no-ssr":"^1.1.1","vue-router":"^3.5.3"}}
+{
+  "name": "nuxt-express",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "yarn lint:js",
+    "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore ."
+  },
+  "dependencies": {
+    "@nuxt/core": "^2.15.8",
+    "@nuxt/http": "latest",
+    "@nuxtjs/eslint-module": "^3.0.2",
+    "body-parser": "^1.19.0",
+    "child-process": "^1.0.2",
+    "cors": "^2.8.5",
+    "eslint": "^8.1.0",
+    "express": "latest",
+    "googleapis": "^89.0.0",
+    "nuxt": "^2.15.8",
+    "path": "^0.12.7",
+    "vue-client-only": "^2.1.0",
+    "vue-no-ssr": "^1.1.1",
+    "vue-router": "^3.5.3"
+  }
+}
