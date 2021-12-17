@@ -7,6 +7,7 @@ const auth = require('../auth');
 
 const router = Router()
 let members = null
+const numberFields = ['ID', 'credit_limit', 'balance', 'credit', 'debit', 'transaction_total']
 
 google.options({ auth });
 
@@ -22,7 +23,7 @@ sheets.spreadsheets.values.get({
     let data = result.data.values.map(row => {
       let obj = {}
       row.forEach((element, index) => {
-        obj[header[index]] = element
+        obj[header[index]] = numberFields.includes(header[index]) ? parseFloat(element) : element
       })
       return obj
     })

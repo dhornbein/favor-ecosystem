@@ -6,6 +6,7 @@ const SPREADSHEET_ID = env.SPREADSHEET_ID;
 const auth = require('../auth');
 
 const router = Router()
+const numberFields = ['ID', 'credit_limit', 'balance', 'credit', 'debit', 'transaction_total']
 
 // Test route
 router.get('/transactions', function (req, res) {
@@ -24,7 +25,7 @@ router.get('/transactions', function (req, res) {
       let data = result.data.values.map(row => {
         let obj = {}
         row.forEach((element, index) => {
-          obj[header[index]] = element
+          obj[header[index]] = numberFields.includes(header[index]) ? parseFloat(element) : element
         })
         return obj
       })
