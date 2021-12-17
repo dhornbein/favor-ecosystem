@@ -1,5 +1,6 @@
 <template>
-  <div class="member-card flex flex-col rounded-md border border-gray-300 shadow-md p-5 mb-5 last:mb-0">
+  <div class="member-card flex flex-col relative rounded-md border border-gray-300 shadow-md p-5 mb-10 last:mb-0">
+    <nuxt-link class="member-card__button" :to="`/members/${row.ID}`">More...</nuxt-link>
     <div class="flex-grow flex justify-between pb-4 mb-4 border-b border-gray-400">
       <header class="member-card__head flex justify-start gap-3 w-full">
         <MemberIcon :username="row.username" class="flex-shrink-0" />
@@ -52,3 +53,11 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.member-card {
+  .member-card__button {
+    @apply absolute bottom-0 right-0 rounded-tl-md rounded-br-md p-2 border text-brand-primary border-brand-primary hover:bg-brand-primary hover:text-white;
+  }
+}
+</style>
