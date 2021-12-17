@@ -1,4 +1,3 @@
-
 export default {
   /*
   ** Nuxt target
@@ -46,9 +45,11 @@ export default {
   */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
+    // '@nuxtjs/eslint-module', // this stupid thing keeps throwing erros
     // see https://tailwindcss.nuxtjs.org/
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    // see: https://google-fonts.nuxtjs.org/
+    '@nuxtjs/google-fonts'
   ],
 
   /*
@@ -79,5 +80,21 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
+  },
+
+  // Cormorant+SC:300,700
+  // Cormorant+Upright:400,700
+  // Montserrat:300,300i,600,600i,900,900
+  // https://fonts.googleapis.com/css?family=Cormorant+SC:300,700|Cormorant+Upright:400,700|Montserrat:300,300i,600,600i,900,900i&display=swap
+  // https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300&family=Cormorant+Upright:wght@400;700&family=Montserrat:wght@300;300i;600;600i;900;900i
+  googleFonts: {
+    families: {
+      'Cormorant+SC': [300],
+      'Cormorant+Upright': [400,700],
+      'Montserrat': {
+        ital: [300, 600, 900,], 
+        wght: [300, 600, 900,]
+      },
+    }
   }
 }

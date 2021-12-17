@@ -3,11 +3,12 @@
     <div>
       <Header />
 
-      <h1 class="title text-2xl text-brand-primary">
+      <h1 class="title font-logo text-2xl text-brand-primary">
         Favor Solutions Network
       </h1>
       <div style="text-align:left">
-        <pre>{{ stats.data }}</pre>
+        <h2 class="text-xl font-cormorant">The API is fresh</h2>
+        <pre>{{ !!stats.data }}</pre>
 
       </div>
 
