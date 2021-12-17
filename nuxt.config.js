@@ -92,8 +92,8 @@ export default {
       'Cormorant+SC': [300],
       'Cormorant+Upright': [400,700],
       'Montserrat': {
-        ital: [300, 600, 900,], 
-        wght: [300, 600, 900,]
+        ital: [300, 600, 700], 
+        wght: [300, 600, 700]
       },
     }
   }
