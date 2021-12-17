@@ -26,10 +26,12 @@ const { appendToSheet } = require('./sheets');
 // Require API routes
 const users = require('./routes/members')
 const test = require('./routes/test')
+const transactions = require('./routes/transactions')
 
 // Import API Routes
 app.use(users)
 app.use(test)
+app.use(transactions)
 
 
 app.get('/stats', function (req, res) {
