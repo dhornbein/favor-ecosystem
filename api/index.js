@@ -33,31 +33,28 @@ app.use(test)
 
 
 app.get('/stats', function (req, res) {
+
   const auth = new google.auth.GoogleAuth({
     keyFile: path.join(__dirname, 'serviceaccount.json'),
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
   });
+
   google.options({ auth });
 
-     sheets.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEET_ID,
-      range: 'transactions!A:A',
-    }, (err, result) => {
-      if (err) {
-        // Handle error
-        console.log(err);
-      } else {
-        const numRows = result.values ? result.values.length : 0;
-        console.log(`${numRows} rows retrieved.`);
-        const transactCount = numRows - 1;
+  sheets.spreadsheets.values.get({
+    spreadsheetId: SPREADSHEET_ID,
+    range: 'transactions!A:N',
+  }, (err, result) => {
+    if (err) {
+      // Handle error
+      console.log('there was an error');
+      console.log(err);
+    } else {
+      res.json({ data: result.data})
+    }
 
-      }
+  })
 
-
-
-    })()
-
-  res.json({transactCount: transactCount})
 })
 
 module.exports = app

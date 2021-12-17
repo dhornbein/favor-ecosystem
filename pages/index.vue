@@ -6,8 +6,8 @@
       <h1 class="title">
         Favor Solutions Network
       </h1>
-      <div>
-        {{ stats.data.transactCount }}
+      <div style="text-align:left">
+        <pre>{{ stats.data }}</pre>
 
       </div>
 
@@ -19,6 +19,7 @@
 export default {
   async asyncData ({ $http }) {
     const stats = await $http.$get('/api/stats')
+
     return {
       stats
     }
