@@ -17,7 +17,6 @@
     "body-parser": "^1.19.0",
     "child-process": "^1.0.2",
     "cors": "^2.8.5",
-    "eslint": "^8.1.0",
     "express": "latest",
     "googleapis": "^89.0.0",
     "nuxt": "^2.15.8",
@@ -25,5 +24,15 @@
     "vue-client-only": "^2.1.0",
     "vue-no-ssr": "^1.1.1",
     "vue-router": "^3.5.3"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^4.2.1",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-vue": "^8.2.0",
+    "prettier": "^2.5.1"
   }
 }
