@@ -1,43 +1,39 @@
 <template>
-  <div class="container">
-    <div>
-      <Header />
+  <main>
+    
+    <div class="lg:container mx-auto">
 
-      <div class="lg:container mx-auto">
-        <header class="max-w-3xl mx-auto">
-          <h1 class="title font-logo text-4xl text-brand-primary">
-            Favor Solutions Network
-          </h1>
-          <h2 class="text-xl font-cormorant">Transactions</h2>
-        </header>
-        <table class="trans-table table-auto max-w-3xl w-full" v-if="trans">
-          <thead>
-            <tr>
-              <th v-for="title in trans.header" :key="title" :class="title">{{ title }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in trans.data" :key="row.ID" :id="`row-${row.ID}`" :title="row.timestamp"
-              class="odd:bg-gray-100"
+      <header class="max-w-3xl mx-auto">
+        <Logo />
+        <h2 class="text-xl font-cormorant">Transactions</h2>
+      </header>
+      <table class="trans-table table-auto max-w-3xl w-full" v-if="trans">
+        <thead>
+          <tr>
+            <th v-for="title in trans.header" :key="title" :class="title">{{ title }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in trans.data" :key="row.ID" :id="`row-${row.ID}`" :title="row.timestamp"
+            class="odd:bg-gray-100"
+          >
+            <td v-for="(cell, col) in row" :key="row.ID + '-' + cell"
+              :class="col"
             >
-              <td v-for="(cell, col) in row" :key="row.ID + '-' + cell"
-                :class="col"
-              >
-                <details v-if="col == 'title' && row.description != ''">
-                  <summary>{{ cell }}</summary>
-                  <p>{{ row.description }}</p>
-                </details>
-                <span v-else>{{ cell }}</span>
+              <details v-if="col == 'title' && row.description != ''">
+                <summary>{{ cell }}</summary>
+                <p>{{ row.description }}</p>
+              </details>
+              <span v-else>{{ cell }}</span>
               
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-      </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
     </div>
-  </div>
+
+  </main>
 </template>
 
 <script>

@@ -1,14 +1,14 @@
 <template>
-  <section class="container">
-    <div>
+  <section class="flex-grow flex justify-center items-center">
+    <div class="text-center">
       <Logo />
-      <h1 class="title">
+      <h1 class="text-4xl text-brand-primary font-mono my-2">
         {{ error.statusCode }}
       </h1>
-      <h2 class="info">
+      <h2 class="text-lg text-gray-700 font-mono">
         {{ error.message }}
       </h2>
-      <nuxt-link v-if="error.statusCode === 404" class="button" to="/">
+      <nuxt-link v-if="error.statusCode === 404" class="p-3 mt-2 rounded-md border border-current hover:bg-yellow-500 text-brand-primary inline-block" to="/">
         Homepage
       </nuxt-link>
     </div>
@@ -25,42 +25,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family:
-    'Quicksand',
-    'Source Sans Pro',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-.info
-{
-  font-weight: 300;
-  color: #9aabb1;
-  margin: 0;
-}
-.button
-{
-  margin-top: 50px;
-}
-</style>
