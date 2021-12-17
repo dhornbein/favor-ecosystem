@@ -1,10 +1,5 @@
 <template>
   <div class="payment-card flex gap-3 rounded-md border border-gray-300 shadow-md p-5 mb-5 last:mb-0">
-    <div class="flex flex-col justify-start items-center">
-      <MemberIcon :username="row.payee" />
-      <div class="text-gray-400">&#x27F1;</div>
-      <MemberIcon :username="row.recipient" :alt="true" />
-    </div>
     <div class="payment-card__body">
       <header class="text-sm">
         <p class="">
@@ -19,7 +14,7 @@
         <p class="" v-if="row.description">{{ row.description }}</p>
       </div>
     </div>
-    <footer class="flex-shrink flex justify-center items-center font-mono ml-auto">
+    <div class="flex-shrink flex justify-center items-center font-mono ml-auto">
       <div class="text-right">
         <div class="amount text-gray-600">
           <span class="">f</span>
@@ -30,7 +25,12 @@
           <span class=" font-bold">{{ row.fee }}</span>
         </div>
       </div>
-    </footer>
+    </div>
+    <div class="flex flex-col justify-start items-center">
+      <MemberIcon :username="row.payee" />
+      <div class="text-gray-400">&#x27F1;</div>
+      <MemberIcon :username="row.recipient" :alt="true" />
+    </div>
   </div>
 </template>
 
