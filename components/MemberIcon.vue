@@ -26,7 +26,7 @@ export default {
   filters: {
     abbreviate(str) {
       if ( str === 'FSN' ) return str
-      return str.match(/[A-Z]/g).join('').slice(0,2)
+      return (str.match(/[A-Z]/g)) ? str.match(/[A-Z]/g).join('').slice(0,2) : '??'
     }
   },
   computed: {
