@@ -27,9 +27,7 @@
       </header>
 
       <section class="max-w-3xl mx-auto relative" v-if="isGrid">
-        <div :class="{ 'bg-green-500': isSlim }" @click="isSlim = !isSlim"
-        class="p-2 text-xs border border-green-200 rounded-md cursor-pointer hover:bg-green-500 absolute -top-12 right-0">&UpArrowBar; Slim Grid</div>
-        <TransactionCard v-for="(row, idx) in trans" :key="idx" :row="row" :isSlim="isSlim" :focusUser="member.ID" />
+        <TransactionCard v-for="(row, idx) in trans" :key="idx" :row="row" isSlim :focusUser="member.ID" />
       </section>
 
       <section class="max-w-3xl mx-auto" v-if="isTable">
@@ -76,7 +74,6 @@ export default {
   data() {
     return {
       view: 'grid',
-      isSlim: true
     }
   },
   created() {

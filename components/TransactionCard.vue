@@ -1,9 +1,13 @@
 <template>
-  <div class="trans-card" :class="{ 
+  <div class="trans-card" 
+    :class="{ 
     'trans-card--slim': isSlim, 
     'trans-card--network': row.payee_id === 1, 
     'trans-card--payee': isFocusedPayee, 
-    'trans-card--recipient': isFocusedRecipient }">
+    'trans-card--recipient': isFocusedRecipient 
+    }"
+    @click="isSlim = !isSlim"
+  >
     <div class="trans-card__body">
       <header class="text-sm">
         <p class="">
@@ -73,7 +77,8 @@ export default {
 
 <style lang="scss">
 .trans-card {
-  @apply flex gap-3 rounded-md border border-gray-300 shadow-md p-5 mb-5 last:mb-0;
+  @apply flex gap-3 rounded-md border border-gray-300 shadow-md p-5 mb-5 last:mb-0
+    transition cursor-pointer hover:border-gray-500;
   .trans-card__body {}
   .trans-card__details {}
   .trans-card__favor {
@@ -83,6 +88,15 @@ export default {
     @apply flex flex-col justify-start items-center;
   }
 
+  &.trans-card--slim + &:not(.trans-card--slim) {
+    @apply rounded-t-none;
+  }
+
+  &:not(.trans-card--slim) + .trans-card.trans-card--slim  {
+    @apply rounded-t-md;
+  }
+
+  // Slimming
   &.trans-card--slim {
     @apply py-2 items-center gap-0 shadow-none mb-0 rounded-none first:rounded-t-md last:rounded-b-md;
 
@@ -98,6 +112,7 @@ export default {
     }
   }
 
+  // Focus User
   &.trans-card--payee,
   &.trans-card--recipient {
     @apply bg-gradient-to-l via-transparent
