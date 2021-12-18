@@ -37,4 +37,15 @@ router.get('/transactions', function (req, res) {
 
 })
 
+/* GET member by ID. */
+router.get('/transactions/:id', function (req, res, next) {
+  const id = parseInt(req.params.id)
+  const transaction = transactions.filter(obj => (obj.payee_id === id || obj.recipient_id === id))
+  if (transaction.length > 0) {
+    res.json(transaction)
+  } else {
+    res.sendStatus(404)
+  }
+})
+
 module.exports = router
