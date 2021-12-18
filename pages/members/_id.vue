@@ -8,27 +8,28 @@
         <nuxt-link to="/members" class="text-sm text-gray-500 hover:text-brand-primary">Members</nuxt-link>
         <h2 class="text-5xl font-cormorant flex items-center gap-3">
           <span>{{ userName }}</span>
-          <MemberIcon :username="user.username" />
+          <MemberIcon :username="member.username" />
         </h2>
         <div class="flex gap-3">
-          <FavorDisplay :num="user.credit_limit" label="Credit Limit" />
-          <FavorDisplay :num="user.transaction_total" label="Total Transactions" class="text-purple-500" />
+          <FavorDisplay :num="member.credit_limit" label="Credit Limit" />
+          <FavorDisplay :num="member.transaction_total" label="Total Transactions" class="text-purple-500" />
         </div>
       </header>
 
       <section>
         <div class="member__balance m-5 text-center">
           <span>Balance</span>
-          <div class="text-4xl font-bold font-mono" :class="{ 'text-purple-500': user.balance < 0 }">{{ user.balance | favor }}</div>
+          <div class="text-4xl font-bold font-mono" :class="{ 'text-purple-500': member.balance < 0 }">{{ member.balance | favor }}</div>
         </div>
         <div class="member__inout flex justify-center">
-          <div class="member__credits flex-grow text-right bg-green-200 p-2 mb-2 border-b-2 border-green-500">
-            <FavorDisplay :num="user.credit" label="Credit" />
+          <div class="member__credits w-1/2 flex-grow text-right bg-green-200 p-2 border-b-2 border-green-500">
+            <FavorDisplay :num="member.credit" label="Credit" />
           </div>
-          <div class="member__debits flex-grow bg-purple-200 p-2 mb-2 border-b-2 border-purple-500">
-            <FavorDisplay :num="-user.debit" label="Debit" />
+          <div class="member__debits w-1/2 flex-grow bg-purple-200 p-2 border-b-2 border-purple-500">
+            <FavorDisplay :num="-member.debit" label="Debit" />
           </div>
         </div>
+        <TransactionTchart :trans="trans" :targetId="member.ID" />
       </section>
       
     </div>
@@ -43,13 +44,17 @@
 <script>
 export default {
   asyncData ({ params, error, $http }) {
-    return $http.$get('/api/members/' + params.id)
-      .then((res) => {
-        return { user: res }
-      })
-      .catch((e) => {
-        error({ statusCode: 404, message: 'Member not found' })
-      })
+    return Promise.all([
+      $http.$get('/api/transactions/' + params.id), 
+      $http.$get('/api/members/' + params.id)
+    ])
+    .then(function([trans,member]) {
+      return { trans, member }
+    })
+    .catch((e) => {
+      console.log(e);
+      error({ statusCode: 404, message: 'Member not found for id: ' + params.id })
+    });
   },
   head () {
     return {
@@ -58,7 +63,7 @@ export default {
   },
   computed: {
     userName() {
-      return this.user.first_name + ' ' + this.user.last_name
+      return this.member.first_name + ' ' + this.member.last_name
     }
   }
 }
