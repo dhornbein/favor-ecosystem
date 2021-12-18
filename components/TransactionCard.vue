@@ -23,15 +23,21 @@
       </div>
     </div>
     <div class="trans-card__favor">
-      <div class="text-right">
-        <div class="amount text-gray-600">
-          <span class="">f</span>
-          <span class="font-bold">{{ ((isFocusedPayee) ? -row.amount : row.amount) | favor }}</span>
-        </div>
-        <div class="fee text-gray-400">
-          <span class="text-xs">fee</span>
-          <span class="">{{ - row.fee | favor }}</span>
-        </div>
+      <div class="fee text-gray-400" v-if="!isSlim">
+        <span class="text-xs">fee</span>
+        <span class="">{{ - row.fee / 2 | favor }}</span>
+      </div>
+      <div class="amount text-gray-600">
+        <span class="">f</span>
+        <span class="font-bold">{{ ((isFocusedPayee) ? -row.amount : row.amount) | favor }}</span>
+      </div>
+      <div class="fee text-gray-400" v-if="!isSlim">
+        <span class="text-xs">fee</span>
+        <span class="">{{ - row.fee / 2 | favor }}</span>
+      </div>
+      <div class="fee text-gray-400" v-else>
+        <span class="text-xs">fee</span>
+        <span class="">{{ - row.fee | favor }}</span>
       </div>
     </div>
     <div class="trans-card__icons">
@@ -82,7 +88,7 @@ export default {
   .trans-card__body {}
   .trans-card__details {}
   .trans-card__favor {
-    @apply flex-shrink flex justify-center items-center font-mono ml-auto;
+    @apply flex-shrink flex flex-col justify-center items-end text-right font-mono ml-auto;
   }
   .trans-card__icons {
     @apply flex flex-col justify-start items-center;
