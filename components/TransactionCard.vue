@@ -3,9 +3,9 @@
     <div class="payment-card__body">
       <header class="text-sm">
         <p class="">
-          <nuxt-link :to="`/member/${row.payee_id}`" class="font-bold hover:text-brand-primary">{{ row.payee }}</nuxt-link>
+          <nuxt-link :to="`/members/${row.payee_id}`" class="font-bold hover:text-brand-primary">{{ row.payee }}</nuxt-link>
           paid
-          <nuxt-link :to="`/member/${row.recipient_id}`" class="font-bold hover:text-brand-primary">{{ row.recipient }}</nuxt-link>
+          <nuxt-link :to="`/members/${row.recipient_id}`" class="font-bold hover:text-brand-primary">{{ row.recipient }}</nuxt-link>
         </p>
         <time :datetime="row.timestamp">{{ row.timestamp | formatDate }}</time>
       </header>
