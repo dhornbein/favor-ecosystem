@@ -2,11 +2,11 @@
   <table class="trans-table table-auto max-w-3xl w-full" v-if="trans">
     <thead>
       <tr>
-        <th v-for="title in trans.header" :key="title" :class="title">{{ title }}</th>
+        <th v-for="title in Object.keys(trans[0])" :key="title" :class="title">{{ title }}</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="row in trans.data" :key="row.ID" :id="`row-${row.ID}`" :title="row.timestamp"
+      <tr v-for="row in trans" :key="row.ID" :id="`row-${row.ID}`" :title="row.timestamp"
         class="odd:bg-gray-100"
       >
         <td v-for="(cell, col) in row" :key="row.ID + '-' + cell"

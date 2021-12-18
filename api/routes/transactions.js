@@ -12,7 +12,7 @@ const numberFields = ['ID', 'credit_limit', 'balance', 'credit', 'debit', 'trans
 
 google.options({ auth });
 
-sheets.spreadsheets.values.get({
+let test = sheets.spreadsheets.values.get({
   spreadsheetId: SPREADSHEET_ID,
   range: 'transactions!A:N',
 }, (err, result) => {
@@ -21,23 +21,16 @@ sheets.spreadsheets.values.get({
     console.log(err);
   } else {
     headers = result.data.values.shift()
-    console.log(result.data.values);
     transactions = result.data.values.map(row => {
-      let obj = {}
-      row.forEach((element, index) => {
-        obj[headers[index]] = numberFields.includes(headers[index]) ? parseFloat(element) : element
-      })
-      return obj
+      return headers.reduce((obj, key, index) => ({ ...obj, [key]: row[index] }), {})
     })
   }
 })
 
+
 router.get('/transactions', function (req, res) {
 
-  res.json({
-    header: headers,
-    data: transactions
-  })
+  res.json(transactions)
 
 })
 

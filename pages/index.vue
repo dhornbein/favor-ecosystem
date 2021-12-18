@@ -9,7 +9,7 @@
       </header>
       
       <div class="max-w-3xl mx-auto py-5">
-        <TransactionCard v-for="(row, idx) in trans.data" :key="idx" :row="row" />
+        <TransactionCard v-for="(row, idx) in trans" :key="idx" :row="row" />
       </div>
 
     </div>
