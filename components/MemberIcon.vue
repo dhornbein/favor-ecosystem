@@ -15,12 +15,9 @@ export default {
       type: Boolean,
       default: false
     },
-  },
-  data() {
-    return {
-      classDefault: {
-        'member-icon__alt': this.alt,
-      }
+    highlight: {
+      type: Boolean,
+      default: false
     }
   },
   filters: {
@@ -31,8 +28,11 @@ export default {
   },
   computed: {
     cssClass() {
-      if ( this.username === 'FSN' ) this.classDefault['member-icon__network'] = true
-      return this.classDefault
+      return {
+        'member-icon__highlight': this.highlight,
+        'member-icon__network': this.username === 'FSN',
+        'member-icon__alt': this.alt,
+      }
     }
   }
 }
@@ -40,12 +40,15 @@ export default {
 
 <style lang="scss">
 .member-icon {
-  @apply border border-brand-primary bg-brand-primary text-yellow-400 text-center align-middle p-1 rounded-full h-10 w-10 text-sm flex justify-center items-center;
+  @apply border border-brand-primary bg-yellow-100 text-brand-primary text-center align-middle p-1 rounded-full h-10 w-10 text-sm flex justify-center items-center;
   &.member-icon__network {
     @apply bg-yellow-400 text-brand-primary font-bold;
   }
   &.member-icon__alt {
     @apply bg-yellow-100 text-brand-primary;
+  }
+  &.member-icon__highlight {
+    @apply bg-brand-primary text-yellow-400;
   }
 }
 </style>

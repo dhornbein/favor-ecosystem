@@ -1,35 +1,39 @@
 <template>
-  <div class="payment-card" :class="{ 'payment-card--slim': isSlim }">
-    <div class="payment-card__body">
+  <div class="trans-card" :class="{ 
+    'trans-card--slim': isSlim, 
+    'trans-card--network': row.payee_id === 1, 
+    'trans-card--payee': isFocusedPayee, 
+    'trans-card--recipient': isFocusedRecipient }">
+    <div class="trans-card__body">
       <header class="text-sm">
         <p class="">
-          <nuxt-link :to="`/members/${row.payee_id}`" class="font-bold hover:text-brand-primary">{{ row.payee }}</nuxt-link>
+          <nuxt-link :to="`/members/${row.payee_id}`" class="member-link payee font-bold hover:text-brand-primary">{{ row.payee }}</nuxt-link>
           paid
-          <nuxt-link :to="`/members/${row.recipient_id}`" class="font-bold hover:text-brand-primary">{{ row.recipient }}</nuxt-link>
+          <nuxt-link :to="`/members/${row.recipient_id}`" class="member-link recipient font-bold hover:text-brand-primary">{{ row.recipient }}</nuxt-link>
         </p>
         <time :datetime="row.timestamp">{{ row.timestamp | formatDate }}</time>
       </header>
-      <div class="payment-card__details">
+      <div class="trans-card__details">
         <h1 class="text-2xl">{{ row.title }}</h1>
         <p class="" v-if="row.description">{{ row.description }}</p>
       </div>
     </div>
-    <div class="payment-card__favor">
+    <div class="trans-card__favor">
       <div class="text-right">
         <div class="amount text-gray-600">
           <span class="">f</span>
-          <span class="font-bold">{{ row.amount | favor }}</span>
+          <span class="font-bold">{{ ((isFocusedPayee) ? -row.amount : row.amount) | favor }}</span>
         </div>
         <div class="fee text-gray-400">
-          <span class="">&minus;</span>
-          <span class=" font-bold">{{ row.fee | favor }}</span>
+          <span class="text-xs">fee</span>
+          <span class="">{{ - row.fee | favor }}</span>
         </div>
       </div>
     </div>
-    <div class="payment-card__icons">
-      <MemberIcon :username="row.payee" />
+    <div class="trans-card__icons">
+      <MemberIcon :username="row.payee" :highlight="isFocusedPayee || !isFocusedRecipient" />
       <div class="text-gray-400">&#x27F1;</div>
-      <MemberIcon :username="row.recipient" :alt="true" />
+      <MemberIcon :username="row.recipient" alt :highlight="isFocusedRecipient" />
     </div>
   </div>
 </template>
@@ -44,40 +48,77 @@ export default {
     isSlim: {
       type: Boolean,
       required: false
+    },
+    focusUser: {
+      required: false
     }
+  },
+  computed: {
+    isFocusedPayee() {
+      if (isNaN(this.focusUser)) return this.focusUser === this.row.payee
+      return this.focusUser === this.row.payee_id
+    },
+    isFocusedRecipient() {
+      if (isNaN(this.focusUser)) return this.focusUser === this.row.recipient
+      return this.focusUser === this.row.recipient_id
+    },
   },
   filters: {
     formatDate(dateStr) {
       return Intl.DateTimeFormat("us-EN").format(new Date(dateStr))
-    }
+    },
   },
 }
 </script>
 
 <style lang="scss">
-.payment-card {
+.trans-card {
   @apply flex gap-3 rounded-md border border-gray-300 shadow-md p-5 mb-5 last:mb-0;
-  .payment-card__body {}
-  .payment-card__details {}
-  .payment-card__favor {
+  .trans-card__body {}
+  .trans-card__details {}
+  .trans-card__favor {
     @apply flex-shrink flex justify-center items-center font-mono ml-auto;
   }
-  .payment-card__icons {
+  .trans-card__icons {
     @apply flex flex-col justify-start items-center;
   }
 
-  &.payment-card--slim {
-    @apply py-2 items-center;
+  &.trans-card--slim {
+    @apply py-2 items-center gap-0 shadow-none mb-0 rounded-none first:rounded-t-md last:rounded-b-md;
 
-    .payment-card__body header {
+    .trans-card__body header {
       @apply flex gap-2;
     }
-    .payment-card__details {
+    .trans-card__details {
       h1 { @apply text-base; }
       p { @apply hidden; }
     }
-    .payment-card__icons {
+    .trans-card__icons {
       @apply hidden;
+    }
+  }
+
+  &.trans-card--payee,
+  &.trans-card--recipient {
+    @apply bg-gradient-to-l via-transparent
+  }
+
+  &.trans-card--payee {
+    @apply from-purple-300;
+    .payee {
+      @apply text-brand-primary;
+    }
+  }
+  &.trans-card--recipient {
+    @apply from-green-100;
+    .recipient {
+      @apply text-brand-primary;
+    }
+  }
+  &.trans-card--network {
+    @apply from-yellow-100 border-yellow-400;
+    .payee {
+      @apply text-yellow-500;
     }
   }
 }
