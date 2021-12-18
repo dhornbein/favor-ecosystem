@@ -19,15 +19,13 @@ sheets.spreadsheets.values.get({
     // Handle error
     console.log(err);
   } else {
-    let header = result.data.values.shift()
-    let data = result.data.values.map(row => {
-      let obj = {}
-      row.forEach((element, index) => {
-        obj[header[index]] = numberFields.includes(header[index]) ? parseFloat(element) : element
-      })
-      return obj
+    headers = result.data.values.shift()
+    members = result.data.values.map(row => {
+      return headers.reduce((obj, key, index) => {
+        let value = numberFields.includes(key) ? parseFloat(row[index]) : row[index]
+        return { ...obj, [key]: value }
+      }, {})
     })
-    members = data
   }
 })
 
