@@ -1,18 +1,18 @@
 <template>
-  <table class="trans-table table-auto max-w-3xl w-full" v-if="trans">
+  <table class="trans-table table-auto max-w-3xl w-full" v-if="filtered">
     <thead>
       <tr>
-        <th v-for="title in Object.keys(trans[0])" :key="title" :class="title">{{ title }}</th>
+        <th v-for="title in Object.keys(filtered[0])" :key="title" :class="title">{{ title }}</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="row in trans" :key="row.ID" :id="`row-${row.ID}`" :title="row.timestamp"
+      <tr v-for="(row) in filtered" :key="row.ID" :id="`row-${row.ID}`" :title="row.timestamp"
         class="odd:bg-gray-100"
       >
-        <td v-for="(cell, col) in row" :key="row.ID + '-' + cell"
+        <td v-for="(cell, col) in row" :key="row.ID + '-' + col"
           :class="col"
         >
-          <details v-if="col == 'title' && row.description != ''">
+          <details v-if="col == 'title' && row.description">
             <summary>{{ cell }}</summary>
             <p>{{ row.description }}</p>
           </details>
@@ -29,8 +29,24 @@
 export default {
   props: {
     trans: {
-      type: Object,
+      type: Array,
       required: true
+    },
+    showCols: {
+      type: Array,
+      default: false
+    }
+  },
+  computed: {
+    filtered() {
+      return this.trans.map(row => {
+        return Object.keys(row)
+        .filter(key => this.showCols.includes(key))
+        .reduce((obj, key) => {
+          obj[key] = row[key];
+          return obj;
+        }, {});
+      })
     }
   }
 }
@@ -58,21 +74,8 @@ export default {
     }
   }
 
-  .ID,
-  .timestamp,
-  .payee_id,
-  .recipient_id,
-  .broker_name,
-  .ip_address,
-  .transaction_phone,
-  .effective_datetime,
   .description {
     @apply hidden;
-  }
-  .payee {}
-  .recipient {}
-  .title {
-    @apply max-w-sm;
   }
 }
 </style>

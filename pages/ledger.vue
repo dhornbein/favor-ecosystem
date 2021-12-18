@@ -9,7 +9,7 @@
       </header>
       
       <div class="p-5">
-        <TransactionTable :trans="trans" />
+        <DataTable :trans="trans" :showCols="['payee','recipient','amount','fee','title','description']" />
       </div>
 
     </div>
