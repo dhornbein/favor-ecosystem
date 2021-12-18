@@ -1,35 +1,35 @@
 <template>
-  <div class="member-card flex flex-col relative rounded-md border border-gray-300 shadow-md p-5 mb-10 last:mb-0">
-    <nuxt-link class="member-card__button" :to="`/members/${row.ID}`">More...</nuxt-link>
-    <div class="flex-grow flex justify-between pb-4 mb-4 border-b border-gray-400">
-      <header class="member-card__head flex justify-start gap-3 w-full">
+  <div class="member-card">
+    <header class="member-card__head">
+      <nuxt-link :to="`/members/${row.ID}`">
         <MemberIcon :username="row.username" class="flex-shrink-0" />
-        <div class="member__bio">
+      </nuxt-link>
+      <div class="member__bio">
+        <nuxt-link :to="`/members/${row.ID}`">
           <h2 class="text-2xl">{{ row.first_name }} {{ row.last_name }}</h2>
-          <p class="text-sm" v-if="row.email || row.pone">
-            <a :href="`mailto:${row.email}`" v-if="row.email" class="whitespace-nowrap">{{ row.email }}</a>
-            <a :href="`tel:${row.phone}`" v-if="row.phone" class="whitespace-nowrap">{{ row.phone | phoneNumber }}</a>
-          </p>
-        </div>
-      </header>
-      <div>
-        <FavorDisplay :num="row.transaction_total" label="Total"
-        class="member__total text-sm text-right rounded-bl-md p-5 -mt-5 -mr-5 bg-yellow-100" />
+        </nuxt-link>
+        <p class="text-sm" v-if="row.email || row.pone">
+          <a :href="`mailto:${row.email}`" v-if="row.email" class="whitespace-nowrap">{{ row.email }}</a>
+          <a :href="`tel:${row.phone}`" v-if="row.phone" class="whitespace-nowrap">{{ row.phone | phoneNumber }}</a>
+        </p>
       </div>
-    </div>
-    <div class="member-card__body flex items-center">
-      <div class="member__inout">
-        <div class="member__credits bg-green-200 p-2 rounded-r mb-2 -ml-5 pl-7 border-l-2 border-green-500">
-          <FavorDisplay :num="row.credit" label="Credit" />
-        </div>
-        <div class="member__debits bg-purple-200 p-2 rounded-r mb-2 -ml-5 pl-7 border-l-2 border-purple-500">
-          <FavorDisplay :num="-row.debit" label="Debit" />
-        </div>
+    </header>
+    <div class="member-card__body">
+      <div class="member__details">
+        <FavorDisplay :num="row.transaction_total" label="Total Transactions" />
+        <FavorDisplay :num="row.credit_limit" label="Credit Limit" class="text-gray-500 text-sm" />
       </div>
-      <div class="member__balance mx-5">
+      <div class="member__balance">
         <span>Balance</span>
         <div class="text-4xl font-bold font-mono" :class="{ 'text-purple-500': row.balance < 0 }">{{ row.balance | favor }}</div>
-        <FavorDisplay :num="row.credit_limit" label="Credit Limit" class="text-gray-500" />
+      </div>
+      <div class="member__inout">
+        <div class="member__credits">
+          <FavorDisplay :num="row.credit" label="Credit" />
+        </div>
+        <div class="member__debits">
+          <FavorDisplay :num="-row.debit" label="Debit" />
+        </div>
       </div>
     </div>
   </div>
@@ -56,8 +56,38 @@ export default {
 
 <style lang="scss">
 .member-card {
-  .member-card__button {
-    @apply absolute bottom-0 right-0 rounded-tl-md rounded-br-md p-2 border text-brand-primary border-brand-primary hover:bg-brand-primary hover:text-white;
+  @apply flex flex-col relative overflow-hidden rounded-md border border-gray-300 shadow-md py-5 mb-10 last:mb-0;
+  
+  .member-card__head {
+    @apply flex-grow flex justify-between pb-4 px-5 border-b border-gray-200;
+    
+    .member__bio {
+      @apply text-right;
+    }
+  }
+  .member-card__body {
+    @apply flex flex-col;
+  }
+
+  .member__details {
+    @apply flex items-center justify-between px-5 py-2 mb-2 border-b border-gray-200;
+  }
+  .member__balance {
+    @apply mx-5 text-center;
+  }
+  .member__inout {
+    @apply flex justify-start w-full;
+    
+    .member__credits,
+    .member__debits {
+      @apply p-2 -mb-5 border-b-2 w-1/2;
+    }
+    .member__credits {
+      @apply bg-green-200 border-green-500 text-right;
+    }
+    .member__debits {
+      @apply bg-purple-200 border-purple-500 -mr-5;
+    }
   }
 }
 </style>
