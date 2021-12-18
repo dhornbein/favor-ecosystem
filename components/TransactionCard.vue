@@ -1,5 +1,5 @@
 <template>
-  <div class="payment-card flex gap-3 rounded-md border border-gray-300 shadow-md p-5 mb-5 last:mb-0">
+  <div class="payment-card" :class="{ 'payment-card--slim': isSlim }">
     <div class="payment-card__body">
       <header class="text-sm">
         <p class="">
@@ -14,7 +14,7 @@
         <p class="" v-if="row.description">{{ row.description }}</p>
       </div>
     </div>
-    <div class="flex-shrink flex justify-center items-center font-mono ml-auto">
+    <div class="payment-card__favor">
       <div class="text-right">
         <div class="amount text-gray-600">
           <span class="">f</span>
@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col justify-start items-center">
+    <div class="payment-card__icons">
       <MemberIcon :username="row.payee" />
       <div class="text-gray-400">&#x27F1;</div>
       <MemberIcon :username="row.recipient" :alt="true" />
@@ -40,6 +40,10 @@ export default {
     row: {
       type: Object,
       required: true
+    },
+    isSlim: {
+      type: Boolean,
+      required: false
     }
   },
   filters: {
@@ -49,3 +53,32 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.payment-card {
+  @apply flex gap-3 rounded-md border border-gray-300 shadow-md p-5 mb-5 last:mb-0;
+  .payment-card__body {}
+  .payment-card__details {}
+  .payment-card__favor {
+    @apply flex-shrink flex justify-center items-center font-mono ml-auto;
+  }
+  .payment-card__icons {
+    @apply flex flex-col justify-start items-center;
+  }
+
+  &.payment-card--slim {
+    @apply py-2 items-center;
+
+    .payment-card__body header {
+      @apply flex gap-2;
+    }
+    .payment-card__details {
+      h1 { @apply text-base; }
+      p { @apply hidden; }
+    }
+    .payment-card__icons {
+      @apply hidden;
+    }
+  }
+}
+</style>

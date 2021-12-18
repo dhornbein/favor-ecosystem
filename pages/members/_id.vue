@@ -14,13 +14,25 @@
           <FavorDisplay :num="member.credit_limit" label="Credit Limit" />
           <FavorDisplay :num="member.transaction_total" label="Total Transactions" class="text-purple-500" />
         </div>
-      </header>
+        <p class="my-3 text-center">
+          <a href="#table" @click="toggleView('table')" class="btn" :class="{ 'is-active': isTable}">Table</a>
+          <a href="#grid" @click="toggleView('grid')" class="btn" :class="{ 'is-active': isGrid}">Grid</a>
+        </p>
 
-      <section>
         <div class="member__balance m-5 text-center">
           <span>Balance</span>
           <div class="text-4xl font-bold font-mono" :class="{ 'text-purple-500': member.balance < 0 }">{{ member.balance | favor }}</div>
         </div>
+
+      </header>
+
+      <section class="max-w-3xl mx-auto relative" v-if="isGrid">
+        <div :class="{ 'bg-green-500': isSlim }" @click="isSlim = !isSlim"
+        class="p-2 text-xs border border-green-200 rounded-md cursor-pointer hover:bg-green-500 absolute -top-12 right-0">&UpArrowBar; Slim Grid</div>
+        <TransactionCard v-for="(row, idx) in trans" :key="idx" :row="row" :isSlim="isSlim" />
+      </section>
+
+      <section class="max-w-3xl mx-auto" v-if="isTable">
         <div class="member__inout flex justify-center">
           <div class="member__credits w-1/2 flex-grow text-right bg-green-200 p-2 border-b-2 border-green-500">
             <FavorDisplay :num="member.credit" label="Credit" />
@@ -61,10 +73,30 @@ export default {
       title: `User: ${this.userName}`
     }
   },
+  data() {
+    return {
+      view: 'grid',
+      isSlim: false
+    }
+  },
+  created() {
+    this.view = (this.$route.hash) ? this.$route.hash.slice(1) : this.view
+  },
   computed: {
     userName() {
       return this.member.first_name + ' ' + this.member.last_name
+    },
+    isGrid() {
+      return this.view === 'grid'
+    },
+    isTable() {
+      return this.view === 'table'
+    },
+  },
+  methods: {
+    toggleView(view) {
+      this.view = view
     }
-  }
+  },
 }
 </script>
