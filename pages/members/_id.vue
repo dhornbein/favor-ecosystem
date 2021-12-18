@@ -19,7 +19,7 @@
       <section>
         <div class="member__balance m-5 text-center">
           <span>Balance</span>
-          <div class="text-4xl font-bold font-mono" :class="{ 'text-purple-500': user.balance < 0 }">{{ user.balance }}</div>
+          <div class="text-4xl font-bold font-mono" :class="{ 'text-purple-500': user.balance < 0 }">{{ user.balance | favor }}</div>
         </div>
         <div class="member__inout flex justify-center">
           <div class="member__credits flex-grow text-right bg-green-200 p-2 mb-2 border-b-2 border-green-500">

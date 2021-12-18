@@ -28,7 +28,7 @@
       </div>
       <div class="member__balance mx-5">
         <span>Balance</span>
-        <div class="text-4xl font-bold font-mono" :class="{ 'text-purple-500': row.balance < 0 }">{{ row.balance }}</div>
+        <div class="text-4xl font-bold font-mono" :class="{ 'text-purple-500': row.balance < 0 }">{{ row.balance | favor }}</div>
         <FavorDisplay :num="row.credit_limit" label="Credit Limit" class="text-gray-500" />
       </div>
     </div>

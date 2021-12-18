@@ -16,6 +16,7 @@
             <summary>{{ cell }}</summary>
             <p>{{ row.description }}</p>
           </details>
+          <span v-else-if="col == 'amount' || col == 'fee'">{{ cell | favor }}</span>
           <span v-else>{{ cell }}</span>
           
         </td>

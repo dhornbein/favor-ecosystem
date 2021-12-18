@@ -18,11 +18,11 @@
       <div class="text-right">
         <div class="amount text-gray-600">
           <span class="">f</span>
-          <span class="font-bold">{{ row.amount }}</span>
+          <span class="font-bold">{{ row.amount | favor }}</span>
         </div>
         <div class="fee text-gray-400">
           <span class="">&minus;</span>
-          <span class=" font-bold">{{ row.fee }}</span>
+          <span class=" font-bold">{{ row.fee | favor }}</span>
         </div>
       </div>
     </div>

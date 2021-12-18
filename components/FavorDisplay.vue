@@ -3,7 +3,7 @@
     <span class="favor-display__label" v-if="label">{{ label }}</span>
     <div class="favor-display__num" :class="{'favor-display__num--neg': num < 0}">
       <span class="-mr-2">f</span>
-      <span class="font-bold">{{ num }}</span>
+      <span class="font-bold">{{ num | favor }}</span>
     </div>
   </div>
 </template>
