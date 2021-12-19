@@ -25,7 +25,7 @@
     <div class="trans-card__favor">
       <div class="fee text-gray-400" v-if="!isSlim">
         <span class="text-xs">fee</span>
-        <span class="">{{ - row.fee / 2 | favor }}</span>
+        <span class="">{{ row.fee ? - row.fee / 2 : row.amount * 0.01 | favor }}</span>
       </div>
       <div class="amount text-gray-600">
         <span class="">f</span>
@@ -33,11 +33,11 @@
       </div>
       <div class="fee text-gray-400" v-if="!isSlim">
         <span class="text-xs">fee</span>
-        <span class="">{{ - row.fee / 2 | favor }}</span>
+        <span class="">{{ row.fee ? - row.fee / 2 : row.amount * 0.01 | favor }}</span>
       </div>
       <div class="fee text-gray-400" v-else>
         <span class="text-xs">fee</span>
-        <span class="">{{ - row.fee | favor }}</span>
+        <span class="">{{ row.fee ? - row.fee : row.amount * 0.02 | favor }}</span>
       </div>
     </div>
     <div class="trans-card__icons">
@@ -75,7 +75,7 @@ export default {
   },
   filters: {
     formatDate(dateStr) {
-      return Intl.DateTimeFormat("us-EN").format(new Date(dateStr))
+      if (Date.parse(dateStr)) return Intl.DateTimeFormat("us-EN").format(new Date(dateStr))
     },
   },
 }
