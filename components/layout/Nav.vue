@@ -54,11 +54,15 @@
     }
   }
 
+  .burger {
+    @apply cursor-pointer;
+  }
+
   &.is-active {
     @apply flex-wrap;
 
     .nav__menu {
-      @apply flex flex-col order-last w-full p-2 -mx-2 bg-gray-100;
+      @apply flex flex-col order-last w-full flex-grow p-2 -mx-2 bg-gray-100;
 
       a {
         @apply font-bold text-brand-primary hover:text-yellow-500;
