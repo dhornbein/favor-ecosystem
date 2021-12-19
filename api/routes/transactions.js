@@ -1,4 +1,5 @@
 const { Router } = require('express')
+const { query } = require('express-validator/check');
 const { google } = require('googleapis');
 const sheets = google.sheets('v4');
 const env = require('../env.json');
@@ -46,6 +47,13 @@ router.get('/transactions/:id', function (req, res, next) {
   } else {
     res.sendStatus(404)
   }
+})
+
+router.post('/transactions/create', (req, res, next) => {
+  res.json({
+    body: req.body,
+    params: req.query
+  })
 })
 
 module.exports = router
