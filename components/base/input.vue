@@ -1,5 +1,5 @@
 <template>
-  <div class="input" :class="$attrs.type" v-if="label">
+  <div class="input" :class="[$attrs.type, { 'is-required': ('required' in $attrs) }]" v-if="label">
     <label :for="$attrs.id">{{ label }}</label>
     <input v-bind="$attrs" :value="value" v-on:input="$emit('input', $event.target.value)">
   </div>
@@ -20,6 +20,11 @@ export default {
     &.radio,
     &.checkbox {
       @apply flex-row-reverse justify-end items-baseline;
+    }
+
+    &.is-required label:after {
+      content: ' *';
+      @apply text-red-500 font-bold;
     }
     
     input {
