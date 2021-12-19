@@ -7,7 +7,7 @@ body {
 }
 
 .btn {
-  @apply inline-block border border-brand-primary rounded-md px-4 py-2 hover:bg-yellow-100;
+  @apply cursor-pointer inline-block border border-brand-primary rounded-md px-4 py-2 hover:bg-yellow-100;
   &.is-active {
     @apply bg-brand-primary text-yellow-500;
   }
