@@ -44,6 +44,8 @@ export default {
   .tchart__row {
     @apply flex;
   }
+
+  // apply to both credit and debit columns
   .tchart__credit,
   .tchart__debit {
     @apply w-1/2 p-2 border-b;
@@ -52,6 +54,8 @@ export default {
       @apply flex justify-between items-center gap-2;
     }
   }
+
+  // apply to credit column only
   .tchart__credit {
     @apply bg-green-100 border-green-200 text-right;
 
@@ -59,15 +63,21 @@ export default {
       @apply flex-row-reverse;
     }
 
+    a.payee { @apply hidden }
+
     .tchart__details {
       @apply text-left
     }
   }
+
+  // apply to debit column only
   .tchart__debit {
     @apply bg-purple-100 border-purple-200;
 
     .tchart__transaction {
     }
+
+    a.recipient { @apply hidden }
 
     .tchart__details {
       @apply text-right

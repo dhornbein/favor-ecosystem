@@ -7,8 +7,8 @@
       <a href="#grid" @click="toggleView('grid')" class="btn" :class="{ 'is-active': isGrid}">Grid</a>
     </header>
 
-    <div class="py-5 flex flex-wrap" v-if="isGrid">
-      <div class="w-full md:w-1/2 lg:w-1/3 p-4" v-for="(row, idx) in members" :key="idx">
+    <div class="py-5 flex flex-wrap gap-4" v-if="isGrid">
+      <div class="w-full md:w-1/2 lg:w-1/3" v-for="(row, idx) in members" :key="idx">
         <MemberCard class="h-full" :row="row" />
       </div>
     </div>
