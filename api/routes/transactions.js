@@ -19,30 +19,32 @@ let headers = null
 let transactions = null
 const numberFields = ['ID', 'payee_id', 'recipient_id', 'amount', 'fee']
 
-google.options({ auth });
-
-let test = sheets.spreadsheets.values.get({
-  spreadsheetId: SPREADSHEET_ID,
-  range: TRANSACTION_RANGE,
-}, (err, result) => {
-  if (err) {
-    // Handle error
-    console.log(err);
-  } else {
-    headers = result.data.values.shift()
-    transactions = result.data.values.map(row => {
-      return headers.reduce((obj, key, index) => {
-        let value = numberFields.includes(key) ? parseFloat(row[index]) : row[index]
-        return { ...obj, [key]: value }
-      }, {})
-    })
-  }
-})
+// google.options({ auth });
 
 
-router.get('/transactions', function (req, res) {
+router.get('/transactions', async (req, res) => {
 
-  res.json(transactions)
+  await sheets.spreadsheets.values.get({
+    spreadsheetId: SPREADSHEET_ID,
+    range: TRANSACTION_RANGE,
+    auth: auth
+  }, (err, result) => {
+    if (err) {
+      // Handle error
+      console.log(err);
+    } else {
+      headers = result.data.values.shift()
+      transactions = result.data.values.map(row => {
+        return headers.reduce((obj, key, index) => {
+          let value = numberFields.includes(key) ? parseFloat(row[index]) : row[index]
+          return { ...obj, [key]: value }
+        }, {})
+      })
+      res.json(transactions)
+    }
+  })
+
+  
 
 })
 
