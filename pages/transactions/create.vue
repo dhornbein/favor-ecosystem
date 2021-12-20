@@ -10,7 +10,14 @@
       <div class="btn">Make Payment</div>
     </div>
 
-    <pre>{{ response }}</pre>
+    <div class="response" v-if="response">
+      <ErrorHandler :error="response.error" v-if="response.error" />
+      <div v-else>
+        <p class="text-green-700"><strong>Success!</strong> The Transaction was added:</p>
+        <TransactionCard :row="response.dataAdded" />
+        <p>Add another?</p>
+      </div>
+    </div>
 
     <div id="transaction-box" class="transaction">
       <h2 class="">Enter Transaction</h2>
