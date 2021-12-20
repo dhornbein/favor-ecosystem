@@ -23,7 +23,10 @@
       <h2 class="">Enter Transaction</h2>
 
       <form class="broker-form">
-        <BaseInput label="Purchaser" id="purchaser" type="text" v-model="form.payee" placeholder="@jacklovesbeans" required />
+        
+        <MemberUsernameInput label="Purchaser" id="purchaser" type="text" hiddenName="payee_id" v-model="form.payee" placeholder="@jacklovesbeans" required />
+
+        <!-- <BaseInput label="Purchaser" id="purchaser" type="text" v-model="form.payee" placeholder="@jacklovesbeans" required /> -->
         <BaseInput id="purchaser_id" type="hidden" v-model="form.payee_id" />
         <BaseInput label="Recipient" id="recipient" type="text" v-model="form.recipient" placeholder="@oldcowfan" required />
         <BaseInput id="recipient_id" type="hidden" v-model="form.recipient_id" />
@@ -39,8 +42,8 @@
 
         <BaseInput label="Favor Amount" id="amount" type="number" v-model="form.amount" placeholder="100" required />
         <BaseInput label="Transaction Title" id="title" type="text" v-model="form.title" placeholder="Magic Beans, cheap" required />
-        <textarea id="transaction-description" class="type__textarea" v-model="form.description" placeholder="Please describe the transaction as accurately as is reasonable. Description should be sufficient to determine that currency speculation and other other anti-network behavior are not at work."></textarea>
-
+        <BaseTextarea label="Description" id="transaction-description" v-model="form.description" placeholder="Please describe the transaction as accurately as is reasonable. Description should be sufficient to determine that currency speculation and other other anti-network behavior are not at work." />
+        
         <BaseInput label="Broker Username" id="broker" type="text" v-model="form.broker_name" placeholder="@tomsawyer" />
         <BaseInput type="hidden" v-model="form.broker_name_id" />
         <BaseInput label="Broker Password" id="password" type="password" name="password" placeholder="password" />
@@ -52,7 +55,7 @@
 
       </form>
 
-      <button class="btn" @click="formConfirm">Submit</button>
+      <button class="btn my-5" @click="formConfirm">Submit</button>
 
       <BaseModal v-if="showConfirm" @close="showConfirm = false">
         <h2 class="text-2xl">Confirm Transaction</h2>

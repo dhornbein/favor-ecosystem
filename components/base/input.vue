@@ -27,9 +27,10 @@ export default {
       @apply text-red-500 font-bold;
     }
     
-    input {
-      @apply border border-gray-200 shadow-inner rounded-lg p-2 focus:border-blue-200;
-    }
 
+  }
+  
+  input {
+    @apply border border-gray-200 shadow-inner rounded-lg p-2 focus:border-blue-200;
   }
 </style>
