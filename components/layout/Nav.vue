@@ -1,6 +1,6 @@
 <template>
     <nav class="nav" :class="{'is-active':showNav}">
-      <MemberIcon username="FSN" />
+      <MemberIcon :username="$globals.networkUsername" />
       <div class="nav__menu">
         <nuxt-link :to="item.url" v-for="(item, idx) in nav" :key="idx"
           class=""
