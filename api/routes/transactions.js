@@ -15,83 +15,98 @@ function GoogleDate(JSdate) {
 }
 
 const router = Router()
-let headers = null
-let transactions = null
 const numberFields = ['ID', 'payee_id', 'recipient_id', 'amount', 'fee']
 
-// google.options({ auth });
-
-
-router.get('/transactions', async (req, res) => {
-
-  await sheets.spreadsheets.values.get({
+async function getGoogleTransactions() {
+  const request = {
     spreadsheetId: SPREADSHEET_ID,
     range: TRANSACTION_RANGE,
     auth: auth
-  }, (err, result) => {
-    if (err) {
-      // Handle error
-      console.log(err);
-    } else {
-      headers = result.data.values.shift()
-      transactions = result.data.values.map(row => {
-        return headers.reduce((obj, key, index) => {
-          let value = numberFields.includes(key) ? parseFloat(row[index]) : row[index]
-          return { ...obj, [key]: value }
-        }, {})
-      })
-      res.json(transactions)
-    }
-  })
+  }
+  try {
+    const response = (await sheets.spreadsheets.values.get(request)).data;
+    let headers = response.values.shift();
+    let transactions = response.values.map(row => {
+      return headers.reduce((obj, key, index) => {
+        let value = numberFields.includes(key) ? parseFloat(row[index]) : row[index];
+        return { ...obj, [key]: value };
+      }, {});
+    });
+    return {transactions, headers}
+  } catch (err) {
+    throw err
+  }
+}
 
-  
+
+router.get('/transactions', async (req, res) => {
+  try {
+    const {transactions} = await getGoogleTransactions()
+    res.json(transactions)
+  } catch (err) {
+    console.log(err);
+    res.status(500).json( err )
+  }
 
 })
 
 /* GET member by ID. */
-router.get('/transactions/:id', function (req, res, next) {
-  const id = parseInt(req.params.id)
-  const transaction = transactions.filter(obj => (obj.payee_id === id || obj.recipient_id === id))
-  if (transaction.length > 0) {
-    res.json(transaction)
-  } else {
-    res.sendStatus(404)
+router.get('/transactions/:id', async (req, res, next) =>{
+  try {
+    let { transactions } = await getGoogleTransactions()
+    const id = parseInt(req.params.id)
+    const transaction = transactions.filter(obj => (obj.payee_id === id || obj.recipient_id === id))
+    if (transaction.length > 0) {
+      res.json(transaction)
+    } else {
+      res.sendStatus(404)
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err)
   }
 })
 
 router.post('/transactions/create', async (req, res, next) => {
-  // find the next id from the transactions array
-  const nextId = transactions.length > 0 ? Math.max(...transactions.map(obj => obj.ID)) + 1 : 1
-  // create a new transaction object
-  const newTransaction = {
-    ID: nextId,
-    timestamp: GoogleDate(Date.now()),
-    ...req.body
-  }
-  // convert newTransaction to an array matching the headers
-  const newTransactionArray = headers.map(key => newTransaction[key])
-
-  // build google sheets request
-  const request = {
-    spreadsheetId: SPREADSHEET_ID,
-    range: TRANSACTION_RANGE,
-    valueInputOption: 'USER_ENTERED',
-    insertDataOption: 'INSERT_ROWS',
-    resource: {
-      "majorDimension": "ROWS",
-      "values": [newTransactionArray]
-    },
-    auth: auth,
-  };
-
   try {
-    const response = (await sheets.spreadsheets.values.append(request));
-    res.json({
-      response: response.data,
-      dataAdded: newTransaction
-    })
+    const { transactions, headers } = await getGoogleTransactions()
+    // find the next id from the transactions array
+    const nextId = transactions.length > 0 ? Math.max(...transactions.map(obj => obj.ID)) + 1 : 1
+    // create a new transaction object
+    const newTransaction = {
+      ID: nextId,
+      ip_address: req.ip,
+      timestamp: GoogleDate(Date.now()),
+      ...req.body
+    }
+    // convert newTransaction to an array matching the headers
+    const newTransactionArray = headers.map(key => newTransaction[key])
+
+    // build google sheets request
+    const request = {
+      spreadsheetId: SPREADSHEET_ID,
+      range: TRANSACTION_RANGE,
+      valueInputOption: 'USER_ENTERED',
+      insertDataOption: 'INSERT_ROWS',
+      resource: {
+        "majorDimension": "ROWS",
+        "values": [newTransactionArray]
+      },
+      auth: auth,
+    };
+
+    try {
+      const response = (await sheets.spreadsheets.values.append(request));
+      res.json({
+        response: response.data,
+        dataAdded: newTransaction
+      })
+    } catch (err) {
+      res.json(err.response.data)
+    }
   } catch (err) {
-    res.json(err.response.data)
+    console.log(err);
+    res.status(500).json(err)
   }
 })
 
