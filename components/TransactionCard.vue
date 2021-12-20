@@ -1,13 +1,5 @@
 <template>
-  <div class="trans-card" 
-    :class="{ 
-    'trans-card--slim': isSlim, 
-    'trans-card--network': row.payee_id === 1, 
-    'trans-card--payee': isFocusedPayee, 
-    'trans-card--recipient': isFocusedRecipient 
-    }"
-    @click="isSlim = !isSlim"
-  >
+  <div class="trans-card" :class="classes" v-on:click="toggleSlim()">
     <div class="trans-card__body">
       <header class="text-sm">
         <p class="">
@@ -18,12 +10,12 @@
         <time :datetime="row.timestamp">{{ row.timestamp | formatDate }}</time>
       </header>
       <div class="trans-card__details">
-        <h1 class="text-2xl">{{ row.title }}</h1>
-        <p class="" v-if="row.description">{{ row.description }}</p>
+        <h1>{{ row.title }}</h1>
+        <p v-if="row.description">{{ row.description }}</p>
       </div>
     </div>
     <div class="trans-card__favor">
-      <div class="fee text-gray-400" v-if="!isSlim">
+      <div class="fee text-gray-400" v-if="!slim">
         <span class="text-xs">fee</span>
         <span class="">{{ row.fee ? - row.fee / 2 : row.amount * 0.01 | favor }}</span>
       </div>
@@ -31,7 +23,7 @@
         <span class="">f</span>
         <span class="font-bold">{{ ((isFocusedPayee) ? -row.amount : row.amount) | favor }}</span>
       </div>
-      <div class="fee text-gray-400" v-if="!isSlim">
+      <div class="fee text-gray-400" v-if="!slim">
         <span class="text-xs">fee</span>
         <span class="">{{ row.fee ? - row.fee / 2 : row.amount * 0.01 | favor }}</span>
       </div>
@@ -63,6 +55,17 @@ export default {
       required: false
     }
   },
+  data() {
+    return {
+      slim: this.isSlim,
+      classes: { 
+        'trans-card--slim': this.isSlim, 
+        'trans-card--network': this.row.payee_id === 1, 
+        'trans-card--payee': this.isFocusedPayee, 
+        'trans-card--recipient': this.isFocusedRecipient 
+      }
+    }
+  },
   computed: {
     isFocusedPayee() {
       if (isNaN(this.focusUser)) return this.focusUser === this.row.payee
@@ -72,6 +75,12 @@ export default {
       if (isNaN(this.focusUser)) return this.focusUser === this.row.recipient
       return this.focusUser === this.row.recipient_id
     },
+  },
+  methods: {
+    toggleSlim() {
+      this.slim = !this.slim
+      this.classes['trans-card--slim'] = this.slim
+    }
   },
   filters: {
     formatDate(dateStr) {
@@ -83,12 +92,17 @@ export default {
 
 <style lang="scss">
 .trans-card {
-  @apply flex gap-3 rounded-md border border-gray-300 shadow-md p-5 mb-5 last:mb-0
+  @apply flex gap-3 rounded-md border border-gray-300 shadow-md p-2 mb-5 last:mb-0
     transition cursor-pointer hover:border-gray-500;
   .trans-card__body {}
-  .trans-card__details {}
+  .trans-card__details {
+    h1 { @apply text-lg break-words }
+  }
   .trans-card__favor {
     @apply flex-shrink flex flex-col justify-center items-end text-right font-mono ml-auto;
+
+    .fee,
+    .amount { @apply whitespace-nowrap }
   }
   .trans-card__icons {
     @apply flex flex-col justify-start items-center;
