@@ -25,7 +25,7 @@
     </header>
 
     <section class="relative" v-if="isGrid">
-      <TransactionCard v-for="(row, idx) in trans" :key="idx" :row="row" isSlim :focusUser="member.ID" />
+      <TransactionCard v-for="(row, idx) in trans.slice().reverse()" :key="idx" :row="row" isSlim :focusUser="member.ID" />
     </section>
 
     <section class="container-fill" v-if="isTable">
@@ -37,7 +37,7 @@
           <FavorDisplay :num="-member.debit" label="Debit" />
         </div>
       </div>
-      <TransactionTchart :trans="trans" :targetId="member.ID" />
+      <TransactionTchart :trans="trans.slice().reverse()" :targetId="member.ID" />
     </section>
 
   </main>

@@ -2,11 +2,11 @@
   <main>
 
     <header>
-      <h2 class="text-xl font-cormorant">Transactions</h2>
+      <h2 class="text-xl font-cormorant">Latest Transactions</h2>
     </header>
       
     <div>
-      <TransactionCard v-for="(row, idx) in trans" :key="idx" :row="row" />
+      <TransactionCard v-for="(row, idx) in trans.slice().reverse()" :key="idx" :row="row" />
     </div>
 
   </main>
