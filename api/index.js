@@ -16,7 +16,6 @@ const transactions = require('./routes/transactions')
 
 // Import API Routes
 app.use(members)
-app.use(test)
 app.use(transactions)
 
 module.exports = app
