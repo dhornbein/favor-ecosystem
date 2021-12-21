@@ -1,0 +1,323 @@
+openapi: 3.0.0
+info:
+  description: An interface into Favor transaction and member data
+  version: "1.0.0"
+  title: Favor Solutions Network API
+  contact:
+    email: favor@dhornbein.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: brokers
+    description: Secured broker-only calls
+  - name: members
+    description: Operations available to regular members
+  - name: public
+    description: Operations available to anyone
+paths:
+  /transactions:
+    get:
+      tags:
+        - members
+        - public
+      summary: searches transactions
+      operationId: searchTransactions
+      description: |
+        By passing in the appropriate options, you can look up Favor transactions
+      parameters:
+        - in: query
+          name: searchString
+          description: pass an optional search string for looking up inventory
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: searchId
+          description: pass an id to recieve a specific transaction
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: payeeId
+          description: pass a userId to see all payments made by that user
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: searchPayee
+          description: pass an optional username string for looking up all payments made by that user
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: recipientId
+          description: pass a userId to see all payments recevied by that user
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: searchRecipien
+          description: pass an optional username string for looking up all payments recevied by that user
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: skip
+          description: number of records to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: transations found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionItem'
+        '400':
+          description: bad input parameter
+        '404':
+          description: no transactions found
+    post:
+      tags:
+        - brokers
+      summary: adds an transaction
+      operationId: addTransaction
+      description: Adds a transaction
+      responses:
+        '201':
+          description: transaction created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: an existing item already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionItem'
+        description: Transaction to add
+  /members:
+    get:
+      tags:
+        - members
+        - public
+      summary: searches members
+      operationId: searchMembers
+      description: |
+        By passing in the appropriate options, you can look up members of the Favor Solutions Network
+      parameters:
+        - in: query
+          name: searchString
+          description: pass an optional search string for members
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: searchId
+          description: pass an id to recieve a specific member
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: skip
+          description: number of records to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: Member found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberItem'
+        '400':
+          description: bad input parameter
+        '404':
+          description: no members found
+    post:
+      tags:
+        - brokers
+      summary: adds a member
+      operationId: addMember
+      description: Adds a member
+      responses:
+        '201':
+          description: member created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: that member already exisits
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberItem'
+        description: Transaction
+components:
+  schemas:
+    TransactionItem:
+      type: object
+      required:
+        - uuid
+        - id
+        - created
+        - payeeId
+        - recipientId
+        - amount
+        - title
+        - effectiveDatetime
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        id:
+          type: integer
+          example: 42
+          minimum: 0
+        created:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        updated:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+          readOnly: true
+        payeeId:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        recipientId:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        amount:
+          type: number
+          multipleOf: 0.001
+          example: 420.069
+        title:
+          type: string
+          example: 'a short descriptive title'
+        description:
+          type: string
+          example: 'a long form descriptive story'
+        effectiveDatetime:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        brokerId:
+          type: integer
+          example: 22
+    MemberItem:
+      type: object
+      required:
+        - username
+        - uuid
+        - id
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        id:
+          type: integer
+          example: 42
+          minimum: 1
+        created:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        updated:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+          readOnly: true
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        creditLimit:
+          type: number
+          minimum: 0.000
+          multipleOf: 0.001
+          example: 420.069
+        balance:
+          type: number
+          multipleOf: 0.001
+          example: 420.069
+          description: the sum of member's credits and debits
+          readOnly: true
+        credit:
+          type: number
+          multipleOf: 0.001
+          example: 420.069
+          description: the sum of member's credits
+          readOnly: true
+        debit:
+          type: number
+          multipleOf: 0.001
+          example: 420.069
+          description: the sum of member's debits
+          readOnly: true
+        transactionTotal:
+          type: number
+          multipleOf: 0.001
+          example: 420.069
+          description: the sum of all money moved by the member
+          readOnly: true
+        brokerName:
+          type: string
+          example: 'username of broker'
+        Brokerid:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        InvitedById:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+          description: the member id who invited this member
+        phone:
+          type: string
+          format: string
+          example: '(123) 555-5555'
+        email:
+          type: string
+          format: email
+          example: 'name@example.com'

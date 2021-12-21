@@ -1,12 +1,16 @@
 const { Router } = require('express')
-const { query } = require('express-validator/check');
-const { google } = require('googleapis');
-const sheets = google.sheets('v4');
-const env = require('../env.json');
-const auth = require('../auth');
+const transactionsController = require('../controllers/transactions')
 
-const SPREADSHEET_ID = env.SPREADSHEET_ID
-const TRANSACTION_RANGE = 'Transactions!A:N'
+const router = Router()
+
+const use = fn => (req, res, next) => 
+  Promise.resolve(fn(req, res, next)).catch(next);
+
+router.get('/transactions', use(transactionsController.get));
+router.post('/transactions', use(transactionsController.post));
+
+// const { query } = require('express-validator/check');
+
 
 function GoogleDate(JSdate) {
   var D = new Date(JSdate);
@@ -14,7 +18,7 @@ function GoogleDate(JSdate) {
   return ((D.getTime() - Null.getTime()) / 60000 - D.getTimezoneOffset()) / 1440;
 }
 
-const router = Router()
+
 const numberFields = ['ID', 'payee_id', 'recipient_id', 'amount', 'fee']
 
 async function getGoogleTransactions() {
@@ -36,7 +40,7 @@ async function getGoogleTransactions() {
   } catch (err) {
     throw err
   }
-}
+  }
 
 
 router.get('/transactions', async (req, res) => {
