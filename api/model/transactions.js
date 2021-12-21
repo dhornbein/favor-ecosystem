@@ -7,10 +7,16 @@ const SPREADSHEET_ID = env.SPREADSHEET_ID
 const TRANSACTION_RANGE = 'Transactions!A:AA'
 
 const REQUEST = {
-  auth: auth,
-  spreadsheetId: SPREADSHEET_ID,
-  range: TRANSACTION_RANGE,
-  valueRenderOption: 'UNFORMATTED_VALUE',
+  GET: {
+    auth: auth,
+    spreadsheetId: SPREADSHEET_ID,
+    range: TRANSACTION_RANGE,
+    valueRenderOption: 'UNFORMATTED_VALUE',
+  },
+  POST: {
+    auth: auth,
+    spreadsheetId: SPREADSHEET_ID,
+    range: TRANSACTION_RANGE,}
 }
 
 const KEYS = [
@@ -29,11 +35,47 @@ const KEYS = [
 
 exports.get = async (params) => {
   try {
-    const response = (await sheets.spreadsheets.values.get(REQUEST)).data;
-    console.log('response', params);
+    const response = (await sheets.spreadsheets.values.get(REQUEST.GET)).data;
     return deserializeTransactions(response.values)
   } catch (err) {
     throw err
+  }
+}
+
+exports.post = async (payload) => {
+  try {
+    const transactions = (await sheets.spreadsheets.values.get(REQUEST.GET)).data.values;
+    let headers = [],
+        nextId = 1;
+
+    // collect the header row of the spreadsheet & find the next id
+    if (transactions.length > 0) {
+      headers = transactions[0];
+      nextId = Math.max(...deserializeTransactions(transactions).map(obj => parseInt(obj.id))) + 1
+      payload['id'] = nextId;
+    }
+
+    const payloadArray = headers.map(key => payload[key])
+
+    const request = {
+      ...REQUEST.POST,
+      valueInputOption: 'USER_ENTERED',
+      insertDataOption: 'INSERT_ROWS',
+      resource: {
+        "majorDimension": "ROWS",
+        "values": [payloadArray]
+      },
+    };
+
+    const response = (await sheets.spreadsheets.values.append(request));
+    return { 
+      response, 
+      payload,
+      code: response.code ? response.code : 500,
+      errors: response.data.error ? response.data.error : null
+    }
+  } catch (err) {
+    throw new Error(err)
   }
 }
 

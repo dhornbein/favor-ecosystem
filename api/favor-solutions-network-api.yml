@@ -33,14 +33,6 @@ paths:
           schema:
             type: string
         - in: query
-          name: searchId
-          description: pass an id to recieve a specific transaction
-          required: false
-          schema:
-            type: integer
-            format: int32
-            minimum: 0
-        - in: query
           name: payeeId
           description: pass a userId to see all payments made by that user
           required: false
@@ -63,7 +55,7 @@ paths:
             format: int32
             minimum: 0
         - in: query
-          name: searchRecipien
+          name: searchRecipient
           description: pass an optional username string for looking up all payments recevied by that user
           required: false
           schema:
@@ -104,7 +96,7 @@ paths:
       description: Adds a transaction
       responses:
         '201':
-          description: transaction created
+          description: Transaction created successfully
         '400':
           description: 'invalid input, object invalid'
         '409':
