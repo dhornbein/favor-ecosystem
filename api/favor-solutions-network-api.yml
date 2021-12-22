@@ -84,7 +84,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/TransactionItem'
-        '400':
+        '422':
           description: bad input parameter
         '404':
           description: no transactions found
@@ -223,6 +223,7 @@ components:
           example: 420.069
         title:
           type: string
+          maxLength: 140
           example: 'a short descriptive title'
         description:
           type: string
