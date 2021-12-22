@@ -8,7 +8,6 @@ const use = fn => (req, res, next) =>
 
 router.get('/members', use(membersController.get))
 router.get('/members/:id', use(membersController.get))
-router.post('/members', use(membersController.post))
-// router.post('/members', membersController.validation, use(membersController.post))
+router.post('/members', membersController.validation, use(membersController.post))
 
 module.exports = router
