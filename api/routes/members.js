@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const membersController = require('../controllers/members')
+const validate = require('../utilities/validate')
 
 const router = Router()
 
@@ -8,6 +9,6 @@ const use = fn => (req, res, next) =>
 
 router.get('/members', use(membersController.get))
 router.get('/members/:id', use(membersController.get))
-router.post('/members', membersController.validation, use(membersController.post))
+router.post('/members', validate.member, use(membersController.post))
 
 module.exports = router

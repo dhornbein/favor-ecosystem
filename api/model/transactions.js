@@ -30,7 +30,9 @@ const KEYS = [
   'title',
   'description',
   'effectiveDatetime',
-  'brokerId'
+  'brokerId',
+  'ipAddress',
+  'transactionPhone'
 ]
 
 exports.get = async (params) => {
