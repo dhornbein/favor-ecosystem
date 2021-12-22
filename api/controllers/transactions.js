@@ -1,5 +1,6 @@
 const transactions = require('../model/transactions')
 const { v4: uuidv4 } = require('uuid')
+const { error, success } = require('../utilities/index')
 
 exports.get = async (req, res, next) => {
 
@@ -54,17 +55,5 @@ exports.post = async (req, res, next) => {
   } catch(err) {
     console.error('Controller',err)
     res.status(500).json(error(err))
-  }
-}
-
-function error(data){
-  return {
-    error: data
-  }
-}
-
-function success(data){
-  return {
-    success: data
   }
 }
