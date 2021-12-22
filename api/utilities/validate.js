@@ -1,5 +1,8 @@
 const { check, validationResult } = require('express-validator');
+const { get: getTransactions } = require('../model/transactions')
+const { get: getMembers } = require('../model/members')
 const { v4: uuidv4, validate: uuidValidate } = require('uuid')
+const { error, success } = require('../utilities/index')
 
 exports.transaction = [
   check('recipientId')
@@ -66,12 +69,27 @@ exports.transaction = [
   },
 ];
 
-function validateTransaction(value, { req }) {
-  // TODO
-  // pull members data from the database
+async function validateTransaction(value, { req }) {
+  // fetch members from database
+  const members = await getMembers()
+  
+  const { payeeId, recipientId, brokerId } = req.body
+  const payee = members.find(member => member.uuid === payeeId)
+  const recipient = members.find(member => member.uuid === recipientId)
+  const broker = (brokerId) ? members.find(member => member.uuid === brokerId) : null
 
-  // check if payeeId, recipientId, and brokerId exists in the database
+  if (payeeId === recipientId)
+    throw new Error('Payee and recipient can not have the same!')
 
+  // if payee or recipient is not found, throw error
+  if (payee === undefined)
+    throw new Error('Payee does not match an existing a member');
+
+  if (recipient === undefined)
+    throw new Error('Recipient does not match an existing a member');
+
+  if (brokerId && broker === undefined)
+    throw new Error('Broker does not match an existing a member');
   // check if payeeId and recipientId are the same person
 
   return true
