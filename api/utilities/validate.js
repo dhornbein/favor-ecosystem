@@ -37,7 +37,7 @@ exports.transaction = [
     .withMessage('Amount must be a number')
     .custom(amount => amount > 0.001)
     .withMessage('Amount must be more than f0.001')
-    .customSanitizer(value => Math.round(parseFloat(value) * 1000) / 1000), // round to 3 decimal places 0.001
+    .customSanitizer(sanitizeFavor), // round to 3 decimal places 0.001
   check('effectiveDatetime')
     .trim()
     .customSanitizer(value =>
@@ -96,39 +96,6 @@ async function validateTransaction(value, { req }) {
 }
 
 exports.member = [
-  check('username')
-    .trim()
-    .not()
-    .isEmpty()
-    .withMessage('username can not be empty!')
-    .bail()
-    .custom(value => value.length >= 4) // TODO move this to a config file
-    .withMessage('username must be more than 4 characters')
-    .bail()
-    .custom(value => value.length <= 20) // TODO move this to a config file
-    .withMessage('username must be less than 20 characters')
-    .bail()
-    .custom(validateMember),
-  check('created')
-    .customSanitizer(value => new Date().toISOString()),
-  check('firstName')
-    .trim()
-    .escape(),
-  check('lastName')
-    .trim()
-    .escape(),
-  check('creditLimit')
-    .exists()
-    .withMessage('Credit limit is required')
-    .trim()
-    .not()
-    .isEmpty()
-    .withMessage('Credit limit can not be empty')
-    .isNumeric()
-    .withMessage('Credit limit must be a number')
-    .custom(amount => amount > 0.001)
-    .withMessage('Credit limit must be more than f0.001')
-    .customSanitizer(value => Math.round(parseFloat(value) * 1000) / 1000), // round to 3 decimal places 0.001
   check('balance')
     .not()
     .exists()
@@ -156,12 +123,45 @@ exports.member = [
     .custom(uuidValidate)
     .withMessage('Invalid Invited By UUID'),
   check('phone')
-    .trim()
-    .escape(),
+    .customSanitizer(normalizePhone),
   check('email')
     .trim()
+    .escape()
+    .custom(validateEmail)
+    .withMessage('Invalid email address'),
+  check('firstName')
+    .trim()
     .escape(),
-  // .custom((val) => /[^A-za-z0-9\s]/g.test(val)),
+  check('lastName')
+    .trim()
+    .escape(),
+  check('username')
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage('username can not be empty!')
+    .bail()
+    .custom(value => value.length >= 4) // TODO move this to a config file
+    .withMessage('username must be more than 4 characters')
+    .bail()
+    .custom(value => value.length <= 20) // TODO move this to a config file
+    .withMessage('username must be less than 20 characters')
+    .bail()
+    .custom(validateMember),
+  check('creditLimit')
+    .exists()
+    .withMessage('Credit limit is required')
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage('Credit limit can not be empty')
+    .isNumeric()
+    .withMessage('Credit limit must be a number')
+    .custom(amount => amount > 0.001)
+    .withMessage('Credit limit must be more than f0.001')
+    .customSanitizer(sanitizeFavor), // round to 3 decimal places 0.001
+  check('created')
+    .customSanitizer(value => new Date().toISOString()),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())
@@ -170,13 +170,47 @@ exports.member = [
   },
 ];
 
-function validateMember(value, { req }) {
-  // TODO
-  // pull members data from the database
+async function validateMember(value, { req }) {
+  // fetch members from database
+  const members = await getMembers()
 
-  // check if payeeId, recipientId, and brokerId exists in the database
+  const { username, email, phone } = req.body
 
-  // check if payeeId and recipientId are the same person
+  const foundEmail = members.find(member => member.email === email)
+  const foundPhone = members.find(member => member.phone === phone)
+  const foundUsername = members.find(member => member.username === username)
+  
+  if (foundEmail)
+    throw new Error('Email is already in use')
+
+  if (foundPhone)
+    throw new Error('Phone number is already in use')
+
+  if (foundUsername)
+    throw new Error('Username is already in use')
+
+  if (!phone && !email)
+    throw new Error('Phone number OR email is required')
 
   return true
+}
+
+// round to 3 decimal places 0.001
+function sanitizeFavor(value) {
+  return Math.round(parseFloat(value) * 1000) / 1000
+}
+
+function normalizePhone(number) {
+  if (!number) return ''
+  number = number.replace(/[^\d+]+/g, '')
+  number = number.replace(/^00/, '+')
+  if (number.match(/^1/)) number = '+' + number
+  if (!number.match(/^\+/)) number = '+1' + number
+  return number
+}
+
+function validateEmail(email) {
+  return email.match(
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  );
 }
