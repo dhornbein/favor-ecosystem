@@ -8,6 +8,13 @@
   </div>
 </template>
 
+<script>
+
+export default {
+  middleware: 'load-data'
+}
+</script>
+
 <style lang="scss">
 .default-container{
   @apply container mx-auto px-5;

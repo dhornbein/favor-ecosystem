@@ -19,9 +19,6 @@ export default {
   computed: {
     ...mapState(['transactions'])
   },
-  async fetch({store}) {
-    await store.dispatch('getAllTransactionsOnce');
-  }
 }
 </script>
 

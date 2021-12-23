@@ -16,10 +16,6 @@
 import { mapState } from 'vuex'
 
 export default {
-  data() {
-    return {
-    }
-  },
   computed: {
     ...mapState(['transactions','members']),
     member() {
@@ -29,10 +25,6 @@ export default {
       return this.$store.getters.getTransactionsByMemberUUID(this.member.uuid);
     }
   },
-  async fetch({store}) {
-    await store.dispatch('getAllTransactionsOnce'), 
-    await store.dispatch('getAllMembersOnce')
-  }
 
 
     

@@ -25,9 +25,6 @@
 import { mapState } from 'vuex'
 
 export default {
-  async fetch({store}) {
-    await store.dispatch('getAllMembersOnce');
-  },
   head () {
     return {
       title: 'Users'
