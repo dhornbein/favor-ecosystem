@@ -3,7 +3,7 @@
     <label :for="$attrs.id">{{ label }}</label>
     <input v-bind="$attrs" :value="value" v-on:input="$emit('input', $event.target.value)">
   </div>
-  <input v-else v-bind="$attrs" :value="value" v-on:input="$emit('input', $event.target.value)">
+  <input class="input" v-else v-bind="$attrs" :value="value" v-on:input="$emit('input', $event.target.value)">
 </template>
 
 <script>
@@ -13,7 +13,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .input {
     @apply flex flex-col gap-2;
 
@@ -27,6 +27,7 @@ export default {
       @apply text-red-500 font-bold;
     }
     
+    input#{&},
     input {
       @apply border border-gray-200 shadow-inner rounded-lg p-2 focus:border-blue-200;
     }
