@@ -6,20 +6,21 @@
     </header>
       
     <div>
-      <TransactionCard v-for="(row, idx) in trans" isSlim :key="idx" :row="row" />
+      <TransactionCard v-for="(row, idx) in transactions" isSlim :key="idx" :row="row" />
     </div>
 
   </main>
 </template>
 
 <script>
-export default {
-  async asyncData ({ $http }) {
-    const trans = await $http.$get('/api/transactions')
+import { mapState } from 'vuex'
 
-    return {
-      trans
-    }
+export default {
+  computed: {
+    ...mapState(['transactions'])
+  },
+  async fetch({store}) {
+    await store.dispatch('getAllTransactionsOnce');
   }
 }
 </script>

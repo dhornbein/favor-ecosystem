@@ -45,18 +45,9 @@
 
 <script>
 export default {
-  asyncData ({ params, error, $http }) {
-    return Promise.all([
-      $http.$get('/api/transactions/' + params.id), 
-      $http.$get('/api/members/' + params.id)
-    ])
-    .then(function([trans,member]) {
-      return { trans, member }
-    })
-    .catch((e) => {
-      console.log(e);
-      error({ statusCode: 404, message: 'Member not found for id: ' + params.id })
-    });
+  async fetch({store}) {
+    await store.dispatch('getAllTransactionsOnce'), 
+    await store.dispatch('getAllMembersOnce')
   },
   head () {
     return {
@@ -72,8 +63,13 @@ export default {
     this.view = (this.$route.hash) ? this.$route.hash.slice(1) : this.view
   },
   computed: {
-    userName() {
-      return this.member.first_name + ' ' + this.member.last_name
+    ...mapState(['transactions','members']),
+    member() {
+      return this.$store.getters.getMemberById(this.$route.params.id);
+    },
+    memberTransactions() {
+      return this.$store.getters.getTransactionsByMemberUUID(this.member.uuid);
+    },
     },
     isGrid() {
       return this.view === 'grid'

@@ -13,13 +13,14 @@
 </template>
 
 <script>
-export default {
-  async asyncData ({ $http }) {
-    const trans = await $http.$get('/api/transactions')
+import { mapState } from 'vuex'
 
-    return {
-      trans
-    }
+export default {
+  computed: {
+    ...mapState(['transactions'])
+  },
+  async fetch({store}) {
+    await store.dispatch('getAllTransactionsOnce');
   }
 }
 </script>

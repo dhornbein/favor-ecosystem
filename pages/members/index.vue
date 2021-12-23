@@ -22,10 +22,11 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  async asyncData ({ $http }) {
-    const data = await $http.$get('/api/members')
-    return { members: data }
+  async fetch({store}) {
+    await store.dispatch('getAllMembersOnce');
   },
   head () {
     return {
@@ -47,6 +48,7 @@ export default {
     isTable() {
       return this.view === 'table'
     },
+    ...mapState(['members'])
   },
   methods: {
     toggleView(view) {
