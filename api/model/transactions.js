@@ -1,7 +1,7 @@
 const { google } = require('googleapis');
 const sheets = google.sheets('v4');
 const env = require('../env.json');
-const auth = require('../auth');
+const auth = require('./google-auth');
 
 const SPREADSHEET_ID = env.SPREADSHEET_ID
 const TRANSACTION_RANGE = 'Transactions!A:AA'

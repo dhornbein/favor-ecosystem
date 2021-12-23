@@ -2,7 +2,18 @@ const { check, validationResult } = require('express-validator');
 const { get: getTransactions } = require('../model/transactions')
 const { get: getMembers } = require('../model/members')
 const { v4: uuidv4, validate: uuidValidate } = require('uuid')
-const { error, success } = require('../utilities/index')
+
+exports.error = data => {
+  return {
+    error: data
+  }
+}
+
+exports.success = data => {
+  return {
+    success: data
+  }
+}
 
 exports.transaction = [
   check('recipientId')
@@ -65,7 +76,7 @@ exports.transaction = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())
-      return res.status(422).json(error(errors.array()));
+      return res.status(422).json(this.error(errors.array()));
     next();
   },
 ];
@@ -166,7 +177,7 @@ exports.member = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())
-      return res.status(422).json(error(errors.array()));
+      return res.status(422).json(this.error(errors.array()));
     next();
   },
 ];

@@ -1,6 +1,6 @@
 const members = require('../model/members')
 const { v4: uuidv4 } = require('uuid')
-const { error, success } = require('../utilities/index')
+const { error, success } = require('../middleware/validate')
 
 exports.get = async (req, res, next) => {
 
