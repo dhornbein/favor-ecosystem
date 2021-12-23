@@ -33,6 +33,7 @@ exports.transaction = [
     .not()
     .isEmpty()
     .withMessage('Amount can not be empty')
+    .bail()
     .isNumeric()
     .withMessage('Amount must be a number')
     .custom(amount => amount > 0.001)
@@ -79,7 +80,7 @@ async function validateTransaction(value, { req }) {
   const broker = (brokerId) ? members.find(member => member.uuid === brokerId) : null
 
   if (payeeId === recipientId)
-    throw new Error('Payee and recipient can not have the same!')
+    throw new Error('Payee and recipient can not be the same!')
 
   // if payee or recipient is not found, throw error
   if (payee === undefined)
