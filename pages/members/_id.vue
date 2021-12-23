@@ -5,12 +5,12 @@
 
       <nuxt-link to="/members" class="text-sm text-gray-500 hover:text-brand-primary">Members</nuxt-link>
       <h2 class="text-5xl font-cormorant flex items-center gap-3">
-        <span>{{ userName }}</span>
+        <span>{{ fullName }}</span>
         <MemberIcon :username="member.username" />
       </h2>
       <div class="flex gap-3">
-        <FavorDisplay :num="member.credit_limit" label="Credit Limit" />
-        <FavorDisplay :num="member.transaction_total" label="Total Transactions" class="text-purple-500" />
+        <FavorDisplay :num="member.creditLimit" label="Credit Limit" />
+        <FavorDisplay :num="member.transactionTotal" label="Total Transactions" class="text-purple-500" />
       </div>
       <p class="my-3 text-center">
         <a href="#table" @click="toggleView('table')" class="btn" :class="{ 'is-active': isTable}">Table</a>
@@ -25,7 +25,7 @@
     </header>
 
     <section class="relative" v-if="isGrid">
-      <TransactionCard v-for="(row, idx) in trans.slice().reverse()" :key="idx" :row="row" isSlim :focusUser="member.ID" />
+      <TransactionCard v-for="(row, idx) in memberTransactions.slice().reverse()" :key="idx" :row="row" isSlim :focusUser="member.uuid" />
     </section>
 
     <section class="container-fill" v-if="isTable">
@@ -37,13 +37,15 @@
           <FavorDisplay :num="-member.debit" label="Debit" />
         </div>
       </div>
-      <TransactionTchart :trans="trans.slice().reverse()" :targetId="member.ID" />
+      <TransactionTchart :trans="memberTransactions.slice().reverse()" :focusUUID="member.uuid" />
     </section>
 
   </main>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   async fetch({store}) {
     await store.dispatch('getAllTransactionsOnce'), 
@@ -51,7 +53,7 @@ export default {
   },
   head () {
     return {
-      title: `User: ${this.userName}`
+      title: `User: ${this.fullName}`
     }
   },
   data() {
@@ -70,6 +72,8 @@ export default {
     memberTransactions() {
       return this.$store.getters.getTransactionsByMemberUUID(this.member.uuid);
     },
+    fullName() {
+      return this.member.firstName + ' ' + this.member.lastName
     },
     isGrid() {
       return this.view === 'grid'

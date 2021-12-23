@@ -6,10 +6,10 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(row) in filtered" :key="row.ID" :id="`row-${row.ID}`" :title="row.timestamp"
+      <tr v-for="(row) in filtered" :key="row.id" :id="`row-${row.id}`" :title="row.created"
         class="odd:bg-gray-100"
       >
-        <td v-for="(cell, col) in row" :key="row.ID + '-' + col"
+        <td v-for="(cell, col) in row" :key="row.id + '-' + col"
           :class="col"
         >
           <details v-if="col == 'title' && row.description">

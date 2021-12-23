@@ -2,11 +2,11 @@
   <main>
     
     <header>
-      <h2>Transactions for {{ member.first_name }}</h2>
+      <h2>Transactions for {{ member.firstName }}</h2>
     </header>
       
     <div>
-      <TransactionCard v-for="(row, idx) in trans" :key="idx" :row="row" />
+      <TransactionCard v-for="(row, idx) in memberTransactions" :key="idx" :row="row" />
     </div>
 
   </main>

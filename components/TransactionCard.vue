@@ -3,11 +3,11 @@
     <div class="trans-card__body">
       <header class="text-sm">
         <p class="">
-          <nuxt-link :to="`/members/${row.payee_id}`" class="member-link payee font-bold hover:text-brand-primary">{{ row.payee }}</nuxt-link>
+          <nuxt-link :to="`/members/${payeeNumber}`" class="member-link payee font-bold hover:text-brand-primary">{{ payeeUsername }}</nuxt-link>
           paid
-          <nuxt-link :to="`/members/${row.recipient_id}`" class="member-link recipient font-bold hover:text-brand-primary">{{ row.recipient }}</nuxt-link>
+          <nuxt-link :to="`/members/${recipientNumber}`" class="member-link recipient font-bold hover:text-brand-primary">{{ recipientUsername }}</nuxt-link>
         </p>
-        <time :datetime="row.timestamp">{{ row.timestamp | formatDate }}</time>
+        <time :datetime="row.created">{{ row.created | formatDate }}</time>
       </header>
       <div class="trans-card__details">
         <h1>{{ row.title }}</h1>
@@ -17,7 +17,7 @@
     <div class="trans-card__favor">
       <div class="fee text-gray-400" v-if="!slim">
         <span class="text-xs">fee</span>
-        <span class="">{{ row.fee ? - row.fee / 2 : row.amount * ($globals.fee / 2) | favor }}</span>
+        <span class="">{{ row.amount * ($globals.fee / 2) | favor }}</span>
       </div>
       <div class="amount text-gray-600">
         <span class="">f</span>
@@ -25,17 +25,17 @@
       </div>
       <div class="fee text-gray-400" v-if="!slim">
         <span class="text-xs">fee</span>
-        <span class="">{{ row.fee ? - row.fee / 2 : row.amount * ($globals.fee / 2) | favor }}</span>
+        <span class="">{{ row.amount * ($globals.fee / 2) | favor }}</span>
       </div>
       <div class="fee text-gray-400" v-else>
         <span class="text-xs">fee</span>
-        <span class="">{{ row.fee ? - row.fee : row.amount * $globals.fee | favor }}</span>
+        <span class="">{{ row.amount * $globals.fee | favor }}</span>
       </div>
     </div>
     <div class="trans-card__icons">
-      <MemberIcon :username="row.payee" :highlight="isFocusedPayee || !isFocusedRecipient" />
+      <MemberIcon :username="payeeUsername" :highlight="isFocusedPayee || !isFocusedRecipient" />
       <div class="text-gray-400">&#x27F1;</div>
-      <MemberIcon :username="row.recipient" alt :highlight="isFocusedRecipient" />
+      <MemberIcon :username="recipientUsername" alt :highlight="isFocusedRecipient" />
     </div>
   </div>
 </template>
@@ -52,29 +52,43 @@ export default {
       required: false
     },
     focusUser: {
+      // pass the user uuid of the user to focus on
+      type: String,
       required: false
     }
   },
   data() {
     return {
       slim: this.isSlim,
-      classes: { 
-        'trans-card--slim': this.isSlim, 
-        'trans-card--network': this.row.payee_id === 1, 
-        'trans-card--payee': this.isFocusedPayee, 
-        'trans-card--recipient': this.isFocusedRecipient 
-      }
     }
   },
   computed: {
+    classes() { 
+      return {
+        'trans-card--slim': this.isSlim, 
+        'trans-card--network': this.row.payeeId === this.$globals.networkUUID, 
+        'trans-card--payee': this.isFocusedPayee, 
+        'trans-card--recipient': this.isFocusedRecipient 
+      }
+    },
     isFocusedPayee() {
-      if (isNaN(this.focusUser)) return this.focusUser === this.row.payee
-      return this.focusUser === this.row.payee_id
+      return this.focusUser === this.row.payeeId
     },
     isFocusedRecipient() {
-      if (isNaN(this.focusUser)) return this.focusUser === this.row.recipient
-      return this.focusUser === this.row.recipient_id
+      return this.focusUser === this.row.recipientId
     },
+    payeeNumber() {
+      return this.$store.getters.getMemberIdByUUID(this.row.payeeId)
+    },
+    recipientNumber() {
+      return this.$store.getters.getMemberIdByUUID(this.row.recipientId)
+    },
+    payeeUsername() {
+      return this.$store.getters.getMemberUsernameByUUID(this.row.payeeId)
+    },
+    recipientUsername() {
+      return this.$store.getters.getMemberUsernameByUUID(this.row.recipientId)
+    }
   },
   methods: {
     toggleSlim() {

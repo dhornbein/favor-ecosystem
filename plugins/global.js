@@ -3,7 +3,8 @@ import Vue from 'vue'
 let globals = {
   fee: 0.02,
   symbol: 'f',
-  networkUsername: 'FSN'
+  networkUsername: 'FSN',
+  networkUUID: '942b2515-3f16-42d8-869f-1e3af4d51117'
 }
 
 export default ({ app }, inject) => {

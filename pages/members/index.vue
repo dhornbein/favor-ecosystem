@@ -14,7 +14,7 @@
     </div>
 
     <div class="py-5 overflow-x-scroll" v-if="isTable">
-      <DataTable :trans="members" :showCols="['ID','username','credit_limit','balance','transaction_total']" />
+      <DataTable :trans="members" :showCols="['ID','username','creditLimit','balance','transactionTotal']" />
     </div>
 
 

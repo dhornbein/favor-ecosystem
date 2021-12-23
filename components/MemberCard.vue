@@ -1,23 +1,23 @@
 <template>
   <div class="member-card">
     <header class="member-card__head">
-      <nuxt-link :to="`/members/${row.ID}`">
+      <nuxt-link :to="`/members/${row.id}`">
         <MemberIcon :username="row.username" class="flex-shrink-0" />
       </nuxt-link>
       <div class="member__bio">
-        <nuxt-link :to="`/members/${row.ID}`">
-          <h2 class="text-2xl">{{ row.first_name }} {{ row.last_name }}</h2>
+        <nuxt-link :to="`/members/${row.id}`">
+          <h2 class="text-2xl">{{ row.firstName }} {{ row.lastName }}</h2>
         </nuxt-link>
         <p class="text-sm" v-if="row.email || row.pone">
           <a :href="`mailto:${row.email}`" v-if="row.email" class="whitespace-nowrap">{{ row.email }}</a>
-          <a :href="`tel:${row.phone}`" v-if="row.phone" class="whitespace-nowrap">{{ row.phone | phoneNumber }}</a>
+          <a :href="`tel:${row.phone}`" v-if="row.phone" class="whitespace-nowrap">{{ row.phone }}</a>
         </p>
       </div>
     </header>
     <div class="member-card__body">
       <div class="member__details">
-        <FavorDisplay :num="row.transaction_total" label="Total Transactions" />
-        <FavorDisplay :num="row.credit_limit" label="Credit Limit" class="text-gray-500 text-sm" />
+        <FavorDisplay :num="row.transactionTotal" label="Total Transactions" />
+        <FavorDisplay :num="row.creditLimit" label="Credit Limit" class="text-gray-500 text-sm" />
       </div>
       <div class="member__balance">
         <span>Balance</span>
@@ -46,9 +46,6 @@ export default {
   filters: {
     formatDate(dateStr) {
       return Intl.DateTimeFormat("us-EN").format(new Date(dateStr))
-    },
-    phoneNumber(phone) {
-      return phone.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
     }
   },
 }

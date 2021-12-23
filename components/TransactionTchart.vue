@@ -1,11 +1,11 @@
 <template>
   <div class="tchart">
-    <div class="tchart__row" v-for="row in trans" :key="row.ID">
+    <div class="tchart__row" v-for="row in trans" :key="row.id">
       <div class="tchart__credit">
-        <TransactionTchartRow class="tchart__transaction" :row="row" v-if="row.payee_id === targetId" />
+        <TransactionTchartRow class="tchart__transaction" :row="row" v-if="row.payeeId === focusUUID" />
       </div>
       <div class="tchart__debit bg-purple-200 w-1/2">
-        <TransactionTchartRow class="tchart__transaction" :row="row" v-if="row.recipient_id === targetId" />
+        <TransactionTchartRow class="tchart__transaction" :row="row" v-if="row.recipientId === focusUUID" />
       </div>
     </div>
   </div>
@@ -18,17 +18,17 @@ export default {
       type: Array,
       required: true
     },
-    targetId: {
+    focusUUID: {
       type: Number,
       required: true
     }
   },
   computed: {
     isReceiver() {
-      return this.trans.filter(obj => obj.recipient_id === this.targetId)
+      return this.trans.filter(obj => obj.recipientId === this.targetId)
     },
     isPayee() {
-      return this.trans.filter(obj => obj.payee_id === this.targetId)
+      return this.trans.filter(obj => obj.payeeId === this.targetId)
     }
   },
   filters: {

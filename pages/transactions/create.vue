@@ -24,9 +24,9 @@
 
       <form class="broker-form">
         <BaseInput label="Purchaser" id="purchaser" type="text" v-model="form.payee" placeholder="@jacklovesbeans" required />
-        <BaseInput id="purchaser_id" type="hidden" v-model="form.payee_id" />
+        <BaseInput id="purchaser_id" type="hidden" v-model="form.payeeId" />
         <BaseInput label="Recipient" id="recipient" type="text" v-model="form.recipient" placeholder="@oldcowfan" required />
-        <BaseInput id="recipient_id" type="hidden" v-model="form.recipient_id" />
+        <BaseInput id="recipientId" type="hidden" v-model="form.recipientId" />
         <label for="schedule"><input type="checkbox" v-model="scheduleLater" id="schedule"> Schedule Payment</label>
         <BaseInput label="Effective Date" id="effective_date" type="date" v-model="form.effective_datetime" v-if="scheduleLater" />
 
@@ -56,7 +56,7 @@
 
       <BaseModal v-if="showConfirm" @close="showConfirm = false">
         <h2 class="text-2xl">Confirm Transaction</h2>
-        <TransactionCard :row="{...form,timestamp:form.effective_date}" v-if="form.payee && form.recipient" />
+        <TransactionCard :row="{...form,created:form.effective_date}" v-if="form.payee && form.recipient" />
         <p>Are you sure you want to submit this transaction?</p>
         <button class="btn" @click="sendReq">Submit</button> <button class="btn" @click="showConfirm = false">Edit</button>
 
@@ -78,9 +78,9 @@ export default {
       scheduleLater: false,
       form: {
         payee: null,
-        payee_id: null,
+        payeeId: null,
         recipient: null,
-        recipient_id: null,
+        recipientId: null,
         effective_datetime: new Date().toLocaleDateString('en-CA'),
         amount: null,
         title: null,
