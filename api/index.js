@@ -11,8 +11,8 @@ app.use(cors());
 
 
 // Require API routes
-const members = require('./routes/members')
-const transactions = require('./routes/transactions')
+const members = require('./routes/members-router')
+const transactions = require('./routes/transactions-router')
 
 // Import API Routes
 app.use(members)

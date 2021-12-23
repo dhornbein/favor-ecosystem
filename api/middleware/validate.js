@@ -1,6 +1,6 @@
 const { check, validationResult } = require('express-validator');
-const { get: getTransactions } = require('../model/transactions')
-const { get: getMembers } = require('../model/members')
+const { get: getTransactions } = require('../model/transactions-model')
+const { get: getMembers } = require('../model/members-model')
 const { v4: uuidv4, validate: uuidValidate } = require('uuid')
 
 exports.error = data => {

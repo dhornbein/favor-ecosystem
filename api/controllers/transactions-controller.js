@@ -1,4 +1,4 @@
-const transactions = require('../model/transactions')
+const transactions = require('../model/transactions-model')
 const { v4: uuidv4 } = require('uuid')
 const { error, success } = require('../middleware/validate')
 

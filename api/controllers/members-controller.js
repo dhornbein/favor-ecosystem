@@ -1,14 +1,14 @@
-const members = require('../model/members')
+const membersModel = require('../model/members-model')
 const { v4: uuidv4 } = require('uuid')
 const { error, success } = require('../middleware/validate')
 
 exports.get = async (req, res, next) => {
 
   try {
-    const trans = await members.get(req.params)
+    const members = await membersModel.get(req.params)
 
     if (req.params.id) {
-      const found = trans.find(row => row.id === parseInt(req.params.id))
+      const found = members.find(row => row.id === parseInt(req.params.id))
 
       if (found) {
         res.status(200).json({ data: found })
@@ -22,7 +22,7 @@ exports.get = async (req, res, next) => {
         }))
       }
     } else {
-      res.status(200).json({ data: trans })
+      res.status(200).json({ data: members })
     }
   } catch (err) {
     console.error(err)
