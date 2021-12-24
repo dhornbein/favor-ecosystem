@@ -54,6 +54,49 @@ async function validateAuth(value, { req }) {
 
 }
 
+// firstName, lastName, email, phone, favor, invitedById
+exports.invite = [
+  check('firstName')
+    .trim()
+    .escape()
+    .not()
+    .isEmpty()
+    .withMessage('First name is required'),
+  check('lastName')
+    .trim()
+    .escape(),
+  check('email')
+    .trim()
+    .escape()
+    .custom(validateEmail)
+    .withMessage('Invalid email address'),
+  check('phone')
+    .customSanitizer(normalizePhone),
+  check('favor')
+    .trim()
+    .isNumeric()
+    .withMessage('Favor amount must be a number')
+    .custom(amount => amount > 0.001)
+    .withMessage('Favor amount must be more than f0.001')
+    .customSanitizer(sanitizeFavor), // round to 3 decimal places 0.001
+  check('invitedById')
+    .not()
+    .isEmpty()
+    .withMessage('Must include a UUID of the inviting member')
+    .custom(uuidValidate)
+    .withMessage('Invalid UUID')
+    .custom((value, { req }) => req.user.uuid == value || req.user.roles['broker'] ) // check that the auth token's owner is the same as the invitedByID
+    .withMessage('Auth token UUID must match invitedById!')
+    .bail()
+    .custom(validateMember), // checks for unique email & phone and if invited by ID exists
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(422).json(this.error(errors.array()));
+    next();
+  },
+]
+
 exports.transaction = [
   check('recipientId')
     .trim()
@@ -221,15 +264,18 @@ exports.member = [
   },
 ];
 
+// used with validate invite as well!
 async function validateMember(value, { req }) {
   // fetch members from database
   const members = await getMembers()
 
-  const { username, email, phone } = req.body
+  const { username, email, phone, invitedById, brokerId } = req.body
 
   const foundEmail = members.find(member => member.email === email)
   const foundPhone = members.find(member => member.phone === phone)
   const foundUsername = members.find(member => member.username === username)
+  const foundInviter = members.find(member => member.uuid === invitedById)
+  const foundBroker = members.find(member => member.uuid === brokerId)
   
   if (foundEmail)
     throw new Error('Email is already in use')
@@ -242,6 +288,12 @@ async function validateMember(value, { req }) {
 
   if (!phone && !email)
     throw new Error('Phone number OR email is required')
+
+  if (invitedById && !foundInviter)
+    throw new Error('Inviter doesn\'t match any members')
+
+  if (brokerId && !foundBroker)
+    throw new Error('BrokerId doesn\'t match any members')
 
   return true
 }

@@ -33,9 +33,9 @@ exports.requireToken = (req, res, next) => {
     const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, env.JWT_AUTH_SECRET);
 
-    if (!decoded.roles) {
-      return res.status(403).json(error(message.noPermissions));
-    }
+    // if (!decoded.roles) {
+    //   return res.status(403).json(error(message.noPermissions));
+    // }
 
     // add the decoded token to the request
     req.user = decoded;

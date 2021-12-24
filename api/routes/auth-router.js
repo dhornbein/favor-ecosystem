@@ -11,5 +11,6 @@ const use = fn => (req, res, next) =>
 router.get('/auth', auth.checkToken, use(authController.get))
 router.get('/auth/me', auth.requireToken, use(authController.getMember))
 router.post('/auth', validate.auth, use(authController.post))
+router.post('/auth/invite', auth.requireToken, validate.invite, use(authController.invite))
 
 module.exports = router

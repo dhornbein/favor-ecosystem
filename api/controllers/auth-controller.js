@@ -1,4 +1,5 @@
 const membersModel = require('../model/members-model')
+const authModel = require('../model/auth-model')
 const { error, success } = require('../middleware/validate')
 const env = require('../env.json')
 var jwt = require('jsonwebtoken');
@@ -35,10 +36,58 @@ exports.getMember = async (req, res, next) => {
 
 }
 
+exports.invite = async (req, res, next) => {
+  try {
+    let expiresIn = '14d'
+
+    // invitation_token
+    const token = jwt.sign({
+      invitation: {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        phone: req.body.phone,
+      },
+      invitedById: req.body.invitedById,
+      transaction: (req.body.favor) ? {
+        payeeId: req.body.invitedById
+      } : false,
+    }, env.JWT_INVITE_SECRET, {
+      expiresIn
+    })
+
+    // db payload
+    const payload = {
+      created: new Date().toISOString(),
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      phone: req.body.phone,
+      favor: req.body.favor,
+      invitedById: req.body.invitedById,
+      token: token
+    }
+
+    // send token to database
+    await authModel.post(payload)
+
+    res.status(201).json(success({
+      invitation_token: token,
+      token_type: 'Bearer',
+      expires_in: expiresIn,
+    }))
+    
+  } catch (err) {
+    console.error('Controller Error', err)
+    res.status(500).json(error(err))
+  }
+}
+
 exports.post = async (req, res, next) => {
   try {
     let expiresIn = '1h'
 
+    // access_token
     const token = jwt.sign({
       uuid: req.member.uuid,
       username: req.member.username,

@@ -47,7 +47,7 @@ export default {
   */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    // '@nuxtjs/eslint-module', // this stupid thing keeps throwing erros
+    // '@nuxtjs/eslint-module', // this stupid thing keeps throwing errors
     // see https://tailwindcss.nuxtjs.org/
     '@nuxtjs/tailwindcss',
     // see: https://google-fonts.nuxtjs.org/
