@@ -37,7 +37,9 @@ const KEYS = [
   'BrokerId',
   'InvitedById',
   'phone',
-  'email'
+  'email',
+  'roles',
+  'invites'
 ]
 
 const FAVOR_KEYS = [
@@ -48,10 +50,24 @@ const FAVOR_KEYS = [
   'transactionTotal',
 ]
 
+const AUTH_KEYS = [
+  'username',
+  'password'
+]
+
 exports.get = async (params) => {
   try {
     const response = (await sheets.spreadsheets.values.get(REQUEST.GET)).data;
-    return deserializeMembers(response.values)
+    return deserializeMembers(response.values,KEYS)
+  } catch (err) {
+    throw err
+  }
+}
+
+exports.auth = async () => {
+  try {
+    const response = (await sheets.spreadsheets.values.get(REQUEST.GET)).data;
+    return deserializeMembers(response.values,AUTH_KEYS)
   } catch (err) {
     throw err
   }
@@ -66,7 +82,7 @@ exports.post = async (payload) => {
     // collect the header row of the spreadsheet & find the next id
     if (members.length > 0) {
       headers = members[0];
-      nextId = Math.max(...deserializeMembers(members).map(obj => parseInt(obj.id))) + 1
+      nextId = Math.max(...deserializeMembers(members, KEYS).map(obj => parseInt(obj.id))) + 1
       payload['id'] = nextId;
     }
 
@@ -97,12 +113,12 @@ exports.post = async (payload) => {
 // takes a 'ListValue' array from the MajorDimensions=ROWS sheet 
 // with the first row being the headers
 // returns an array of objects with the headers as keys
-function deserializeMembers(members) {
+function deserializeMembers(members,keys) {
   let headers = members.shift(); // take the first row as headers
   return members.map(row => {
     return headers.reduce((obj, key, index) => {
       row[index] = FAVOR_KEYS.includes(key) ? roundFavorAmount(row[index]) : row[index];
-      if (KEYS.includes(key)) return { ...obj, [key]: row[index] };
+      if (keys.includes(key)) return { ...obj, [key]: row[index] };
       return obj;
     }, {});
 

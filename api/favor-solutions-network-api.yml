@@ -315,3 +315,9 @@ components:
           type: string
           format: email
           example: 'name@example.com'
+        password:
+          type: string
+        roles:
+          type: array
+        invites:
+          type: integer
