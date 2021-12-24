@@ -9,8 +9,11 @@ const verifyToken = (req, res, next) => {
 
   if (!authHeader) {
     return res.status(403).json(error({
-      message: 'No token provided.',
-      header: req.headers
+      title: "Not Authorized",
+      detail: 'No token provided',
+      status: 403,
+      path: req.originalUrl,
+      timestamp: new Date(),
     }));
   }
   
