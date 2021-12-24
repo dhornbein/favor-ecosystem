@@ -50,9 +50,13 @@ const FAVOR_KEYS = [
   'transactionTotal',
 ]
 
+// TODO handle returned keys better, offer option to get all keys, restrict keys based on user role
 const AUTH_KEYS = [
+  'id',
+  'uuid',
   'username',
-  'password'
+  'password',
+  'roles'
 ]
 
 exports.get = async (params) => {

@@ -6,7 +6,9 @@ var jwt = require('jsonwebtoken');
 exports.get = async (req, res, next) => {
 
   try {
-    const members = await membersModel.get(req.params)
+    res.status(200).json(success({
+      user: req.user
+    }, 'You are authenticated!'))
   } catch (err) {
     console.error(err)
     res.status(500).json(error(err))
@@ -19,7 +21,9 @@ exports.post = async (req, res, next) => {
     let expiresIn = '1h'
 
     const token = jwt.sign({
+      uuid: req.member.uuid,
       username: req.member.username,
+      id: req.member.id,
       roles: req.member.roles
     }, env.JWT_AUTH_SECRET, {
       expiresIn

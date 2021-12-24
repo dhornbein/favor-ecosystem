@@ -10,9 +10,9 @@ exports.error = data => {
   }
 }
 
-exports.success = data => {
+exports.success = (data, message = true) => {
   return {
-    success: true,
+    success: message,
     ...data
   }
 }
