@@ -1,13 +1,16 @@
 <template>
-  <main>
+  <main v-if="$auth.loggedIn">
     
     <header>
 
       <nuxt-link to="/members" class="text-sm text-gray-500 hover:text-brand-primary">Members</nuxt-link>
-      <h2 class="text-5xl font-cormorant flex items-center gap-3">
-        <span>{{ fullName }}</span>
+      <div class="flex items-center gap-3">
+        <h2 class="text-5xl font-cormorant">{{ fullName }}</h2>
         <MemberIcon :username="member.username" />
-      </h2>
+        <div class="text-sm rounded-md bg-brand-primary text-yellow-500 font-bold px-2" 
+          v-for="role in member.roles" :key="role"
+        >{{ role }}</div>
+      </div>
       <div class="flex gap-3">
         <FavorDisplay :num="member.creditLimit" label="Your Credit Limit" />
         <FavorDisplay :num="member.transactionTotal" label="Your Total Transactions" class="text-purple-500" />

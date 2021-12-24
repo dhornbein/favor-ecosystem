@@ -3,6 +3,7 @@
     <header class="member-card__head">
       <nuxt-link :to="`/members/${row.id}`">
         <MemberIcon :username="row.username" class="flex-shrink-0" />
+        <div class="role" v-if="isBroker">Broker</div>
       </nuxt-link>
       <div class="member__bio">
         <nuxt-link :to="`/members/${row.id}`">
@@ -43,6 +44,11 @@ export default {
       required: true
     }
   },
+  computed: {
+    isBroker() {
+      return this.row.roles ? this.row.roles.includes('broker') : false
+    }
+  },
   filters: {
     formatDate(dateStr) {
       return Intl.DateTimeFormat("us-EN").format(new Date(dateStr))
@@ -60,6 +66,10 @@ export default {
     
     .member__bio {
       @apply text-right;
+    }
+
+    .role {
+      @apply bg-brand-primary text-yellow-500 text-xs px-2 rounded-bl-md absolute right-0 top-0;
     }
   }
   .member-card__body {
