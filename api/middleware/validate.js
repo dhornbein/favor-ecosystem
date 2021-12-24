@@ -163,14 +163,14 @@ exports.member = [
     .not()
     .exists()
     .withMessage('Do not include transaction total in the request body'),
-  check('BrokerId')
+  check('brokerId')
     .trim()
-    .if(check('BrokerId').exists().not().isEmpty())
+    .if(check('brokerId').exists().not().isEmpty())
     .custom(uuidValidate)
     .withMessage('Invalid Broker UUID'),
-  check('InvitedById')
+  check('invitedById')
     .trim()
-    .if(check('InvitedById').exists().not().isEmpty())
+    .if(check('invitedById').exists().not().isEmpty())
     .custom(uuidValidate)
     .withMessage('Invalid Invited By UUID'),
   check('phone')
