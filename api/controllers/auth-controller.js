@@ -6,9 +6,16 @@ var jwt = require('jsonwebtoken');
 exports.get = async (req, res, next) => {
 
   try {
-    res.status(200).json(success({
-      user: req.user
-    }, 'You are authenticated!'))
+    if (req.user) {
+      res.status(200).json(success({
+        user: req.user
+      }, 'You are authenticated!'))
+    } else {
+      res.status(401).json(error({
+        title: 'Not Authorized',
+        detail: 'You are not authenticated',
+      }))
+    }
   } catch (err) {
     console.error(err)
     res.status(500).json(error(err))

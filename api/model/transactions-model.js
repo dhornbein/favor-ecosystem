@@ -35,10 +35,10 @@ const KEYS = [
   'transactionPhone'
 ]
 
-exports.get = async (params) => {
+exports.get = async () => {
   try {
     const response = (await sheets.spreadsheets.values.get(REQUEST.GET)).data;
-    return deserializeTransactions(response.values)
+    return deserializeTransactions(response.values);
   } catch (err) {
     throw err
   }
@@ -84,11 +84,11 @@ exports.post = async (payload) => {
 // takes a 'ListValue' array from the MajorDimensions=ROWS sheet 
 // with the first row being the headers
 // returns an array of objects with the headers as keys
-function deserializeTransactions(transactions) {
+function deserializeTransactions(transactions, keys = KEYS) {
   let headers = transactions.shift(); // take the first row as headers
   return transactions.map(row => {
     return headers.reduce((obj, key, index) => {
-      if (KEYS.includes(key)) return { ...obj, [key]: row[index] };
+      if (keys.includes(key)) return { ...obj, [key]: row[index] };
       return obj;
     }, {});
 
