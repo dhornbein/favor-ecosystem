@@ -23,10 +23,13 @@
       <h2 class="">Enter Transaction</h2>
 
       <form class="broker-form">
+        
         <label for="payeeId">Select Payee</label>
         <v-select id="payeeId" :options="membersLabelList" v-model="form.payeeId" :reduce="member => member.uuid"></v-select>
+        
         <label for="recipientId">Select Recipient</label>
         <v-select id="recipientId" :options="membersLabelList" v-model="form.recipientId" :reduce="member => member.uuid"></v-select>
+        
         <label for="schedule"><input type="checkbox" v-model="scheduleLater" id="schedule"> Schedule Payment</label>
         <BaseInput label="Effective Date" id="effectiveDatetime" type="datetime-local" v-model="form.effectiveDatetime" v-if="scheduleLater" />
 
@@ -74,6 +77,7 @@ export default {
   components: {
     vSelect
   },
+  middleware: ['auth-broker'],
   async fetch({store}) {
     await store.dispatch('getAllTransactions'), 
     await store.dispatch('getAllMembers')
