@@ -6,7 +6,7 @@
       </nuxt-link>
       <div class="member__bio">
         <nuxt-link :to="`/members/${row.id}`">
-          <h2 class="text-2xl">{{ row.firstName }} {{ row.lastName }}</h2>
+          <h2 class="text-2xl" :class="{ 'font-bold': $auth.user.uuid == row.uuid }">{{ row.firstName }} {{ row.lastName }}</h2>
         </nuxt-link>
         <p class="text-sm" v-if="row.email || row.pone">
           <a :href="`mailto:${row.email}`" v-if="row.email" class="whitespace-nowrap">{{ row.email }}</a>
