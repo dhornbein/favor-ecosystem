@@ -43,7 +43,7 @@ exports.post = async (req, res, next) => {
       uuid: req.member.uuid,
       username: req.member.username,
       id: req.member.id,
-      roles: req.member.roles.split(',')
+      roles: req.member.roles
     }, env.JWT_AUTH_SECRET, {
       expiresIn
     })

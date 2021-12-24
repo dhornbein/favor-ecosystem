@@ -122,6 +122,7 @@ function deserializeMembers(members,keys) {
   return members.map(row => {
     return headers.reduce((obj, key, index) => {
       row[index] = FAVOR_KEYS.includes(key) ? roundFavorAmount(row[index]) : row[index];
+      if (key === 'roles' && row[index]) row[index] = row[index].split(',');
       if (keys.includes(key)) return { ...obj, [key]: row[index] };
       return obj;
     }, {});
