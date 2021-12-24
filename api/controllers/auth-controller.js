@@ -22,6 +22,18 @@ exports.get = async (req, res, next) => {
   }
 
 }
+exports.getMember = async (req, res, next) => {
+
+  try {
+    const members = await membersModel.get()
+    const member = members.find(member => member.uuid === req.user.uuid)
+    res.status(200).json(member)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json(error(err))
+  }
+
+}
 
 exports.post = async (req, res, next) => {
   try {
