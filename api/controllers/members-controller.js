@@ -36,14 +36,13 @@ exports.post = async (req, res, next) => {
   const authMember = req.user;
 
   if (!authMember.roles.includes('broker')) {
-    res.status(403).json(error({
+    return res.status(403).json(error({
       title: "Not Authorized",
       detail: `You do not have permission to create members. Your roles are: ${authMember.roles}`,
       status: 403,
       path: req.originalUrl,
       timestamp: new Date(),
     }))
-    return null
   }
 
   // build new member object
