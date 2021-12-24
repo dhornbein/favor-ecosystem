@@ -35,18 +35,6 @@ exports.post = async (req, res, next) => {
 
   const authMember = req.user;
   const isBroker = authMember.roles.includes('broker')
-  const isMember = authMember.roles.includes('member')
-
-  if (!isBroker && !isMember) {
-    res.status(403).json(error({
-      title: "Not Authorized",
-      detail: `You do not have permission to create transactions! Your roles are: ${authMember.roles}`,
-      status: 403,
-      path: req.originalUrl,
-      timestamp: new Date(),
-    }))
-    return null
-  }
 
   if (!isBroker && req.body.payeeId !== authMember.uuid) {
     res.status(403).json(error({
