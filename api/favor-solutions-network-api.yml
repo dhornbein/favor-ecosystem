@@ -20,7 +20,7 @@ paths:
     get:
       tags:
         - members
-      summary: Authentication
+      summary: Test authentication
       operationId: authCheck
       description: |
         By passing login credentials
@@ -45,7 +45,6 @@ paths:
           description: You are not authenticated
     post:
       tags:
-        - members
         - public
       summary: request auth token
       operationId: authToken
@@ -252,7 +251,7 @@ paths:
               $ref: '#/components/schemas/TransactionItem'
       responses:
         '201':
-          description: Token created successfully
+          description: Transaction created successfully
           content:
             application/json:
               schema:
@@ -261,7 +260,7 @@ paths:
                   success:
                     type: boolean
                   data:
-                    $ref: '#/components/schemas/AccessTokenReturn'
+                    $ref: '#/components/schemas/TransactionItem'
         '401':
           description: token authentication error
         '403':
@@ -282,7 +281,6 @@ paths:
     get:
       tags:
         - members
-        - public
       summary: searches members
       operationId: searchMembers
       description: |
@@ -299,9 +297,7 @@ paths:
           description: pass an id to recieve a specific member
           required: false
           schema:
-            type: integer
-            format: int32
-            minimum: 0
+            $ref: '#/components/schemas/MemberItem/properties/id'
         - in: query
           name: skip
           description: number of records to skip for pagination
@@ -319,36 +315,108 @@ paths:
             maximum: 50
       responses:
         '200':
-          description: Member found
+          description: Members found
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MemberItem'
-        '400':
-          description: bad input parameter
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/MemberItem'
         '404':
           description: no members found
+        '422':
+          description: 'invalid input, object invalid'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    $ref: '#/components/schemas/ProcessError'
     post:
       tags:
         - brokers
       summary: adds a member
       operationId: addMember
       description: Adds a member
-      responses:
-        '201':
-          description: member created
-        '400':
-          description: 'invalid input, object invalid'
-        '409':
-          description: that member already exisits
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/MemberItem'
         description: Transaction
+      responses:
+        '201':
+          description: Member created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/MemberItem'
+        '401':
+          description: token authentication error
+        '403':
+          description: Not Authorized - only Brokers can create new members
+        '422':
+          description: 'invalid input, object invalid'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    $ref: '#/components/schemas/ProcessError'
+  /members/join/{token}:
+    post:
+      tags:
+        - public
+      summary: Join favor via invite
+      operationId: join
+      description: Join with invite token
+      parameters:
+        - in: path
+          name: token
+          required: true
+          schema:
+            $ref: '#/components/schemas/InviteTokenReturn/properties/invitation_token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMemberRequest'
+        description: Transaction
+      responses:
+        '201':
+          description: Member created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/MemberItem'
+        '401':
+          description: token authentication error
+        '403':
+          description: Not Authorized - missing invite token
+        '422':
+          description: 'invalid input, object invalid, token invalid or claimed'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    $ref: '#/components/schemas/ProcessError'
 components:
   schemas:
     ProcessError:
@@ -515,6 +583,27 @@ components:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
+    NewMemberRequest:
+      type: object
+      required:
+        - username
+        - email
+        - firstName
+      properties:
+        username:
+          $ref: '#/components/schemas/MemberItem/properties/username'
+        firstName:
+          $ref: '#/components/schemas/MemberItem/properties/firstName'
+        lastName:
+          $ref: '#/components/schemas/MemberItem/properties/lastName'
+        BrokerId:
+          $ref: '#/components/schemas/MemberItem/properties/BrokerId'
+        InvitedById:
+          $ref: '#/components/schemas/MemberItem/properties/InvitedById'
+        phone:
+          $ref: '#/components/schemas/MemberItem/properties/phone'
+        email:
+          $ref: '#/components/schemas/MemberItem/properties/email'
     MemberItem:
       type: object
       required:
