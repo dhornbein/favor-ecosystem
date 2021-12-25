@@ -16,7 +16,7 @@ exports.error = data => {
 exports.success = (data, message = true) => {
   return {
     success: message,
-    ...data
+    data: data
   }
 }
 
@@ -92,6 +92,7 @@ exports.invite = [
     .customSanitizer(normalizePhone),
   check('favor')
     .trim()
+    .if(check('favor').not().isEmpty())
     .isNumeric()
     .withMessage('Favor amount must be a number')
     .custom(amount => amount > 0.001)

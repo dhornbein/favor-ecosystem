@@ -28,7 +28,7 @@ exports.getMember = async (req, res, next) => {
   try {
     const members = await membersModel.get()
     const member = members.find(member => member.uuid === req.user.uuid)
-    res.status(200).json(member)
+    res.status(200).json(success(member,'Member info found'))
   } catch (err) {
     console.error(err)
     res.status(500).json(error(err))
@@ -67,7 +67,8 @@ exports.invite = async (req, res, next) => {
       },
       invitedById: req.body.invitedById,
       transaction: (req.body.favor) ? {
-        payeeId: req.body.invitedById
+        payeeId: req.body.invitedById,
+        amount: req.body.favor,
       } : false,
     }, env.JWT_INVITE_SECRET, {
       expiresIn
@@ -109,7 +110,7 @@ exports.post = async (req, res, next) => {
       uuid: req.member.uuid,
       username: req.member.username,
       id: req.member.id,
-      roles: req.member.roles
+      roles: req.member.roles //TODO turn this into an array?
     }, env.JWT_AUTH_SECRET, {
       expiresIn
     })

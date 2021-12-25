@@ -16,6 +16,148 @@ tags:
   - name: public
     description: Operations available to anyone
 paths:
+  /auth:
+    get:
+      tags:
+        - brokers
+        - members
+        - public
+      summary: Authentication
+      operationId: authCheck
+      description: |
+        By passing login credentials
+      parameters:
+        - in: header
+          name: access_token
+          description: pass an access token to check if it is valid
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: You are authenticated!
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/AccessToken'
+        '401':
+          description: You are not authenticated
+    post:
+      tags:
+        - brokers
+        - members
+        - public
+      summary: trades a user/pass for an access token
+      operationId: authToken
+      description: Authenticate and get a shiny access token
+      requestBody:
+        description: that sweet username and password combo
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+      responses:
+        '201':
+          description: Token created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/AccessTokenReturn'
+        '422':
+          description: 'invalid input, object invalid'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    $ref: '#/components/schemas/ProcessError'
+        '403':
+          description: token authentication error
+  /auth/me:
+    get:
+        tags:
+          - brokers
+          - members
+        summary: Get the current authenticated user's member object
+        operationId: authMe
+        description: |
+          Get the member object of the current authenticated member
+        parameters:
+          - in: header
+            name: access_token
+            description: pass an access token to check if it is valid
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: Member found
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    success:
+                      type: string
+                      example: 'Member info found'
+                    data:
+                      $ref: '#/components/schemas/MemberItem'
+          '401':
+            description: You are not authenticated
+  /auth/invite:
+    post:
+      tags:
+        - brokers
+        - members
+      summary: Invites a person to become a member
+      operationId: authInvite
+      description: |
+        By passing user information one can invite a person to join the network
+      parameters:
+        - in: header
+          name: access_token
+          description: pass an access token to check if it is valid
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: that sweet username and password combo
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvitationRequest'
+      responses:
+        '201':
+          description: Invite token created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/InviteTokenReturn'
+        '403':
+          description: token authentication error
+        '422':
+          description: 'invalid input, object invalid'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    $ref: '#/components/schemas/ProcessError'
   /transactions:
     get:
       tags:
@@ -180,6 +322,112 @@ paths:
         description: Transaction
 components:
   schemas:
+    ProcessError:
+      type: array
+      items:
+        type: object
+        properties:
+          msg:
+            type: string
+            description: error message
+          param:
+            type: string
+            description: parameter where error occured
+          value:
+            type: string
+            description: rejected value
+          location:
+            type: string
+            example: body
+            description: where in the request the rejected value came from
+    AccessToken:
+      type: object
+      properties:
+        uuid:
+          $ref: '#/components/schemas/MemberItem/properties/uuid'
+        username:
+          $ref: '#/components/schemas/MemberItem/properties/username'
+        id:
+          $ref: '#/components/schemas/MemberItem/properties/id'
+        roles:
+          $ref: '#/components/schemas/MemberItem/properties/roles'
+    AuthRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          $ref: '#/components/schemas/MemberItem/properties/username'
+        password:
+          $ref: '#/components/schemas/MemberItem/properties/password'
+    AccessTokenReturn:
+      type: object
+      properties:
+        access_token:
+          type: string
+          format: jwt
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        token_type:
+          type: string
+          example: Bearer
+        expires_in:
+          type: string
+          example: 1h
+    InvitaionToken:
+      type: object
+      properties:
+        invitation:
+          type: object
+          properties:
+            firstName:
+              $ref: '#/components/schemas/MemberItem/properties/firstName'
+            lastName:
+              $ref: '#/components/schemas/MemberItem/properties/lastName'
+            email:
+              $ref: '#/components/schemas/MemberItem/properties/email'
+            phone:
+              $ref: '#/components/schemas/MemberItem/properties/phone'
+        invitedById:
+          $ref: '#/components/schemas/MemberItem/properties/uuid'
+        transaction:
+          type: object
+          properties:
+            payeeId:
+              $ref: '#/components/schemas/MemberItem/properties/uuid'
+            amount:
+              $ref: '#/components/schemas/TransactionItem/properties/amount'
+    InvitationRequest:
+      type: object
+      required:
+        - firstName
+        - invitedById
+      properties:
+        firstName:
+          $ref: '#/components/schemas/MemberItem/properties/firstName'
+        lastName:
+          $ref: '#/components/schemas/MemberItem/properties/lastName'
+        email:
+          $ref: '#/components/schemas/MemberItem/properties/email'
+        phone:
+          $ref: '#/components/schemas/MemberItem/properties/phone'
+        amount:
+          $ref: '#/components/schemas/TransactionItem/properties/amount'
+        invitedById:
+          $ref: '#/components/schemas/MemberItem/properties/uuid'
+    InviteTokenReturn:
+      type: object
+      properties:
+        access_token:
+          type: string
+          format: jwt
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        token_type:
+          type: string
+          example: Bearer
+        expires_in:
+          type: string
+          example: 1h
     TransactionItem:
       type: object
       required:
@@ -262,6 +510,7 @@ components:
           readOnly: true
         username:
           type: string
+          example: xXxC4TL0verxXx
         firstName:
           type: string
         lastName:
@@ -298,11 +547,11 @@ components:
         brokerName:
           type: string
           example: 'username of broker'
-        brokerId:
+        BrokerId:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        invitedById:
+        InvitedById:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
@@ -317,7 +566,10 @@ components:
           example: 'name@example.com'
         password:
           type: string
+          format: bcrypt
         roles:
           type: array
+          items:
+            type: string
         invites:
           type: integer
