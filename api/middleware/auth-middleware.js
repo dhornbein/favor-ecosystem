@@ -6,7 +6,7 @@ const message = {
   noToken: {
     title: 'Not Authorized',
     detail: 'No token provided',
-    status: 403,
+    status: 401,
     timestamp: new Date(),
   },
   noPermissions: {
@@ -27,7 +27,7 @@ exports.requireToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader)
-    return res.status(403).json(error(message.noToken));
+    return res.status(401).json(error(message.noToken));
 
   try {
     const token = authHeader.split(' ')[1];
@@ -36,7 +36,7 @@ exports.requireToken = (req, res, next) => {
     req.user = decoded;
 
   } catch (err) {
-    return res.status(401).json(error(message.invalid));
+    return res.status(403).json(error(message.invalid));
   }
   return next();
 

@@ -19,9 +19,7 @@ paths:
   /auth:
     get:
       tags:
-        - brokers
         - members
-        - public
       summary: Authentication
       operationId: authCheck
       description: |
@@ -47,10 +45,9 @@ paths:
           description: You are not authenticated
     post:
       tags:
-        - brokers
         - members
         - public
-      summary: trades a user/pass for an access token
+      summary: request auth token
       operationId: authToken
       description: Authenticate and get a shiny access token
       requestBody:
@@ -80,43 +77,45 @@ paths:
                 properties:
                   errors:
                     $ref: '#/components/schemas/ProcessError'
-        '403':
+        '401':
           description: token authentication error
+        '403':
+          description: token invalid
   /auth/me:
     get:
-        tags:
-          - brokers
-          - members
-        summary: Get the current authenticated user's member object
-        operationId: authMe
-        description: |
-          Get the member object of the current authenticated member
-        parameters:
-          - in: header
-            name: access_token
-            description: pass an access token to check if it is valid
-            required: true
-            schema:
-              type: string
-        responses:
-          '200':
-            description: Member found
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    success:
-                      type: string
-                      example: 'Member info found'
-                    data:
-                      $ref: '#/components/schemas/MemberItem'
-          '401':
-            description: You are not authenticated
+      tags:
+        - members
+      summary: Get the current authenticated user's member object
+      operationId: authMe
+      description: |
+        Get the member object of the current authenticated member
+      parameters:
+        - in: header
+          name: access_token
+          description: pass an access token to check if it is valid
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Member found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'Member info found'
+                  data:
+                    $ref: '#/components/schemas/MemberItem'
+        '401':
+          description: token authentication error
+        '403':
+          description: token invalid
   /auth/invite:
     post:
       tags:
-        - brokers
         - members
       summary: Invites a person to become a member
       operationId: authInvite
@@ -147,8 +146,10 @@ paths:
                     type: boolean
                   data:
                     $ref: '#/components/schemas/InviteTokenReturn'
-        '403':
+        '401':
           description: token authentication error
+        '403':
+          description: token invalid
         '422':
           description: 'invalid input, object invalid'
           content:
@@ -170,7 +171,7 @@ paths:
       parameters:
         - in: query
           name: searchString
-          description: pass an optional search string for looking up inventory
+          description: pass an optional search string for looking up transactions
           required: false
           schema:
             type: string
@@ -179,29 +180,25 @@ paths:
           description: pass a userId to see all payments made by that user
           required: false
           schema:
-            type: integer
-            format: int32
-            minimum: 0
+            $ref: '#/components/schemas/MemberItem/properties/id'
         - in: query
           name: searchPayee
           description: pass an optional username string for looking up all payments made by that user
           required: false
           schema:
-            type: string
+            $ref: '#/components/schemas/MemberItem/properties/username'
         - in: query
           name: recipientId
           description: pass a userId to see all payments recevied by that user
           required: false
           schema:
-            type: integer
-            format: int32
-            minimum: 0
+            $ref: '#/components/schemas/MemberItem/properties/id'
         - in: query
           name: searchRecipient
           description: pass an optional username string for looking up all payments recevied by that user
           required: false
           schema:
-            type: string
+            $ref: '#/components/schemas/MemberItem/properties/username'
         - in: query
           name: skip
           description: number of records to skip for pagination
@@ -219,36 +216,68 @@ paths:
             maximum: 50
       responses:
         '200':
-          description: transations found
+          description: Transactions found
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/TransactionItem'
-        '422':
-          description: bad input parameter
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/TransactionItem'
         '404':
           description: no transactions found
+        '422':
+          description: 'invalid input, object invalid'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    $ref: '#/components/schemas/ProcessError'
     post:
       tags:
         - brokers
+        - members
       summary: adds an transaction
       operationId: addTransaction
       description: Adds a transaction
-      responses:
-        '201':
-          description: Transaction created successfully
-        '400':
-          description: 'invalid input, object invalid'
-        '409':
-          description: an existing item already exists
       requestBody:
+        description: The transaction you'd like to add
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/TransactionItem'
-        description: Transaction to add
+      responses:
+        '201':
+          description: Token created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/AccessTokenReturn'
+        '401':
+          description: token authentication error
+        '403':
+          description: |
+            ## Not Authorized
+            - If your authentication token is invalid
+            - If a non-broker attempts to submit a transaction on behalf of someone else
+        '422':
+          description: 'invalid input, object invalid'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    $ref: '#/components/schemas/ProcessError'
   /members:
     get:
       tags:
@@ -418,7 +447,7 @@ components:
     InviteTokenReturn:
       type: object
       properties:
-        access_token:
+        invitation_token:
           type: string
           format: jwt
           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
@@ -427,13 +456,12 @@ components:
           example: Bearer
         expires_in:
           type: string
-          example: 1h
+          example: 14d
     TransactionItem:
       type: object
       required:
         - uuid
         - id
-        - created
         - payeeId
         - recipientId
         - amount
@@ -444,14 +472,17 @@ components:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
+          readOnly: true
         id:
           type: integer
           example: 42
           minimum: 0
+          readOnly: true
         created:
           type: string
           format: date-time
           example: '2016-08-29T09:12:33.001Z'
+          readOnly: true
         updated:
           type: string
           format: date-time

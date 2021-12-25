@@ -1,28 +1,43 @@
 const transactions = require('../model/transactions-model')
 const { v4: uuidv4 } = require('uuid')
 const { error, success } = require('../middleware/validate')
+const { query } = require('express')
 
 exports.get = async (req, res, next) => {
 
   try {
     const trans = await transactions.get(req.params)
+    let query = trans
 
-    if (req.params.id) {
-      const found = trans.find(row => row.id === parseInt(req.params.id))
-
-      if (found) {
-        res.status(200).json({ data: found })
-      } else {
-        res.status(404).json(error({
-          title: "Transaction Not Found",
-          detail: "No transactions found with that ID",
-          status: 404,
-          path: req.originalUrl,
-          timestamp: new Date(),
-        }))
+    if (req.query) {
+      if (query && req.query.searchString) {
+        let search = new RegExp(req.query.searchString, 'g')
+        query = query.filter(tran => search.test( tran.title + tran.description ) )
       }
+      if (query && req.query.payeeId)
+        query = query.filter(tran => tran.payeeId == req.query.payeeId)
+      if (query && req.query.searchPayee)
+        query = query.filter(tran => tran.payee.toLowerCase() === req.query.searchPayee.toLowerCase())
+      if (query && req.query.recipientId)
+        query = query.filter(tran => tran.recipientId == req.query.recipientId)
+      if (query && req.query.searchRecipient)
+        query = query.filter(tran => tran.recipient.toLowerCase() === req.query.searchRecipient.toLowerCase())
+      if (query && req.query.skip)
+        query = query.slice(req.query.skip)
+      if (query && req.query.limit)
+        query = query.slice(0, req.query.limit)
+    }
+
+    if (query && query.length > 0) {
+      res.status(200).json(success(query))
     } else {
-      res.status(200).json({ data: trans })
+      res.status(404).json(error({
+        title: "No Transaction Found",
+        detail: "Your search turned up no results",
+        status: 404,
+        path: req.originalUrl,
+        timestamp: new Date(),
+      }))
     }
   } catch(err) {
     console.error(err)
@@ -53,24 +68,12 @@ exports.post = async (req, res, next) => {
   }
     
   try {
-    const { response, payload, errors, code } = await transactions.post(req.body)
-    if (!errors) {
-      res.status(201).json(success({
-        message: "Transaction created successfully",
-        data: payload,
-      }))
-      
-    } else {
-      console.log('Transaction Post', response);
-      res.status(code).json(error({
-        title: "Transaction Creation Failed",
-        detail: "Something went wrong applying the transaction to the database",
-        status: code,
-        path: req.originalUrl,
-        timestamp: new Date(),
-        errors: errors
-      }))
-    }
+    const { response, payload } = await transactions.post(req.body)
+    
+    res.status(201).json(success({
+      message: "Transaction created successfully",
+      data: payload,
+    }))
 
   } catch(err) {
     console.error('Controller',err)

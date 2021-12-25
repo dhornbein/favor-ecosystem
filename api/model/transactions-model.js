@@ -70,12 +70,12 @@ exports.post = async (payload) => {
     };
 
     const response = (await sheets.spreadsheets.values.append(request));
+
     return { 
       response, 
-      payload,
-      code: response.code ? response.code : 500,
-      errors: response.data.error ? response.data.error : null
+      payload
     }
+    
   } catch (err) {
     throw new Error(err)
   }
