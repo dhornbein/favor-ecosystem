@@ -6,23 +6,31 @@ exports.get = async (req, res, next) => {
 
   try {
     const members = await membersModel.get(req.params)
+    let query = members
 
-    if (req.params.id) {
-      const found = members.find(row => row.id === parseInt(req.params.id))
-
-      if (found) {
-        res.status(200).json({ data: found })
-      } else {
-        res.status(404).json(error({
-          title: "Member Not Found",
-          detail: "No members found with that ID",
-          status: 404,
-          path: req.originalUrl,
-          timestamp: new Date(),
-        }))
+    if (req.query) {
+      if (query && req.query.searchString) {
+        let search = new RegExp(req.query.searchString, 'g')
+        query = query.filter(mem => search.test( [mem.firstName,mem.lastName,mem.username,mem.brokerName].join(' ') ) )
       }
+      if (query && req.query.searchId)
+        query = query.filter(mem => mem.id == req.query.searchId)
+      if (query && req.query.skip)
+        query = query.slice(req.query.skip)
+      if (query && req.query.limit)
+        query = query.slice(0, req.query.limit)
+    }
+
+    if (query && query.length > 0) {
+      res.status(200).json(success(query,{ query: req.query }))
     } else {
-      res.status(200).json({ data: members })
+      res.status(404).json(error({
+        title: "No Members Found",
+        detail: "Your search turned up no results",
+        status: 404,
+        path: req.originalUrl,
+        timestamp: new Date(),
+      }))
     }
   } catch (err) {
     console.error(err)
@@ -48,26 +56,11 @@ exports.post = async (req, res, next) => {
 
   try {
 
-    const { response, payload, errors, code } = await membersModel.post(newMember)
+    const { response, payload } = await membersModel.post(newMember)
 
-    if (!errors) {
-      req.success = true
-      res.status(201).json(success({
-        message: `Member created successfully`,
-        data: payload,
-      }))
-
-    } else {
-      console.log('Member Post Error', response);
-      res.status(code).json(error({
-        title: "Member Creation Failed",
-        detail: "Something went wrong applying the member to the database",
-        status: code,
-        path: req.originalUrl,
-        timestamp: new Date(),
-        errors: errors
-      }))
-    }
+    req.success = true
+    
+    res.status(201).json(success(payload, {msg: 'Member created successfully'}))
 
   } catch (err) {
     console.error('Controller Error', err)

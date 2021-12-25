@@ -10,7 +10,7 @@ exports.get = async (req, res, next) => {
     if (req.user) {
       res.status(200).json(success({
         user: req.user
-      }, 'You are authenticated!'))
+      }, {msg: 'You are authenticated!'}))
     } else {
       res.status(401).json(error({
         title: 'Not Authorized',
@@ -28,7 +28,7 @@ exports.getMember = async (req, res, next) => {
   try {
     const members = await membersModel.get()
     const member = members.find(member => member.uuid === req.user.uuid)
-    res.status(200).json(success(member,'Member info found'))
+    res.status(200).json(success(member,{msg: 'Member info found'}))
   } catch (err) {
     console.error(err)
     res.status(500).json(error(err))

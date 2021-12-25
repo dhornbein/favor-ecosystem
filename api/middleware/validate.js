@@ -13,10 +13,13 @@ exports.error = data => {
   }
 }
 
-exports.success = (data, message = true) => {
+exports.success = (data, { params, query, body, msg } ) => {
   return {
-    success: message,
-    data: data
+    success: (msg) ? msg : true,
+    data: data,
+    params,
+    query,
+    body
   }
 }
 

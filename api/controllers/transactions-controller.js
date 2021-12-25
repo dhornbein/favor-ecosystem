@@ -12,7 +12,7 @@ exports.get = async (req, res, next) => {
     if (req.query) {
       if (query && req.query.searchString) {
         let search = new RegExp(req.query.searchString, 'g')
-        query = query.filter(tran => search.test( tran.title + tran.description ) )
+        query = query.filter(tran => search.test( [tran.title, tran.description, tran.payee, tran.recipient].join(' ') ) )
       }
       if (query && req.query.payeeId)
         query = query.filter(tran => tran.payeeId == req.query.payeeId)
@@ -29,7 +29,7 @@ exports.get = async (req, res, next) => {
     }
 
     if (query && query.length > 0) {
-      res.status(200).json(success(query))
+      res.status(200).json(success(query, { query: req.query }))
     } else {
       res.status(404).json(error({
         title: "No Transaction Found",
@@ -70,10 +70,7 @@ exports.post = async (req, res, next) => {
   try {
     const { response, payload } = await transactions.post(req.body)
     
-    res.status(201).json(success({
-      message: "Transaction created successfully",
-      data: payload,
-    }))
+    res.status(201).json(success(payload, {msg: 'Transaction created successfully'}))
 
   } catch(err) {
     console.error('Controller',err)
