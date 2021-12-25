@@ -66,3 +66,28 @@ exports.checkToken = (req, res, next) => {
   return next();
   
 }
+
+exports.requireInviteToken = (req, res, next) => {
+  const token = req.params.token;
+
+  if (!token) {
+    return res.status(403).json(error(message.noToken));
+  }
+
+  try {
+    const decoded = jwt.verify(token, env.JWT_INVITE_SECRET);
+    req.invite = decoded;
+    req.body = {
+      'firstName': decoded.invitation.firstName,
+      'lastName': decoded.invitation.lastName,
+      'email': decoded.invitation.email,
+      'phone': decoded.invitation.phone,
+      'invitedById': decoded.invitedById,
+      ...req.body // overwrites the stuff already in the body
+    }
+  } catch (err) {
+    return res.status(401).json(error(message.invalid));
+  }
+  return next();
+    
+}

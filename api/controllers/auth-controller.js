@@ -36,6 +36,23 @@ exports.getMember = async (req, res, next) => {
 
 }
 
+exports.claimInvite = async (req, res, next) => {
+  const token = req.params.token
+  
+  if (!token || !req.success) return next() // no token or no success, nothing to claim
+ 
+  try {
+
+    const response = await authModel.postClaimInvite(token)
+    if (response.status != 200) {
+      console.error('Issue claiming update',response)
+    }
+    
+  } catch (err) {
+    console.error('authController.claimInvite',err)
+  }
+}
+
 exports.invite = async (req, res, next) => {
   try {
     let expiresIn = '14d'

@@ -1,8 +1,11 @@
 const { check, validationResult } = require('express-validator')
 const { get: getTransactions } = require('../model/transactions-model')
 const { get: getMembers, auth: authMembers } = require('../model/members-model')
+const { getInvites } = require('../model/auth-model')
 const { v4: uuidv4, validate: uuidValidate } = require('uuid')
 const bcrypt = require('bcrypt');
+
+const defaultCreditLimit = 1000
 
 exports.error = data => {
   return {
@@ -189,23 +192,43 @@ async function validateTransaction(value, { req }) {
   return true
 }
 
+exports.inviteToken = [
+  check('token')
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage('Invite token is required')
+    .bail()
+    .custom(validateInviteToken),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(422).json(this.error(errors.array()));
+    next();
+  },
+];
+
+async function validateInviteToken(value, { req }){
+  // get list of invite tokens
+  const invites = await getInvites()
+  const foundInvite = invites.find(invite => invite.token == value)
+
+  if (!foundInvite)
+    throw new Error('Token is invalid')
+
+  if (foundInvite.claimed || foundInvite.revoked)
+    throw new Error('Token has already been claimed')
+}
+
 exports.member = [
   check('balance')
-    .not()
-    .exists()
-    .withMessage('Do not include balance in the request body'),
+    .customSanitizer(value => ''),
   check('credit')
-    .not()
-    .exists()
-    .withMessage('Do not include credit in the request body'),
+    .customSanitizer(value => ''),
   check('debit')
-    .not()
-    .exists()
-    .withMessage('Do not include debit in the request body'),
+    .customSanitizer(value => ''),
   check('transactionTotal')
-    .not()
-    .exists()
-    .withMessage('Do not include transaction total in the request body'),
+    .customSanitizer(value => ''),
   check('brokerId')
     .trim()
     .if(check('brokerId').exists().not().isEmpty())
@@ -237,18 +260,13 @@ exports.member = [
     .bail()
     .custom(value => value.length >= 4) // TODO move this to a config file
     .withMessage('username must be more than 4 characters')
-    .bail()
     .custom(value => value.length <= 20) // TODO move this to a config file
     .withMessage('username must be less than 20 characters')
     .bail()
     .custom(validateMember),
   check('creditLimit')
-    .exists()
-    .withMessage('Credit limit is required')
+    .default(defaultCreditLimit)
     .trim()
-    .not()
-    .isEmpty()
-    .withMessage('Credit limit can not be empty')
     .isNumeric()
     .withMessage('Credit limit must be a number')
     .custom(amount => amount > 0.001)

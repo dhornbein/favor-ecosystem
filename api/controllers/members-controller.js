@@ -35,15 +35,16 @@ exports.post = async (req, res, next) => {
 
   const authMember = req.user;
 
-  if (!authMember.roles.includes('broker')) {
-    return res.status(403).json(error({
-      title: "Not Authorized",
-      detail: `You do not have permission to create members. Your roles are: ${authMember.roles}`,
-      status: 403,
-      path: req.originalUrl,
-      timestamp: new Date(),
-    }))
-  }
+  // TODO create validation for broker and add to /members/create route
+  // if (!inviteToken && !authMember.roles.includes('broker')) {
+  //   return res.status(403).json(error({
+  //     title: "Not Authorized",
+  //     detail: `You do not have permission to create members. Your roles are: ${authMember.roles}`,
+  //     status: 403,
+  //     path: req.originalUrl,
+  //     timestamp: new Date(),
+  //   }))
+  // }
 
   // build new member object
   let newMember = {
@@ -54,13 +55,14 @@ exports.post = async (req, res, next) => {
 
   // TODO increment invited count for inviting member
   // if the inviting member isn't set, set it to the current broker
-  if (!req.body.invitedById) newMember.invitedById = authMember.uuid
+  if (authMember && !req.body.invitedById) newMember.invitedById = authMember.uuid
 
   try {
 
     const { response, payload, errors, code } = await membersModel.post(newMember)
 
     if (!errors) {
+      req.success = true
       res.status(201).json(success({
         message: `Member created successfully`,
         data: payload,
@@ -82,4 +84,5 @@ exports.post = async (req, res, next) => {
     console.error('Controller Error', err)
     res.status(500).json(error(err))
   }
+  next()
 }
