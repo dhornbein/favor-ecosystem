@@ -57,6 +57,21 @@ async function validateAuth(value, { req }) {
 
 }
 
+exports.isBroker =  (req, res, next) => {
+  if (req.user && req.user.roles['broker']) {
+    next();
+    return true
+  }
+  
+  return res.status(403).json(error({
+    title: "Not Authorized",
+    detail: 'You must be a broker to perform this action',
+    status: 403,
+    path: req.originalUrl,
+    timestamp: new Date(),
+  }))
+}
+
 // firstName, lastName, email, phone, favor, invitedById
 exports.invite = [
   check('firstName')

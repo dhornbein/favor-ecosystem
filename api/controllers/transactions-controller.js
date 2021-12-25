@@ -34,7 +34,7 @@ exports.get = async (req, res, next) => {
 exports.post = async (req, res, next) => {
 
   const authMember = req.user;
-  const isBroker = authMember.roles.includes('broker')
+  const isBroker = authMember.roles['broker']
 
   if (!isBroker && req.body.payeeId !== authMember.uuid) {
     res.status(403).json(error({

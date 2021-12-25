@@ -35,17 +35,6 @@ exports.post = async (req, res, next) => {
 
   const authMember = req.user;
 
-  // TODO create validation for broker and add to /members/create route
-  // if (!inviteToken && !authMember.roles.includes('broker')) {
-  //   return res.status(403).json(error({
-  //     title: "Not Authorized",
-  //     detail: `You do not have permission to create members. Your roles are: ${authMember.roles}`,
-  //     status: 403,
-  //     path: req.originalUrl,
-  //     timestamp: new Date(),
-  //   }))
-  // }
-
   // build new member object
   let newMember = {
     uuid: uuidv4(),
