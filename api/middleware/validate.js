@@ -6,6 +6,7 @@ const { v4: uuidv4, validate: uuidValidate } = require('uuid')
 const bcrypt = require('bcrypt');
 
 const defaultCreditLimit = 1000
+const saltRounds = 12
 
 exports.error = data => {
   return {
@@ -293,6 +294,8 @@ exports.member = [
     .customSanitizer(sanitizeFavor), // round to 3 decimal places 0.001
   check('created')
     .customSanitizer(value => new Date().toISOString()),
+  check('password')
+    .customSanitizer(value => bcrypt.hash(value, saltRounds)),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())

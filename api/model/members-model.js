@@ -80,15 +80,10 @@ exports.auth = async () => {
 exports.post = async (payload) => {
   try {
     const members = (await sheets.spreadsheets.values.get(REQUEST.GET)).data.values;
-    let headers = [],
-        nextId = 1;
+    const headers = members[0]
+    const nextId = Math.max(...deserializeMembers(members, KEYS).map(obj => parseInt(obj.id))) + 1
 
-    // collect the header row of the spreadsheet & find the next id
-    if (members.length > 0) {
-      headers = members[0];
-      nextId = Math.max(...deserializeMembers(members, KEYS).map(obj => parseInt(obj.id))) + 1
-      payload['id'] = nextId;
-    }
+    payload['id'] = nextId;
 
     const payloadArray = headers.map(key => payload[key])
 

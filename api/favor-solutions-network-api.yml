@@ -223,6 +223,9 @@ paths:
                 properties:
                   success:
                     type: boolean
+                  query:
+                    type: object
+                    description: the queries from the request
                   data:
                     $ref: '#/components/schemas/TransactionItem'
         '404':
@@ -323,6 +326,9 @@ paths:
                 properties:
                   success:
                     type: boolean
+                  query:
+                    type: object
+                    description: the queries from the request
                   data:
                     $ref: '#/components/schemas/MemberItem'
         '404':
@@ -604,6 +610,8 @@ components:
           $ref: '#/components/schemas/MemberItem/properties/phone'
         email:
           $ref: '#/components/schemas/MemberItem/properties/email'
+        password:
+          $ref: '#/components/schemas/MemberItem/properties/password'
     MemberItem:
       type: object
       required:
