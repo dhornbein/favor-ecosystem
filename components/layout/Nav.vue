@@ -5,8 +5,8 @@
         <nuxt-link :to="item.url" v-for="(item, idx) in nav" :key="idx"
           class=""
         >{{ item.title }}</nuxt-link>
-        <nuxt-link to="/me" v-if="$auth.loggedIn">Account</nuxt-link>
-        <nuxt-link to="/login" v-else>Login</nuxt-link>
+        <nuxt-link to="/account" v-if="$auth.loggedIn">Account</nuxt-link>
+        <nuxt-link to="/account/login" v-else>Login</nuxt-link>
         <a v-if="$auth.loggedIn" @click="logout">Logout</a>
       </div>
       <BaseBurger :active="showNav" @click="showNav = !showNav" />
