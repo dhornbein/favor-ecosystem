@@ -13,7 +13,7 @@ exports.error = data => {
   }
 }
 
-exports.success = (data, { params, query, body, msg } ) => {
+exports.success = (data, { params, query, body, msg } = {} ) => {
   return {
     success: (msg) ? msg : true,
     data: data,
