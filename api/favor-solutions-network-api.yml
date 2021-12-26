@@ -397,7 +397,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/NewMemberRequest'
-        description: Transaction
+        description: Data about the new member
       responses:
         '201':
           description: Member created successfully
@@ -416,6 +416,51 @@ paths:
           description: Not Authorized - missing invite token
         '422':
           description: 'invalid input, object invalid, token invalid or claimed'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    $ref: '#/components/schemas/ProcessError'
+  /members/update/{uuid}:
+    patch:
+      tags:
+        - members
+        - brokers
+      summary: update member data
+      operationId: update
+      description: Updates a single member's data
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            $ref: '#/components/schemas/MemberItem/properties/uuid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberPatchRequest'
+        description: All fields that are meant to be updated
+      responses:
+        '204':
+          description: Member updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/MemberItem'
+        '401':
+          description: token authentication error
+        '403':
+          description: Not Authorized
+        '422':
+          description: invalid input, object invalid
           content:
             application/json:
               schema:
@@ -463,7 +508,7 @@ components:
         username:
           $ref: '#/components/schemas/MemberItem/properties/username'
         password:
-          $ref: '#/components/schemas/MemberItem/properties/password'
+          $ref: '#/components/schemas/MemberPrivate/properties/password'
     AccessTokenReturn:
       type: object
       properties:
@@ -477,7 +522,7 @@ components:
         expires_in:
           type: string
           example: 1h
-    InvitaionToken:
+    InvitationToken:
       type: object
       properties:
         invitation:
@@ -589,6 +634,27 @@ components:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
+    MemberPatchRequest:
+      type: object
+      properties:
+        username:
+          $ref: '#/components/schemas/MemberItem/properties/username'
+        firstName:
+          $ref: '#/components/schemas/MemberItem/properties/firstName'
+        lastName:
+          $ref: '#/components/schemas/MemberItem/properties/lastName'
+        BrokerId:
+          $ref: '#/components/schemas/MemberItem/properties/BrokerId'
+        phone:
+          $ref: '#/components/schemas/MemberItem/properties/phone'
+        email:
+          $ref: '#/components/schemas/MemberItem/properties/email'
+        password:
+          $ref: '#/components/schemas/MemberPrivate/properties/password'
+        creditLimit:
+          $ref: '#/components/schemas/MemberItem/properties/creditLimit'
+        updated:
+          $ref: '#/components/schemas/MemberItem/properties/updated'
     NewMemberRequest:
       type: object
       required:
@@ -611,7 +677,13 @@ components:
         email:
           $ref: '#/components/schemas/MemberItem/properties/email'
         password:
-          $ref: '#/components/schemas/MemberItem/properties/password'
+          $ref: '#/components/schemas/MemberPrivate/properties/password'
+    MemberPrivate:
+      type: object
+      properties:
+        password:
+          type: string
+          format: bcrypt
     MemberItem:
       type: object
       required:
@@ -692,9 +764,6 @@ components:
           type: string
           format: email
           example: 'name@example.com'
-        password:
-          type: string
-          format: bcrypt
         roles:
           type: array
           items:

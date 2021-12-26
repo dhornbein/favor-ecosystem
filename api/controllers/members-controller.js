@@ -5,7 +5,7 @@ const { error, success } = require('../middleware/validate')
 exports.get = async (req, res, next) => {
 
   try {
-    const members = await membersModel.get(req.params)
+    const members = await membersModel.get()
     let query = members
 
     if (req.query) {
@@ -67,4 +67,20 @@ exports.post = async (req, res, next) => {
     res.status(500).json(error(err))
   }
   next()
+}
+
+exports.put = async (req, res, next) => {
+  try {
+    const uuid = req.params.uuid
+
+    const { response, payload } = await membersModel.put(uuid, req.body)
+    
+    console.log('membersController.put',response.data,payload);
+    res.status(200).json(success(payload, {msg: 'Member updated successfully'}))
+
+  } catch (err) {
+    console.error('Controller Error', err)
+    res.status(500).json(error(err))
+  }
+  
 }

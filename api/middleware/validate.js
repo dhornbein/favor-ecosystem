@@ -62,7 +62,7 @@ async function validateAuth(value, { req }) {
 }
 
 exports.isBroker =  (req, res, next) => {
-  if (req.user && req.user.roles['broker']) {
+  if (isBroker(req.user)) {
     next();
     return true
   }
@@ -241,14 +241,6 @@ async function validateInviteToken(value, { req }){
 }
 
 exports.member = [
-  check('balance')
-    .customSanitizer(value => ''),
-  check('credit')
-    .customSanitizer(value => ''),
-  check('debit')
-    .customSanitizer(value => ''),
-  check('transactionTotal')
-    .customSanitizer(value => ''),
   check('brokerId')
     .trim()
     .if(check('brokerId').exists().not().isEmpty())
@@ -298,6 +290,11 @@ exports.member = [
     .customSanitizer(value => bcrypt.hash(value, saltRounds)),
   (req, res, next) => {
     const errors = validationResult(req);
+    const blockList = ['balance','credit','debit','transactionTotal']
+
+    req.body = removeObjKeys(req.body, blockList)
+    req.body = removeObjBlanks(req.body)
+
     if (!errors.isEmpty())
       return res.status(422).json(this.error(errors.array()));
     next();
@@ -336,6 +333,119 @@ async function validateMember(value, { req }) {
     throw new Error('BrokerId doesn\'t match any members')
 
   return true
+}
+
+exports.memberUpdate = [
+  check('brokerId')
+    .trim()
+    .if(check('brokerId').exists().not().isEmpty())
+    .custom(uuidValidate)
+    .withMessage('Invalid Broker UUID'),
+  check('phone')
+    .customSanitizer(normalizePhone),
+  check('email')
+    .if(check('email').exists())
+    .trim()
+    .escape()
+    .custom(validateEmail)
+    .withMessage('Invalid email address'),
+  check('firstName')
+    .trim()
+    .escape(),
+  check('lastName')
+    .trim()
+    .escape(),
+  check('username')
+    .if(check('username').exists())
+    .trim()
+    .custom(value => value.length >= 4) // TODO move this to a config file
+    .withMessage('username must be more than 4 characters')
+    .custom(value => value.length <= 20) // TODO move this to a config file
+    .withMessage('username must be less than 20 characters')
+    .bail()
+    .custom(validateMemberUpdate),
+  check('creditLimit')
+    .if(check('creditLimit').exists())
+    .custom((value, { req }) => isBroker(req.user))
+    .withMessage('You are not allowed to change credit limit')
+    .bail()
+    .trim()
+    .isNumeric()
+    .withMessage('Credit limit must be a number')
+    .custom(amount => amount > 0.001)
+    .withMessage('Credit limit must be more than f0.001')
+    .customSanitizer(sanitizeFavor), // round to 3 decimal places 0.001
+  check('password')
+    .if(check('password').exists())
+    .customSanitizer(value => bcrypt.hash(value, saltRounds)),
+  check('updated')
+    .default(new Date().toISOString()),
+  (req, res, next) => {
+    const errors = validationResult(req)
+    const schema = ['username', 'firstName', 'lastName', 'BrokerId', 'phone', 'email', 'password','creditLimit','updated']
+
+    req.body = filterObjKeys(req.body, schema)
+    req.body = removeObjBlanks(req.body)
+
+    if (!errors.isEmpty())
+      return res.status(422).json(this.error(errors.array()));
+    next();
+  },
+];
+
+async function validateMemberUpdate(value, { req }) {
+  // fetch members from database
+  const members = await getMembers()
+
+  const { username, email, phone, brokerId } = req.body
+
+  const foundEmail = members.find(member => member.email === email && member.uuid !== req.params.uuid)
+  const foundPhone = members.find(member => member.phone === phone && member.uuid !== req.params.uuid)
+  const foundUsername = members.find(member => member.username === username && member.uuid !== req.params.uuid)
+  const foundBroker = members.find(member => member.uuid === brokerId)
+  
+  if (foundEmail)
+    throw new Error('Email is already in use')
+
+  if (foundPhone)
+    throw new Error('Phone number is already in use')
+
+  if (foundUsername)
+    throw new Error('Username is already in use')
+
+  if (brokerId && !foundBroker)
+    throw new Error('BrokerId doesn\'t match any members')
+
+  return true
+}
+
+
+function isBroker(user) {
+  return user.roles && user.roles.includes('broker')
+}
+
+function removeObjBlanks(obj) {
+  return Object.keys(obj).reduce((acc, key) => {
+    if (obj[key] !== '')
+      acc[key] = obj[key]
+    return acc
+  }, {})
+}
+
+function filterObjKeys(obj, schema) {
+  return Object.keys(obj).reduce((acc, key) => {
+    if (schema.includes(key))
+      acc[key] = obj[key]
+    return acc
+  }, {})
+}
+
+function removeObjKeys(obj, schema) {
+  return Object.keys(obj).reduce((acc, key) => {
+    if (!schema.includes(key))
+      acc[key] = obj[key]
+    return acc
+  }, {})
 }
 
 // round to 3 decimal places 0.001

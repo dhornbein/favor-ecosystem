@@ -1,3 +1,4 @@
+const { response } = require('express');
 const { google } = require('googleapis');
 const sheets = google.sheets('v4');
 const env = require('../env.json');
@@ -5,6 +6,7 @@ const auth = require('./google-auth');
 
 const SPREADSHEET_ID = env.SPREADSHEET_ID
 const MEMBERS_RANGE = 'members!A:AA'
+const SHEET = 'members'
 
 const REQUEST = {
   GET: {
@@ -59,10 +61,10 @@ const AUTH_KEYS = [
   'roles'
 ]
 
-exports.get = async (params) => {
+exports.get = async (format = true) => {
   try {
     const response = (await sheets.spreadsheets.values.get(REQUEST.GET)).data;
-    return deserializeMembers(response.values,KEYS)
+    return format ? deserializeMembers(response.values,KEYS) : response.values
   } catch (err) {
     throw err
   }
@@ -85,6 +87,8 @@ exports.post = async (payload) => {
 
     payload['id'] = nextId;
 
+    // TODO if a key has an array (such as roles), join the array with a comma
+    // write a serialize function for this
     const payloadArray = headers.map(key => payload[key])
 
     const request = {
@@ -104,6 +108,37 @@ exports.post = async (payload) => {
       code: response.code ? response.code : 500,
       errors: response.data.error ? response.data.error : null
     }
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+exports.put = async (targetUuid,payload) => {
+  try {
+    const members = await this.get(false)
+    const headers = members[0]
+    const formattedMembers = deserializeMembers(members, KEYS) // shift removes the headers
+    const row = formattedMembers.findIndex(member => member.uuid === targetUuid)
+
+    if (row === -1) throw new Error('Member not found')
+
+    const payloadArray = headers.map(key => payload[key] ? payload[key] : null)
+
+    const range = `${SHEET}!A${row + 2}` // add +2 to account for headers and 0 based index
+
+    const request = {
+      ...REQUEST.POST,
+      range: range,
+      valueInputOption: 'USER_ENTERED',
+      resource: {
+        "values": [payloadArray]
+      }
+    }
+
+    const response = (await sheets.spreadsheets.values.update(request));
+
+    return { response, payload }
+    
   } catch (err) {
     throw new Error(err)
   }
