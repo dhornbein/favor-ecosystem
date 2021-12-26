@@ -68,13 +68,13 @@ export default {
     strategies: {
       local: {
         token: {
-          property: 'access_token',
+          property: 'data.access_token',
           global: true,
           // required: true,
           // type: 'Bearer'
         },
         user: {
-          property: false,
+          property: 'data',
           // autoFetch: true
         },
         endpoints: {
@@ -85,10 +85,10 @@ export default {
       }
     },
     redirect: {
-      login: '/login',
+      login: '/account/login',
       logout: '/',
-      callback: '/login',
-      home: '/me'
+      callback: '/account/login',
+      home: '/account'
     }
   },
 
