@@ -6,8 +6,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-serviceaccount.json
 
+# Shhhh
+serviceaccount.json
+env.json
 
 # Runtime data
 pids
