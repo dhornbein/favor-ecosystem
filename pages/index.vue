@@ -1,22 +1,14 @@
 <template>
-  <main>
-
-    <header>
-      <h2 class="text-xl font-cormorant">Latest Transactions</h2>
-    </header>
-      
-    <div>
-      <TransactionCard v-for="(row, idx) in transactions.slice().reverse()" :key="idx" :row="row" />
-
-    </div>
-
-  </main>
+  <NuxtChild  />
 </template>
 
 <script>
 import { mapState } from 'vuex'
 
 export default {
+  layout ({ $auth }) {
+    return ($auth.user) ? 'view' : 'default'
+  },
   computed: {
     ...mapState(['transactions'])
   },
@@ -24,5 +16,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

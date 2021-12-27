@@ -22,7 +22,7 @@
     },
     data() {
       return {
-        showNav: true,
+        showNav: false,
         nav: [
           {
             title: 'Home',

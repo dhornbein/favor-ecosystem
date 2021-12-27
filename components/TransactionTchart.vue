@@ -19,7 +19,7 @@ export default {
       required: true
     },
     focusUUID: {
-      type: Number,
+      type: String,
       required: true
     }
   },

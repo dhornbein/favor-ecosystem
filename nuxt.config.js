@@ -64,6 +64,10 @@ export default {
     '@nuxtjs/auth-next'
   ],
 
+  router: {
+    middleware: ['auth']
+  },
+
   auth: {
     strategies: {
       local: {
@@ -86,9 +90,9 @@ export default {
     },
     redirect: {
       login: '/account/login',
-      logout: '/',
+      logout: '/account/login',
       callback: '/account/login',
-      home: '/account'
+      home: '/'
     }
   },
 

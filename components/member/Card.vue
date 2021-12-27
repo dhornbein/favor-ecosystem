@@ -1,5 +1,5 @@
 <template>
-  <div class="member-card">
+  <div class="member-card" v-if="!isCurrentUser">
     <header class="member-card__head">
       <nuxt-link :to="`/members/${row.id}`">
         <MemberIcon :username="row.username" class="flex-shrink-0" />
@@ -7,7 +7,7 @@
       </nuxt-link>
       <div class="member__bio">
         <nuxt-link :to="`/members/${row.id}`">
-          <h2 class="text-2xl" :class="{ 'font-bold': $auth.user.uuid == row.uuid }">{{ row.firstName }} {{ row.lastName }}</h2>
+          <h2 class="text-2xl">{{ row.firstName }} {{ row.lastName }}</h2>
         </nuxt-link>
         <p class="text-sm" v-if="row.email || row.pone">
           <a :href="`mailto:${row.email}`" v-if="row.email" class="whitespace-nowrap">{{ row.email }}</a>
@@ -47,7 +47,11 @@ export default {
   computed: {
     isBroker() {
       return this.row.roles ? this.row.roles.includes('broker') : false
-    }
+    },
+    isCurrentUser() {
+      if (!this.$auth.user) return false
+      return this.row.uuid === this.$auth.user.uuid
+    },
   },
   filters: {
     formatDate(dateStr) {

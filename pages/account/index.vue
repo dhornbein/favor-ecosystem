@@ -2,8 +2,6 @@
   <main v-if="$auth.loggedIn">
     
     <header>
-
-      <nuxt-link to="/members" class="text-sm text-gray-500 hover:text-brand-primary">Members</nuxt-link>
       <div class="flex items-center gap-3">
         <h2 class="text-5xl font-cormorant">{{ fullName }}</h2>
         <MemberIcon :username="member.username" />
