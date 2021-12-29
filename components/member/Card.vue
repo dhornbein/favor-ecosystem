@@ -9,7 +9,7 @@
       <MemberIcon :username="member.username" />
       <div class="name leading-snug">
         <MemberDisplayName class="block" :member="member" />
-        <MemberUsername class="text-sm text-gray-400" :username="member.username" />
+        <MemberUsername class="text-sm text-gray-400" noLink :username="member.username" @click.native="$emit('usernameClick')" />
       </div>
       <div v-if="mine" class="my edit ml-auto flex gap-2 items-center">
         <BaseFavor class="text-right open-hidden pr-2 border-r border-gray-400" :num="member.creditLimit + member.balance">
@@ -21,8 +21,8 @@
 
     <main class="body">
       <div class="details">
-        <div class="email">{{ member.email }}</div>
-        <div class="phone">{{ member.phone }}</div>
+        <div class="email" @click="$emit('emailClick')">{{ member.email }}</div>
+        <div class="phone" @click="$emit('phoneClick')">{{ member.phone }}</div>
       </div>
       <div class="balance">
         <BaseFavor class="text-2xl" :num="member.creditLimit + member.balance">
