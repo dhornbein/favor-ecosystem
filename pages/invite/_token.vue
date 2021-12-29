@@ -12,7 +12,7 @@
 <script>
 export default {
   layout ({ $auth }) {
-    return ($auth.user) ? 'view' : 'default'
+    return ($auth.user) ? 'action' : 'default'
   },
   auth: false
 }

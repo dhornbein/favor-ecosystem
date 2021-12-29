@@ -1,56 +1,81 @@
 <template>
-  <div class="member-card" v-if="!isCurrentUser">
-    <header class="member-card__head">
-      <nuxt-link :to="`/members/${row.id}`">
-        <MemberIcon :username="row.username" class="flex-shrink-0" />
-        <div class="role" v-if="isBroker">Broker</div>
-      </nuxt-link>
-      <div class="member__bio">
-        <nuxt-link :to="`/members/${row.id}`">
-          <h2 class="text-2xl">{{ row.firstName }} {{ row.lastName }}</h2>
-        </nuxt-link>
-        <p class="text-sm" v-if="row.email || row.pone">
-          <a :href="`mailto:${row.email}`" v-if="row.email" class="whitespace-nowrap">{{ row.email }}</a>
-          <a :href="`tel:${row.phone}`" v-if="row.phone" class="whitespace-nowrap">{{ row.phone }}</a>
-        </p>
+  <article class="card relative" :class="classes" @click="$emit('cardClick')">
+
+    <!-- <MemberBalanceBar class="absolute h-[80%] right-1 top-0 bottom-0" :member="member" /> -->
+
+    <!-- <div v-if="mine" class="my more open-hidden">&#10225; open &#10225;</div> -->
+
+    <header class="head">
+      <MemberIcon :username="member.username" />
+      <div class="name leading-snug">
+        <MemberDisplayName class="block" :member="member" />
+        <MemberUsername class="text-sm text-gray-400" :username="member.username" />
+      </div>
+      <div v-if="mine" class="my edit ml-auto flex gap-2 items-center">
+        <BaseFavor class="text-right open-hidden pr-2 border-r border-gray-400" :num="member.creditLimit + member.balance">
+          <div class="label text-xs">Available</div>
+        </BaseFavor>
+        <div><a>⚙</a></div>
       </div>
     </header>
-    <div class="member-card__body">
-      <div class="member__details">
-        <FavorDisplay :num="row.transactionTotal" label="Total Transactions" />
-        <FavorDisplay :num="row.creditLimit" label="Credit Limit" class="text-gray-500 text-sm" />
+
+    <main class="body">
+      <div class="details">
+        <div class="email">{{ member.email }}</div>
+        <div class="phone">{{ member.phone }}</div>
       </div>
-      <div class="member__balance">
-        <span>Balance</span>
-        <div class="text-4xl font-bold font-mono" :class="{ 'text-purple-500': row.balance < 0 }">{{ row.balance | favor }}</div>
+      <div class="balance">
+        <BaseFavor class="text-2xl" :num="member.creditLimit + member.balance">
+          <div class="label text-xs">Available</div>
+        </BaseFavor>
+        <BaseFavor class="" :num="member.balance">
+          <div class="label text-xs">Balance</div>
+        </BaseFavor>
+        <BaseFavor class="my" :num="member.creditLimit">
+          <div class="label text-xs">Credit Limit</div>
+        </BaseFavor>
+        <BaseFavor class="my" :num="member.transactionTotal">
+          <div class="label text-xs">Total Transactions</div>
+        </BaseFavor>
       </div>
-      <div class="member__inout">
-        <div class="member__credits">
-          <FavorDisplay :num="row.credit" label="Credit" />
-        </div>
-        <div class="member__debits">
-          <FavorDisplay :num="-row.debit" label="Debit" />
-        </div>
-      </div>
-    </div>
-  </div>
+    </main>
+  </article>
 </template>
 
 <script>
 export default {
   props: {
-    row: {
+    member: {
       type: Object,
       required: true
+    },
+    size: {
+      type: String,
+      default: 'compact'
+    }
+  },
+  data() {
+    return {
+      visible: {}
     }
   },
   computed: {
+    mine() {
+      return this.member.username == this.$auth.user.username
+    },
+    classes() { 
+      return {
+        'card--compact': this.size == 'compact',
+        'card--open': this.size == 'open',
+        'card--me': this.$auth.user.uuid == this.member.uuid, 
+      }
+    },
     isBroker() {
-      return this.row.roles ? this.row.roles.includes('broker') : false
+      return this.member.roles ? this.member.roles.includes('broker') : false
     },
     isCurrentUser() {
       if (!this.$auth.user) return false
-      return this.row.uuid === this.$auth.user.uuid
+      return this.member.uuid === this.$auth.user.uuid
     },
   },
   filters: {
@@ -61,43 +86,30 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.member-card {
-  @apply flex flex-col relative overflow-hidden rounded-md border border-gray-300 shadow-md py-5 mb-10 last:mb-0;
-  
-  .member-card__head {
-    @apply flex-grow flex justify-between pb-4 px-5 border-b border-gray-200;
-    
-    .member__bio {
+<style lang="scss" scoped>
+.card {
+  .more {
+    @apply text-xs text-gray-400 absolute bottom-0 left-0 right-0 text-center;
+  }
+  .head {
+    @apply flex gap-2 items-center;
+  }
+  .body {
+    @apply flex gap-2 justify-between;
+    .balance {
       @apply text-right;
     }
-
-    .role {
-      @apply bg-brand-primary text-yellow-500 text-xs px-2 rounded-bl-md absolute right-0 top-0;
-    }
-  }
-  .member-card__body {
-    @apply flex flex-col;
   }
 
-  .member__details {
-    @apply flex items-center justify-between px-5 py-2 mb-2 border-b border-gray-200;
-  }
-  .member__balance {
-    @apply mx-5 text-center;
-  }
-  .member__inout {
-    @apply flex justify-start w-full;
-    
-    .member__credits,
-    .member__debits {
-      @apply p-2 -mb-5 border-b-2 w-1/2;
+  &.card--compact {
+    .body {
+      @apply hidden;
     }
-    .member__credits {
-      @apply bg-green-200 border-green-500 text-right;
-    }
-    .member__debits {
-      @apply bg-purple-200 border-purple-500 -mr-5;
+  }
+
+  &.card--open {
+    .open-hidden {
+      @apply hidden;
     }
   }
 }

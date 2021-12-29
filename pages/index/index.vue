@@ -1,15 +1,11 @@
 <template>
   <main>
+
+    <ActionSearch placeholder="Search" v-model="search" />
+
+    <h2 class="text-xl font-cormorant">Your Latest Transactions</h2>
       
-    <div>
-
-      <MemberDetails :member="$auth.user" v-if="$auth.user" />
-
-      <h2 class="text-xl font-cormorant">Latest Transactions</h2>
-      
-      <TransactionCard v-for="(row, idx) in filteredTransactions" :key="idx" :row="row" />
-
-    </div>
+    <TransactionCard v-for="(row, idx) in filteredTransactions" :key="idx" :trans="row" />
 
   </main>
 </template>
@@ -18,6 +14,11 @@
 import { mapState } from 'vuex'
 
 export default {
+  data() {
+    return {
+      search: ''
+    }
+  },
   computed: {
     ...mapState(['transactions','members']),
     filteredTransactions() {

@@ -40,7 +40,10 @@ export default {
 
 <style lang="scss">
 .member-icon {
-  @apply border border-brand-primary bg-yellow-100 text-brand-primary text-center align-middle p-1 rounded-full h-10 w-10 text-sm flex justify-center items-center;
+  @apply border border-brand-primary bg-yellow-100 text-brand-primary text-center align-middle p-1 rounded-full flex justify-center items-center;
+  height: 3em;
+  width: 3em;
+  span { line-height: 1; }
   &.member-icon__network {
     @apply bg-yellow-400 text-brand-primary font-bold;
   }

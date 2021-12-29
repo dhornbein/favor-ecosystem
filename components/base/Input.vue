@@ -26,11 +26,10 @@ export default {
       content: ' *';
       @apply text-red-500 font-bold;
     }
+  }
     
-    input#{&},
-    input {
-      @apply border border-gray-200 shadow-inner rounded-lg p-2 focus:border-blue-200;
-    }
-
+  input.input,
+  .input input {
+    @apply border border-gray-200 shadow-inner rounded-lg p-2 focus:border-blue-200 w-full;
   }
 </style>

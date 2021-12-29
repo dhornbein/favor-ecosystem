@@ -1,11 +1,11 @@
 <template>
   <main>
     
-    <MemberDetails :member="member" v-if="member" />
+    <MemberCard :member="member" size="open" />
 
-    <h2 class="text-xl font-cormorant">{{ member.firstName }}'s Transactions</h2>
+    <h2 class="text-xl font-cormorant">{{ member.firstName }}'s Recent Transactions</h2>
     
-    <TransactionCard v-for="(row, idx) in memberTransactions" :key="idx" :row="row" />
+    <TransactionCard v-for="(row, idx) in memberTransactions.slice().reverse()" :key="idx" :trans="row" />
 
   </main>
 </template>
@@ -21,16 +21,12 @@ export default {
   },
   data() {
     return {
-      view: 'grid',
     }
-  },
-  created() {
-    this.view = (this.$route.hash) ? this.$route.hash.slice(1) : this.view
   },
   computed: {
     ...mapState(['transactions','members']),
     member() {
-      return this.$store.getters.getMemberById(this.$route.params.id);
+      return this.$store.getters.getMemberByUsername(this.$route.params.username);
     },
     memberTransactions() {
       return this.$store.getters.getTransactionsByMemberUUID(this.member.uuid);
@@ -41,17 +37,6 @@ export default {
     fullName() {
       return this.member.firstName + ' ' + this.member.lastName
     },
-    isGrid() {
-      return this.view === 'grid'
-    },
-    isTable() {
-      return this.view === 'table'
-    },
-  },
-  methods: {
-    toggleView(view) {
-      this.view = view
-    }
   },
 }
 </script>

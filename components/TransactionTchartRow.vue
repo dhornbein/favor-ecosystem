@@ -1,6 +1,6 @@
 <template>
   <div class="tchart__transaction" :datetime="row.created">
-    <FavorDisplay class="" :num="row.amount" :label="row.created | formatDate" />
+    <BasicFavor class="" :num="row.amount" :label="row.created | formatDate" />
     <div class="tchart__details flex-grow">
       <p class="">
         <nuxt-link :to="`/members/${row.payeeId}`" class="payee font-bold hover:text-brand-primary">{{ row.payee }}</nuxt-link>

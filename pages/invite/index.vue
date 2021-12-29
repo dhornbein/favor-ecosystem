@@ -13,3 +13,9 @@
     </form>
   </main>
 </template>
+
+<script>
+export default {
+  layout: 'action',
+}
+</script>

@@ -1,9 +1,8 @@
 <template>
   <main class="view-layout">
-    <ViewHeader class="header" />
-    <ViewExplorer class="explorer" />
+    <MainUserHeader class="header" />
     <nuxt class="content" />
-    <ViewFoot class="foot" />
+    <MainNav class="foot" />
   </main>
 </template>
 

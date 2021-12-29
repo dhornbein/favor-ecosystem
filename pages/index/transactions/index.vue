@@ -6,7 +6,7 @@
     </header>
       
     <div>
-      <TransactionCard v-for="(row, idx) in transactions" isSlim :key="idx" :row="row" />
+      <TransactionCard v-for="(row, idx) in transactions" :key="idx" :trans="row" size="compact" />
     </div>
 
   </main>

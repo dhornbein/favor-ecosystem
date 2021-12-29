@@ -7,10 +7,10 @@ import { mapState } from 'vuex'
 
 export default {
   layout ({ $auth }) {
-    return ($auth.user) ? 'view' : 'default'
+    return ($auth.user) ? 'main' : 'default'
   },
   computed: {
-    ...mapState(['transactions'])
+    ...mapState(['transactions','members'])
   },
 }
 </script>
