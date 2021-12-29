@@ -1,7 +1,14 @@
 <template>
   <main>
 
-    <ActionSearch placeholder="Search" v-model="search" />
+    
+    <ActionSearch 
+      placeholder="Search Transactions" 
+      v-model="search" 
+      :keys="searchKeys"
+      :search="myTransactions"
+      @results="searchRender" 
+    />
 
     <h2 class="text-xl font-cormorant">Your Latest Transactions</h2>
       
@@ -16,20 +23,27 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {
-      search: ''
+      search: '',
+      searchResults: [],
+      searchKeys: ['payee', 'recipient', 'title', 'description'],
     }
   },
   computed: {
     ...mapState(['transactions','members']),
+    myTransactions() {
+      return this.$store.getters.getTransactionsByMemberUUID(this.$auth.user.uuid);
+    },
     filteredTransactions() {
-      let transactions = this.transactions
-      if (this.$auth.user) {
-        transactions = this.$store.getters.getTransactionsByMemberUUID(this.$auth.user.uuid);
-      }
+      let transactions = this.myTransactions
+      transactions = (this.searchResults.length > 0) ? this.searchResults : transactions
       return transactions.slice().reverse()
     },
   },
-  
+  methods: {
+    searchRender(results) {
+      this.searchResults = results
+    },
+  },
 }
 </script>
 

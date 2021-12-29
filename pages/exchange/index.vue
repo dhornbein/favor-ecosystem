@@ -1,10 +1,16 @@
 <template>
   <section>
-    <ActionSearch placeholder="Search" v-model="search" />
-    <h2 class="text-xl font-cormorant">Frequent Exchanges</h2>
+    <ActionSearch 
+      placeholder="Search" 
+      v-model="search" 
+      :keys="searchKeys"
+      :search="members.filter(m => m.uuid !== $auth.user.uuid)"
+      @results="searchRender" 
+    />
+    <h2 class="text-xl font-cormorant" v-if="searchResults.length < 1">Frequent Exchanges</h2>
     <MemberCard 
       class="my-2"
-      v-for="(member, idx) in recentMembers" 
+      v-for="(member, idx) in filteredMembers"
       :key="idx" 
       :member="member" 
       @cardClick="cardClick(member.uuid)" 
@@ -14,19 +20,30 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   layout: 'action',
   data() {
     return {
-      search: ''
+      search: '',
+      searchResults: [],
+      searchKeys: ['username', 'email', 'firstName', 'lastName'],
     }
   },
   computed: {
-    recentMembers() {
-      return this.$store.getters.getRelatedMembers(this.$auth.user.uuid)
-    }
+    ...mapState(['members']),
+    filteredMembers() {
+      const recent = this.$store.getters.getRelatedMembers(this.$auth.user.uuid)
+
+      return (this.searchResults.length > 0) ? this.searchResults : recent
+
+    },
   },
   methods: {
+    searchRender(results) {
+      this.searchResults = results
+    },
     cardClick(uuid) {
       this.$router.push(`/exchange/${uuid}`)
     }
