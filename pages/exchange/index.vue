@@ -31,6 +31,9 @@ export default {
       searchKeys: ['username', 'email', 'firstName', 'lastName'],
     }
   },
+  mounted() {
+    this.$store.dispatch('exchange/clearTargets');
+  },
   computed: {
     ...mapState(['members']),
     filteredMembers() {

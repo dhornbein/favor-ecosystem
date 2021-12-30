@@ -1,18 +1,12 @@
 <template>
   <div class="flex flex-col justify-center">
     <div class="pay flex my-4 flex-row-reverse justify-between">
-      <div class="payee w-1/3 text-center">
-        <MemberIcon :username="$auth.user.username" class="mx-auto" highlight />
-        <p class="text-2xl mt-2">You</p>
-      </div>
+      <MemberPortrait class="recipient w-1/3 text-center" :member="recipient"/>
       <div class="text-4xl text-green-500 font-bold text-center">
         <p class="mb-2">&rAarr;</p>
         <p>Pays</p>
         </div>
-      <div class="recipient w-1/3 text-center">
-        <MemberIcon :username="recipient.username" class="mx-auto" />
-        <p class="text-2xl mt-2">{{ `${recipient.firstName} ${recipient.lastName}` }}</p>
-      </div>
+      <MemberPortrait class="payee w-1/3 text-center" :member="payee"/>
     </div>
 
     <div class="my-4 flex-grow flex flex-col">
@@ -31,26 +25,23 @@
 <script>
 export default {
   layout: 'action',
-  data() {
-    return {
-      details: {
-        recipientId: '',
-        amount: '',
-        title: '',
-        description: '',
-        brokerId: '',
-        payeeId: '',
-      }
-    }
-  },
-  mounted() {
-    // this.details = this.$store.getters.details
-    // HOW???
+  methods: {
+    clickPay() {
+      
+    },
   },
   computed: {
+    payee() {
+      const id = this.$route.params.id
+      const target = this.$store.getters.getMemberByUid(id)
+      this.$store.dispatch('exchange/setPayee', target);
+      return target
+    },
     recipient() {
-      return this.$store.getters.getMemberIdByUUID(this.$route.params.id)
-    }
+      const target = this.$auth.user
+      this.$store.dispatch('exchange/setRecipient', target);
+      return target
+    },
   },
 }
 </script>
