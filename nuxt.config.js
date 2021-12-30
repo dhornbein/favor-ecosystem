@@ -33,7 +33,8 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
-    '@/plugins/global.js'
+    '@/plugins/global.js',
+    '@/plugins/vee-validate'
   ],
 
   /*
@@ -116,6 +117,7 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
+    transpile: ["vee-validate/dist/rules"],
   },
 
   // Cormorant+SC:300,700

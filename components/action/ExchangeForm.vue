@@ -1,38 +1,55 @@
 <template>
   <div class="my-4 flex-grow flex flex-col">
-    <div class="field">
-      <input
-        v-model="details.amount"
-        @change="setValues"
-        type="number"
-        placeholder="0.000"
-        required
-        name=""
-        id=""
-        class="amount"
-      >
-    </div>
-    <div class="field">
-      <input
-        v-model="details.title"
-        @change="setValues"
-        type="text"
-        maxlength="140"
-        required
-        placeholder="Click to add Title"
-        class="title"
-      >
-      <div class="detail text-right text-sm text-gray-400">{{ details.title.length }}/140</div>
-    </div>
-    <div class="field">
-      <textarea
-        v-model="details.description"
-        @change="setValues"
-        name="description"
-        placeholder="Optional description"
-        class="description"
-      ></textarea>
-    </div>
+    <ValidationProvider v-slot="{ errors, classes }">
+      <div class="control" :class="classes">
+        <input
+          v-model="details.amount"
+          @change="setValues"
+          type="number"
+          placeholder="0.000"
+          min="0.001"
+          required
+          name="amount"
+          class="amount"
+        >
+        <div class="input-meta">
+          <span class=errors>{{ errors[0] }}</span>
+        </div>
+      </div>
+    </ValidationProvider>
+    <ValidationProvider v-slot="{ errors, classes }">
+      <div class="control" :class="classes">
+        <input
+          v-model="details.title"
+          @change="setValues"
+          type="text"
+          maxlength="140"
+          minlength="4"
+          required
+          placeholder="Click to add Title"
+          name="title"
+          class="title"
+        >
+        <div class="input-meta">
+          <span class=errors>{{ errors[0] }}</span>
+          <span class="detail text-right text-sm text-gray-400">{{ details.title.length }}/140</span>
+        </div>
+      </div>
+    </ValidationProvider>
+    <ValidationProvider v-slot="{ errors, classes }">
+      <div class="control" :class="classes">
+        <textarea
+          v-model="details.description"
+          @change="setValues"
+          name="description"
+          placeholder="Optional description"
+          class="description"
+        ></textarea>
+        <div class="input-meta">
+          <span class=errors>{{ errors[0] }}</span>
+        </div>
+      </div>
+    </ValidationProvider>
     <!-- add broker drop down -->
   </div>
 </template>
@@ -40,7 +57,12 @@
 
 
 <script>
+import { ValidationProvider } from "vee-validate";
+
 export default {
+  components: {
+    ValidationProvider
+  },
   data() {
     return {
       details: {
@@ -70,11 +92,14 @@ export default {
 
 <style lang="scss" scoped>
 input {
-  @apply p-2 w-full text-2xl border-b-2 border-gray-500 invalid:border-red-200;
+  @apply p-2 w-full text-2xl border-b-2 border-gray-500;
 }
 
-.field {
+.control {
   @apply my-4;
+  .errors {
+    @apply text-red-500 text-sm;
+  }
 }
 
 .amount {
@@ -85,6 +110,6 @@ input {
 }
 
 .description {
-  @apply min-h-[2rem] focus:shadow-inner;
+  @apply w-full max-w-prose mx-auto min-h-[2rem] shadow-md rounded-md p-2 border border-gray-100;
 }
 </style>
