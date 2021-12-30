@@ -52,8 +52,11 @@ export const getters = {
   getMemberById: state => id => {
     return state.members.find(member => member.id == id)
   },
-  getMemberByUid: state => id => {
-    return state.members.find(member => member.uuid == id)
+  getMemberByUid: state => uid => {
+    return state.members.find(member => member.uuid == uid)
+  },
+  getMemberByUsername: state => username => {
+    return state.members.find(member => member.username == username)
   },
   getMemberIdByUUID: state => id => {
     return state.members.find(member => member.uuid == id).id
