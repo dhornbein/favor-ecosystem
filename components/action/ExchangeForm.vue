@@ -1,6 +1,23 @@
 <template>
   <div class="my-4 flex-grow flex flex-col">
-    <ValidationProvider v-slot="{ errors, classes }">
+
+    <ValidationProvider immediate rules="uuid|unique:@recipient,Recipient" v-slot="{ errors }">
+        <input
+          :value="payeeUid"
+          type="text"
+          name="payee"
+        ><span class=errors>{{ errors[0] }}</span>
+    </ValidationProvider>
+
+    <ValidationProvider name="recipient" rules="uuid" v-slot="{ errors }">
+        <input
+          :value="recipientUid"
+          type="text"
+          name="recipient"
+        ><span class=errors>{{ errors[0] }}</span>
+    </ValidationProvider>
+
+    <ValidationProvider slim v-slot="{ errors, classes }">
       <div class="control" :class="classes">
         <input
           v-model="details.amount"
@@ -17,7 +34,7 @@
         </div>
       </div>
     </ValidationProvider>
-    <ValidationProvider v-slot="{ errors, classes }">
+    <ValidationProvider slim v-slot="{ errors, classes }">
       <div class="control" :class="classes">
         <input
           v-model="details.title"
@@ -36,7 +53,7 @@
         </div>
       </div>
     </ValidationProvider>
-    <ValidationProvider v-slot="{ errors, classes }">
+    <ValidationProvider slim v-slot="{ errors, classes }">
       <div class="control" :class="classes">
         <textarea
           v-model="details.description"
@@ -62,6 +79,14 @@ import { ValidationProvider } from "vee-validate";
 export default {
   components: {
     ValidationProvider
+  },
+  props: {
+    payeeUid: {
+      type: String,
+    },
+    recipientUid: {
+      type: String,
+    }
   },
   data() {
     return {
@@ -97,9 +122,10 @@ input {
 
 .control {
   @apply my-4;
-  .errors {
-    @apply text-red-500 text-sm;
-  }
+}
+
+.errors {
+  @apply text-red-500 text-sm;
 }
 
 .amount {

@@ -12,7 +12,7 @@
       <MemberPortrait class="recipient w-1/3 text-center" :member="recipient" />
     </div>
 
-    <ActionExchangeForm />
+    <ActionExchangeForm :payeeUid="payee.uuid" :recipientUid="recipient.uuid" />
 
     <div class="notice text-sm text-red-500" v-if="invalid">Add an amount and title to begin</div>
     <ActionButton>
@@ -65,21 +65,17 @@ export default {
     choosePay() {
       this.$router.push('/exchange/pay/' + this.to.username)
     },
-    submitPay () {},
+    async submitPay () {
+      const valid = await this.$refs.form.validate();
+      if (!valid) return; // TODO show error
+
+    },
     chooseReq() {
       this.$router.push('/exchange/request/' + this.to.username)
     },
     submitReq () {},
   },
   computed: {
-    valid() {
-      // return this.$refs.form.validate().then(success => {
-      //   if (!success) {
-      //     return false;
-      //   }
-      //   return true;
-      // })
-    },
     from() {
       const username = this.$route.params.from
       const member = this.$store.getters.getMemberByUsername(username)
