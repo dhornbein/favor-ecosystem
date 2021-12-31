@@ -1,15 +1,18 @@
 export const state = () => ({
-  recipient: '',
-  payee: '',
   details: {
+    recipientId: '',
+    payeeId: '',
     amount: '',
     title: '',
     description: '',
     brokerId: '',
-  }
+  },
+  receipt: {}
 })
 
 const detailsDefault = {
+  recipientId: '',
+  payeeId: '',
   amount: '',
   title: '',
   description: '',
@@ -18,10 +21,10 @@ const detailsDefault = {
 
 export const mutations = {
   SET_PAYEE(state, target) {
-    state.target = target
+    state.details.payeeId = target
   },
   SET_RECIPIENT(state, target) {
-    state.target = target
+    state.details.recipientId = target
   },
   SET_DETAILS(state, details) {
     state.details = {
@@ -29,15 +32,12 @@ export const mutations = {
       ...details
     }
   },
+  SET_RECEIPT(state, payload) {
+    state.receipt = payload
+  },
 }
 
 export const actions = {
-  setPayee({ commit }, target) {
-    commit('SET_PAYEE', target)
-  },
-  setRecipient({ commit }, target) {
-    commit('SET_RECIPIENT', target)
-  },
   clearTargets({ commit }) {
     commit('SET_PAYEE', '')
     commit('SET_RECIPIENT', '')
@@ -45,13 +45,11 @@ export const actions = {
   setDetails({ commit }, details) {
     commit('SET_DETAILS', details)
   },
-  clearDetails({ commit }) {
+  reset({ commit }) {
     commit('SET_DETAILS', detailsDefault)
   },
-  reset({ commit }) {
-    commit('SET_PAYEE', '')
-    commit('SET_RECIPIENT', '')
-    commit('SET_DETAILS', detailsDefault)
+  receipt({ commit }, payload) {
+    commit('SET_RECEIPT', payload)
   }
 }
 

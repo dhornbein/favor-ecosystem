@@ -59,6 +59,7 @@ export default {
     return {
       payee: false,
       recipient: false,
+      loading: false
     }
   },
   methods: {
@@ -66,8 +67,26 @@ export default {
       this.$router.push('/exchange/pay/' + this.to.username)
     },
     async submitPay () {
+      this.loading = true
       const valid = await this.$refs.form.validate();
       if (!valid) return; // TODO show error
+      try {
+        const payload = this.$store.getters['exchange/details']
+        console.log(payload);
+        const response = await this.$axios.post('api/transactions', payload)
+        if (response.data.success) {
+          this.$store.dispatch('exchange/receipt', response.data.data )
+          this.$store.dispatch('exchange/reset')
+          this.$router.push('/exchange/receipt/')
+        } else {
+          console.log('error',response,response.data,response.errors);
+        }
+          
+      } catch (error) {
+        // TODO handle error like a grown up
+        console.error(error)
+        
+      }
 
     },
     chooseReq() {
@@ -95,14 +114,10 @@ export default {
       if (route == 'pay') {
         this.payee = this.from
         this.recipient = this.to
-        this.$store.dispatch('exchange/setPayee', this.payee);
-        this.$store.dispatch('exchange/setRecipient', this.recipient);
         return 'pay'
       } else if (route == 'request') {
         this.payee = this.to
         this.recipient = this.from
-        this.$store.dispatch('exchange/setPayee', this.payee);
-        this.$store.dispatch('exchange/setRecipient', this.recipient);
         return 'request'
       } else {
         this.$store.dispatch('exchange/clearTargets');

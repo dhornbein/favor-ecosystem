@@ -4,7 +4,8 @@
     <ValidationProvider immediate rules="uuid|unique:@recipient,Recipient" v-slot="{ errors }">
         <input
           :value="payeeUid"
-          type="text"
+          @change="setValues"
+          type="hidden"
           name="payee"
         ><span class=errors>{{ errors[0] }}</span>
     </ValidationProvider>
@@ -12,7 +13,8 @@
     <ValidationProvider name="recipient" rules="uuid" v-slot="{ errors }">
         <input
           :value="recipientUid"
-          type="text"
+          @change="setValues"
+          type="hidden"
           name="recipient"
         ><span class=errors>{{ errors[0] }}</span>
     </ValidationProvider>
@@ -109,7 +111,11 @@ export default {
       return true
     },
     setValues() {
-      this.$store.dispatch('exchange/setDetails', this.details)
+      this.$store.dispatch('exchange/setDetails', {
+        ...this.details,
+        payeeId: this.payeeUid,
+        recipientId: this.recipientUid
+      })
     },
   },
 }
