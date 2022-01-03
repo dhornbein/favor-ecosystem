@@ -31,9 +31,6 @@ export default {
       searchKeys: ['username', 'email', 'firstName', 'lastName'],
     }
   },
-  mounted() {
-    this.$store.dispatch('exchange/clearTargets');
-  },
   computed: {
     ...mapState(['members']),
     filteredMembers() {
@@ -48,7 +45,7 @@ export default {
       this.searchResults = results
     },
     cardClick(username) {
-      this.$router.push(`/exchange/setup/${username}`)
+      this.$router.push(`/exchange/pay/${username}`)
     }
   }
 }

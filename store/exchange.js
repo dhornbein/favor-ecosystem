@@ -20,12 +20,6 @@ const detailsDefault = {
 }
 
 export const mutations = {
-  SET_PAYEE(state, target) {
-    state.details.payeeId = target
-  },
-  SET_RECIPIENT(state, target) {
-    state.details.recipientId = target
-  },
   SET_DETAILS(state, details) {
     state.details = {
       ...state.details,
@@ -56,5 +50,8 @@ export const actions = {
 export const getters = {
   details: state => {
     return state.details
+  },
+  receipt: state => {
+    return state.receipt
   }
 }
