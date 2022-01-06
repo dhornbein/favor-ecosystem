@@ -3,8 +3,8 @@
     <BasicFavor class="" :num="row.amount" :label="row.created | formatDate" />
     <div class="tchart__details flex-grow">
       <p class="">
-        <nuxt-link :to="`/members/${row.payeeId}`" class="payee font-bold hover:text-brand-primary">{{ row.payee }}</nuxt-link>
-        <nuxt-link :to="`/members/${row.recipientId}`" class="recipient font-bold hover:text-brand-primary">{{ row.recipient }}</nuxt-link>
+        <nuxt-link :to="`/members/${row.payeeUid}`" class="payee font-bold hover:text-brand-primary">{{ row.payee }}</nuxt-link>
+        <nuxt-link :to="`/members/${row.recipientUid}`" class="recipient font-bold hover:text-brand-primary">{{ row.recipient }}</nuxt-link>
       </p>
       <p class="hidden md:block">{{ row.title }}</p>
     </div>

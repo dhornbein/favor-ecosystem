@@ -45,14 +45,14 @@ exports.post = async (req, res, next) => {
 
   // build new member object
   let newMember = {
-    uuid: uuidv4(),
+    uid: uuidv4(),
     created: new Date().toISOString(),
     ...req.body
   }
 
   // TODO increment invited count for inviting member
   // if the inviting member isn't set, set it to the current broker
-  if (authMember && !req.body.invitedById) newMember.invitedById = authMember.uuid
+  if (authMember && !req.body.invitedByUid) newMember.invitedByUid = authMember.uid
 
   try {
 
@@ -71,9 +71,9 @@ exports.post = async (req, res, next) => {
 
 exports.put = async (req, res, next) => {
   try {
-    const uuid = req.params.uuid
+    const uid = req.params.uid
 
-    const { response, payload } = await membersModel.put(uuid, req.body)
+    const { response, payload } = await membersModel.put(uid, req.body)
     
     console.log('membersController.put',response.data,payload);
     res.status(200).json(success(payload, {msg: 'Member updated successfully'}))

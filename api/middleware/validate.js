@@ -76,7 +76,7 @@ exports.isBroker =  (req, res, next) => {
   }))
 }
 
-// firstName, lastName, email, phone, favor, invitedById
+// firstName, lastName, email, phone, favor, invitedByUid
 exports.invite = [
   check('firstName')
     .trim()
@@ -102,14 +102,14 @@ exports.invite = [
     .custom(amount => amount > 0.001)
     .withMessage('Favor amount must be more than f0.001')
     .customSanitizer(sanitizeFavor), // round to 3 decimal places 0.001
-  check('invitedById')
+  check('invitedByUid')
     .not()
     .isEmpty()
-    .withMessage('Must include a UUID of the inviting member')
+    .withMessage('Must include a Uid of the inviting member')
     .custom(uuidValidate)
-    .withMessage('Invalid UUID')
-    .custom((value, { req }) => req.user.uuid == value || req.user.roles['broker'] ) // check that the auth token's owner is the same as the invitedByID
-    .withMessage('Auth token UUID must match invitedById!')
+    .withMessage('Invalid Uid')
+    .custom((value, { req }) => req.user.uid == value || req.user.roles['broker'] ) // check that the auth token's owner is the same as the invitedByID
+    .withMessage('Auth token Uid must match invitedByUid!')
     .bail()
     .custom(validateMember), // checks for unique email & phone and if invited by ID exists
   (req, res, next) => {
@@ -121,26 +121,26 @@ exports.invite = [
 ]
 
 exports.transaction = [
-  check('recipientId')
+  check('recipientUid')
     .trim()
     .not()
     .isEmpty()
-    .withMessage('recipientId can not be empty!')
+    .withMessage('recipientUid can not be empty!')
     .bail()
     .custom(uuidValidate)
-    .withMessage('Invalid UUID')
+    .withMessage('Invalid Uid')
     .bail(),
-  check('payeeId')
+  check('payeeUid')
     .trim()
     .not()
     .isEmpty()
-    .withMessage('PayeeId can not be empty!')
+    .withMessage('PayeeUid can not be empty!')
     .bail()
     .custom(uuidValidate)
-    .withMessage('Invalid UUID')
+    .withMessage('Invalid Uid')
     .bail()
     .custom(validateTransaction),
-  check('brokerId')
+  check('brokerUid')
     .trim(),
   check('amount')
     .exists()
@@ -174,7 +174,7 @@ exports.transaction = [
     .escape(),
   check('created')
     .customSanitizer(value => new Date().toISOString()),
-  check('uuid')
+  check('uid')
     .customSanitizer(value => uuidv4()),
   check('ipAddress')
     .customSanitizer((value, { req }) => req.ip),
@@ -190,12 +190,12 @@ async function validateTransaction(value, { req }) {
   // fetch members from database
   const members = await getMembers()
   
-  const { payeeId, recipientId, brokerId } = req.body
-  const payee = members.find(member => member.uuid === payeeId)
-  const recipient = members.find(member => member.uuid === recipientId)
-  const broker = (brokerId) ? members.find(member => member.uuid === brokerId) : null
+  const { payeeUid, recipientUid, brokerUid } = req.body
+  const payee = members.find(member => member.uid === payeeUid)
+  const recipient = members.find(member => member.uid === recipientUid)
+  const broker = (brokerUid) ? members.find(member => member.uid === brokerUid) : null
 
-  if (payeeId === recipientId)
+  if (payeeUid === recipientUid)
     throw new Error('Payee and recipient can not be the same!')
 
   // if payee or recipient is not found, throw error
@@ -205,9 +205,9 @@ async function validateTransaction(value, { req }) {
   if (recipient === undefined)
     throw new Error('Recipient does not match an existing a member');
 
-  if (brokerId && broker === undefined)
+  if (brokerUid && broker === undefined)
     throw new Error('Broker does not match an existing a member');
-  // check if payeeId and recipientId are the same person
+  // check if payeeUid and recipientUid are the same person
 
   return true
 }
@@ -241,16 +241,16 @@ async function validateInviteToken(value, { req }){
 }
 
 exports.member = [
-  check('brokerId')
+  check('brokerUid')
     .trim()
-    .if(check('brokerId').exists().not().isEmpty())
+    .if(check('brokerUid').exists().not().isEmpty())
     .custom(uuidValidate)
-    .withMessage('Invalid Broker UUID'),
-  check('invitedById')
+    .withMessage('Invalid Broker Uid'),
+  check('invitedByUid')
     .trim()
-    .if(check('invitedById').exists().not().isEmpty())
+    .if(check('invitedByUid').exists().not().isEmpty())
     .custom(uuidValidate)
-    .withMessage('Invalid Invited By UUID'),
+    .withMessage('Invalid Invited By Uid'),
   check('phone')
     .customSanitizer(normalizePhone),
   check('email')
@@ -306,13 +306,13 @@ async function validateMember(value, { req }) {
   // fetch members from database
   const members = await getMembers()
 
-  const { username, email, phone, invitedById, brokerId } = req.body
+  const { username, email, phone, invitedByUid, brokerUid } = req.body
 
   const foundEmail = members.find(member => member.email === email)
   const foundPhone = members.find(member => member.phone === phone)
   const foundUsername = members.find(member => member.username === username)
-  const foundInviter = members.find(member => member.uuid === invitedById)
-  const foundBroker = members.find(member => member.uuid === brokerId)
+  const foundInviter = members.find(member => member.uid === invitedByUid)
+  const foundBroker = members.find(member => member.uid === brokerUid)
   
   if (foundEmail)
     throw new Error('Email is already in use')
@@ -326,21 +326,21 @@ async function validateMember(value, { req }) {
   if (!phone && !email)
     throw new Error('Phone number OR email is required')
 
-  if (invitedById && !foundInviter)
+  if (invitedByUid && !foundInviter)
     throw new Error('Inviter doesn\'t match any members')
 
-  if (brokerId && !foundBroker)
-    throw new Error('BrokerId doesn\'t match any members')
+  if (brokerUid && !foundBroker)
+    throw new Error('BrokerUid doesn\'t match any members')
 
   return true
 }
 
 exports.memberUpdate = [
-  check('brokerId')
+  check('brokerUid')
     .trim()
-    .if(check('brokerId').exists().not().isEmpty())
+    .if(check('brokerUid').exists().not().isEmpty())
     .custom(uuidValidate)
-    .withMessage('Invalid Broker UUID'),
+    .withMessage('Invalid Broker Uid'),
   check('phone')
     .customSanitizer(normalizePhone),
   check('email')
@@ -382,7 +382,7 @@ exports.memberUpdate = [
     .default(new Date().toISOString()),
   (req, res, next) => {
     const errors = validationResult(req)
-    const schema = ['username', 'firstName', 'lastName', 'BrokerId', 'phone', 'email', 'password','creditLimit','updated']
+    const schema = ['username', 'firstName', 'lastName', 'BrokerUid', 'phone', 'email', 'password','creditLimit','updated']
 
     req.body = filterObjKeys(req.body, schema)
     req.body = removeObjBlanks(req.body)
@@ -397,12 +397,12 @@ async function validateMemberUpdate(value, { req }) {
   // fetch members from database
   const members = await getMembers()
 
-  const { username, email, phone, brokerId } = req.body
+  const { username, email, phone, brokerUid } = req.body
 
-  const foundEmail = members.find(member => member.email === email && member.uuid !== req.params.uuid)
-  const foundPhone = members.find(member => member.phone === phone && member.uuid !== req.params.uuid)
-  const foundUsername = members.find(member => member.username === username && member.uuid !== req.params.uuid)
-  const foundBroker = members.find(member => member.uuid === brokerId)
+  const foundEmail = members.find(member => member.email === email && member.uid !== req.params.uid)
+  const foundPhone = members.find(member => member.phone === phone && member.uid !== req.params.uid)
+  const foundUsername = members.find(member => member.username === username && member.uid !== req.params.uid)
+  const foundBroker = members.find(member => member.uid === brokerUid)
   
   if (foundEmail)
     throw new Error('Email is already in use')
@@ -413,8 +413,8 @@ async function validateMemberUpdate(value, { req }) {
   if (foundUsername)
     throw new Error('Username is already in use')
 
-  if (brokerId && !foundBroker)
-    throw new Error('BrokerId doesn\'t match any members')
+  if (brokerUid && !foundBroker)
+    throw new Error('BrokerUid doesn\'t match any members')
 
   return true
 }

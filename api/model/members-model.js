@@ -23,7 +23,7 @@ const REQUEST = {
 }
 
 const KEYS = [
-  'uuid',
+  'uid',
   'id',
   'created',
   'updated',
@@ -36,8 +36,8 @@ const KEYS = [
   'debit',
   'transactionTotal',
   'brokerName',
-  'brokerId',
-  'invitedById',
+  'brokerUid',
+  'invitedByUid',
   'phone',
   'email',
   'roles',
@@ -55,7 +55,7 @@ const FAVOR_KEYS = [
 // TODO handle returned keys better, offer option to get all keys, restrict keys based on user role
 const AUTH_KEYS = [
   'id',
-  'uuid',
+  'uid',
   'username',
   'password',
   'roles'
@@ -113,12 +113,12 @@ exports.post = async (payload) => {
   }
 }
 
-exports.put = async (targetUuid,payload) => {
+exports.put = async (targetUid,payload) => {
   try {
     const members = await this.get(false)
     const headers = members[0]
     const formattedMembers = deserializeMembers(members, KEYS) // shift removes the headers
-    const row = formattedMembers.findIndex(member => member.uuid === targetUuid)
+    const row = formattedMembers.findIndex(member => member.uid === targetUid)
 
     if (row === -1) throw new Error('Member not found')
 

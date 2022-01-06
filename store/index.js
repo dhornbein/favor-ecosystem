@@ -41,45 +41,42 @@ export const actions = {
 }
 
 export const getters = {
-  getTransactionsByMemberUUID: state => id => {
-    return state.transactions.filter(transaction => {
-      return transaction.payeeId == id || transaction.recipientId == id
+  getTransactionsByUid: state => uid => {
+    return state.transactions.find(transaction => {
+      return transaction.uid == uid
     })
   },
-  getMemberByUsername: state => username => {
-    return state.members.find(member => member.username == username)
+  getTransactionsByMemberUid: state => uid => {
+    return state.transactions.filter(transaction => {
+      return transaction.payeeUid == uid || transaction.recipientUid == uid
+    })
   },
   getMemberById: state => id => {
     return state.members.find(member => member.id == id)
   },
   getMemberByUid: state => uid => {
-    return state.members.find(member => member.uuid == uid)
+    return state.members.find(member => member.uid == uid)
   },
   getMemberByUsername: state => username => {
     return state.members.find(member => member.username == username)
   },
-  getMemberIdByUUID: state => id => {
-    return state.members.find(member => member.uuid == id).id
-  },
-  getMemberUsernameByUUID: state => id => {
-    return state.members.find(member => member.uuid == id).username
-  },
-  getRelatedMembers: state => id => {
+  getRelatedMembers: state => uid => {
     const transactions = state.transactions.filter(transaction => {
-      return transaction.payeeId == id || transaction.recipientId == id
+      return transaction.payeeUid == uid || transaction.recipientUid == uid
     })
     let weightedTransactions = transactions.reduce((acc, transaction) => {
-      let memberUuid = (transaction.payeeId == id) ? transaction.recipientId : transaction.payeeId
-      let index = acc.findIndex(member => member.uuid == memberUuid)
+      let memberUid = (transaction.payeeUid == uid) ? transaction.recipientUid : transaction.payeeUid
+      let index = acc.findIndex(member => member.uid == memberUid)
+      let datetime = Date.now() - (new Date(transaction.created).getTime())
       if (index === -1) {
         acc.push({
-          uuid: memberUuid,
+          uid: memberUid,
           weight: 1,
-          date: Date.now() - (new Date(transaction.created).getTime())
+          date: datetime
         })
       } else {
         acc[index].weight += 1
-        acc[index].date += Date.now() - (new Date(transaction.created).getTime())
+        acc[index].date += datetime
       }
       return acc
     }, [])
@@ -87,6 +84,6 @@ export const getters = {
     return weightedTransactions.sort((a, b) => {
       b.weight += (b.date > a.date) ? 1 : 0
       return b.weight - a.weight
-    }).map(member => state.members.find(m => m.uuid == member.uuid))
+    }).map(member => state.members.find(m => m.uid == member.uid))
   }
 }

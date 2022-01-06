@@ -67,7 +67,7 @@ export default {
       return {
         'card--compact': this.size == 'compact',
         'card--open': this.size == 'open',
-        'card--me': this.$auth.user.uuid == this.member.uuid, 
+        'card--me': this.$auth.user.uid == this.member.uid, 
       }
     },
     isBroker() {
@@ -75,7 +75,7 @@ export default {
     },
     isCurrentUser() {
       if (!this.$auth.user) return false
-      return this.member.uuid === this.$auth.user.uuid
+      return this.member.uid === this.$auth.user.uid
     },
   },
   filters: {

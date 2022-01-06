@@ -14,12 +14,12 @@ exports.get = async (req, res, next) => {
         let search = new RegExp(req.query.searchString, 'g')
         query = query.filter(tran => search.test( [tran.title, tran.description, tran.payee, tran.recipient].join(' ') ) )
       }
-      if (query && req.query.payeeId)
-        query = query.filter(tran => tran.payeeId == req.query.payeeId)
+      if (query && req.query.payeeUid)
+        query = query.filter(tran => tran.payeeUid == req.query.payeeUid)
       if (query && req.query.searchPayee)
         query = query.filter(tran => tran.payee.toLowerCase() === req.query.searchPayee.toLowerCase())
-      if (query && req.query.recipientId)
-        query = query.filter(tran => tran.recipientId == req.query.recipientId)
+      if (query && req.query.recipientUid)
+        query = query.filter(tran => tran.recipientUid == req.query.recipientUid)
       if (query && req.query.searchRecipient)
         query = query.filter(tran => tran.recipient.toLowerCase() === req.query.searchRecipient.toLowerCase())
       if (query && req.query.skip)
@@ -51,7 +51,7 @@ exports.post = async (req, res, next) => {
   const authMember = req.user;
   const isBroker = authMember.roles['broker']
 
-  if (!isBroker && req.body.payeeId !== authMember.uuid) {
+  if (!isBroker && req.body.payeeUid !== authMember.uid) {
     res.status(403).json(error({
       title: "Not Authorized",
       detail: `You do not have permission to create transactions for anyone other than yourself!`,
@@ -63,8 +63,8 @@ exports.post = async (req, res, next) => {
   }
 
   if (isBroker) {
-    // if no brokerID is set, set it to the current broker
-    if (!req.body.brokerId) req.body.brokerId = authMember.uuid
+    // if no brokerUid is set, set it to the current broker
+    if (!req.body.brokerUid) req.body.brokerUid = authMember.uid
   }
     
   try {

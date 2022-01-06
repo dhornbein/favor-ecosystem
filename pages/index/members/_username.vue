@@ -29,7 +29,7 @@ export default {
       return this.$store.getters.getMemberByUsername(this.$route.params.username);
     },
     memberTransactions() {
-      return this.$store.getters.getTransactionsByMemberUUID(this.member.uuid);
+      return this.$store.getters.getTransactionsByMemberUid(this.member.uid);
     },
     isBroker() {
       return this.row.roles ? this.row.roles.includes('broker') : false

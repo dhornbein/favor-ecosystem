@@ -24,11 +24,11 @@
 
       <form class="broker-form">
         
-        <label for="payeeId">Select Payee</label>
-        <v-select id="payeeId" :options="membersLabelList" v-model="form.payeeId" :reduce="member => member.uuid"></v-select>
+        <label for="payeeUid">Select Payee</label>
+        <v-select id="payeeUid" :options="membersLabelList" v-model="form.payeeUid" :reduce="member => member.uid"></v-select>
         
-        <label for="recipientId">Select Recipient</label>
-        <v-select id="recipientId" :options="membersLabelList" v-model="form.recipientId" :reduce="member => member.uuid"></v-select>
+        <label for="recipientUid">Select Recipient</label>
+        <v-select id="recipientUid" :options="membersLabelList" v-model="form.recipientUid" :reduce="member => member.uid"></v-select>
         
         <label for="schedule"><input type="checkbox" v-model="scheduleLater" id="schedule"> Schedule Payment</label>
         <BaseInput label="Effective Date" id="effectiveDatetime" type="datetime-local" v-model="form.effectiveDatetime" v-if="scheduleLater" />
@@ -44,8 +44,8 @@
         <BaseInput label="Transaction Title" id="title" type="text" v-model="form.title" placeholder="Magic Beans, cheap" required />
         <textarea id="transaction-description" class="type__textarea" v-model="form.description" placeholder="Please describe the transaction as accurately as is reasonable. Description should be sufficient to determine that currency speculation and other other anti-network behavior are not at work."></textarea>
 
-        <label for="brokerId">Select Broker</label>
-        <v-select id="brokerId" :options="membersLabelList" v-model="form.brokerId" :reduce="member => member.uuid"></v-select>
+        <label for="brokerUid">Select Broker</label>
+        <v-select id="brokerUid" :options="membersLabelList" v-model="form.brokerUid" :reduce="member => member.uid"></v-select>
 
         <p>Do you attest that this transaction meets our network guidelines?</p>
 
@@ -57,7 +57,7 @@
 
       <BaseModal v-if="showConfirm" @close="showConfirm = false">
         <h2 class="text-2xl">Confirm Transaction</h2>
-        <TransactionCard :row="{...form,created:form.effectiveDate}" v-if="form.payeeId && form.recipientId" />
+        <TransactionCard :row="{...form,created:form.effectiveDate}" v-if="form.payeeUid && form.recipientUid" />
         <p>Are you sure you want to submit this transaction?</p>
         <button class="btn" @click="sendReq">Submit</button> <button class="btn" @click="showConfirm = false">Edit</button>
 
@@ -89,13 +89,13 @@ export default {
       showConfirm: false,
       scheduleLater: false,
       form: {
-        payeeId: null,
-        recipientId: null,
+        payeeUid: null,
+        recipientUid: null,
         effectiveDatetime: this.getDatetimeString(),
         amount: null,
         title: null,
         description: null,
-        brokerId: null,
+        brokerUid: null,
         assurance: false
       }
     }

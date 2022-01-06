@@ -17,7 +17,7 @@ extend("min", {
   message: "This field must be at least {length} characters"
 });
 
-extend("uuid", {
+extend("uid", {
   validate: value => {
     return uuidValidate(value)
   },

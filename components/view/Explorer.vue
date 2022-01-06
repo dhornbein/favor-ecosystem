@@ -1,7 +1,7 @@
 <template>
   <section class="">
     <div class="search">
-      <v-select class="search__field" id="payeeId" :options="members" v-model="search" label="firstName">
+      <v-select class="search__field" id="payeeUid" :options="members" v-model="search" label="firstName">
         <template v-slot:option="option">
           <MemberIcon :username="option.username" />
           {{ option.username }}

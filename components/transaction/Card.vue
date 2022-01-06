@@ -70,7 +70,7 @@ export default {
       required: false
     },
     focusUid: {
-      // pass the user uuid of the user to focus on
+      // pass the user uid of the user to focus on
       type: String,
       required: false
     }
@@ -87,25 +87,25 @@ export default {
         'card--wide': this.size == 'wide', 
         'card--open': this.size == 'open', 
         'card--full': this.size == 'full',
-        'card--network': this.trans.payeeId === this.$globals.networkUUID, 
+        'card--network': this.trans.payeeUid === this.$globals.networkUid, 
         'card--payee': this.isFocusedPayee, 
         'card--recipient': this.isFocusedRecipient 
       }
     },
     isFocusedPayee() {
-      return this.focusUid === this.trans.payeeId
+      return this.focusUid === this.trans.payeeUid
     },
     isFocusedRecipient() {
-      return this.focusUid === this.trans.recipientId
+      return this.focusUid === this.trans.recipientUid
     },
     payee() {
-      return this.$store.getters.getMemberByUid(this.trans.payeeId)
+      return this.$store.getters.getMemberByUid(this.trans.payeeUid)
     },
     recipient() {
-      return this.$store.getters.getMemberByUid(this.trans.recipientId)
+      return this.$store.getters.getMemberByUid(this.trans.recipientUid)
     },
     broker() {
-      return this.$store.getters.getMemberByUid(this.trans.brokerId)
+      return this.$store.getters.getMemberByUid(this.trans.brokerUid)
     },
     fee() {
       return this.trans.amount * this.$globals.fee

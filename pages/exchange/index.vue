@@ -4,7 +4,7 @@
       placeholder="Search" 
       v-model="search" 
       :keys="searchKeys"
-      :search="members.filter(m => m.uuid !== $auth.user.uuid)"
+      :search="members.filter(m => m.uid !== $auth.user.uid)"
       @results="searchRender" 
     />
     <h2 class="text-xl font-cormorant" v-if="searchResults.length < 1">Frequent Exchanges</h2>
@@ -34,7 +34,7 @@ export default {
   computed: {
     ...mapState(['members']),
     filteredMembers() {
-      const recent = this.$store.getters.getRelatedMembers(this.$auth.user.uuid)
+      const recent = this.$store.getters.getRelatedMembers(this.$auth.user.uid)
 
       return (this.searchResults.length > 0) ? this.searchResults : recent
 

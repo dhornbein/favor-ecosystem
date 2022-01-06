@@ -20,17 +20,17 @@ const REQUEST = {
 }
 
 const KEYS = [
-  'uuid',
+  'uid',
   'id',
   'created',
   'updated',
-  'payeeId',
-  'recipientId',
+  'payeeUid',
+  'recipientUid',
   'amount',
   'title',
   'description',
   'effectiveDatetime',
-  'brokerId',
+  'brokerUid',
   'ipAddress',
   'transactionPhone'
 ]

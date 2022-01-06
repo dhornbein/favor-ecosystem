@@ -17,17 +17,17 @@
     </div>
 
     <div class="my-4 flex-grow flex flex-col">
-      <ValidationProvider immediate rules="uuid|unique:@recipient,Recipient" v-slot="{ errors }">
+      <ValidationProvider immediate rules="uid|unique:@recipient,Recipient" v-slot="{ errors }">
           <input
-            v-model="details.payeeId"
+            v-model="details.payeeUid"
             type="hidden"
             name="payee"
           ><span class=errors>{{ errors[0] }}</span>
       </ValidationProvider>
 
-      <ValidationProvider name="recipient" rules="uuid" v-slot="{ errors }">
+      <ValidationProvider name="recipient" rules="uid" v-slot="{ errors }">
           <input
-            v-model="details.recipientId"
+            v-model="details.recipientUid"
             type="hidden"
             name="recipient"
           ><span class=errors>{{ errors[0] }}</span>
@@ -112,12 +112,12 @@ export default {
       loading: false,
       confirm: false,
       details: {
-        recipientId: '',
-        payeeId: '',
+        recipientUid: '',
+        payeeUid: '',
         amount: '',
         title: '',
         description: '',
-        brokerId: '',
+        brokerUid: '',
       }
     }
   },
@@ -161,7 +161,7 @@ export default {
   computed: {
     from() {
       const member = this.$auth.user
-      this.details.payeeId = member.uuid
+      this.details.payeeUid = member.uid
       return this.$auth.user
     },
     to() {
@@ -171,7 +171,7 @@ export default {
       //   // TODO throw and error for the user "no member found"
       //   this.$router.push('/exchange/'); // no member, go back and choose one
       
-      this.details.recipientId = member.uuid 
+      this.details.recipientUid = member.uid 
       return (member) ? member : false
     },
   },

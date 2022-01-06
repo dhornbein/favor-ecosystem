@@ -77,7 +77,7 @@ exports.requireInviteToken = (req, res, next) => {
       'lastName': decoded.invitation.lastName,
       'email': decoded.invitation.email,
       'phone': decoded.invitation.phone,
-      'invitedById': decoded.invitedById,
+      'invitedByUid': decoded.invitedByUid,
       ...req.body // overwrites the stuff already in the body
     }
   } catch (err) {

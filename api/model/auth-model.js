@@ -35,7 +35,7 @@ const KEYS = [
   'email',
   'phone',
   'favor',
-  'invitedById',
+  'invitedByUid',
   'invitedBy',
   'claimed',
   'revoked',

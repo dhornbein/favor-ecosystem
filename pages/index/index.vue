@@ -31,7 +31,7 @@ export default {
   computed: {
     ...mapState(['transactions','members']),
     myTransactions() {
-      return this.$store.getters.getTransactionsByMemberUUID(this.$auth.user.uuid);
+      return this.$store.getters.getTransactionsByMemberUid(this.$auth.user.uid);
     },
     filteredTransactions() {
       let transactions = this.myTransactions

@@ -1,22 +1,22 @@
 export const state = () => ({
   details: {
-    recipientId: '',
-    payeeId: '',
+    recipientUid: '',
+    payeeUid: '',
     amount: '',
     title: '',
     description: '',
-    brokerId: '',
+    brokerUid: '',
   },
   receipt: {}
 })
 
 const detailsDefault = {
-  recipientId: '',
-  payeeId: '',
+  recipientUid: '',
+  payeeUid: '',
   amount: '',
   title: '',
   description: '',
-  brokerId: '',
+  brokerUid: '',
 }
 
 export const mutations = {

@@ -27,7 +27,7 @@ exports.getMember = async (req, res, next) => {
 
   try {
     const members = await membersModel.get()
-    const member = members.find(member => member.uuid === req.user.uuid)
+    const member = members.find(member => member.uid === req.user.uid)
     res.status(200).json(success(member,{msg: 'Member info found'}))
   } catch (err) {
     console.error(err)
@@ -65,9 +65,9 @@ exports.invite = async (req, res, next) => {
         email: req.body.email,
         phone: req.body.phone,
       },
-      invitedById: req.body.invitedById,
+      invitedByUid: req.body.invitedByUid,
       transaction: (req.body.favor) ? {
-        payeeId: req.body.invitedById,
+        payeeUid: req.body.invitedByUid,
         amount: req.body.favor,
       } : false,
     }, env.JWT_INVITE_SECRET, {
@@ -82,7 +82,7 @@ exports.invite = async (req, res, next) => {
       email: req.body.email,
       phone: req.body.phone,
       favor: req.body.favor,
-      invitedById: req.body.invitedById,
+      invitedByUid: req.body.invitedByUid,
       token: token
     }
 
@@ -107,7 +107,7 @@ exports.post = async (req, res, next) => {
 
     // access_token
     const token = jwt.sign({
-      uuid: req.member.uuid,
+      uid: req.member.uid,
       username: req.member.username,
       id: req.member.id,
       roles: req.member.roles //TODO turn this into an array?
