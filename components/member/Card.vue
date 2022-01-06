@@ -39,6 +39,9 @@
         </BaseFavor>
       </div>
     </main>
+    <footer class="footer">
+      <slot></slot>
+    </footer>
   </article>
 </template>
 
@@ -102,7 +105,8 @@ export default {
   }
 
   &.card--compact {
-    .body {
+    .body,
+    .footer {
       @apply hidden;
     }
   }
