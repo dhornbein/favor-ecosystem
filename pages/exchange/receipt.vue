@@ -8,11 +8,17 @@
 <script>
 export default {
   layout: 'main',
+  async fetch() {
+    await this.$store.dispatch('getAllTransactions')
+  },
   computed: {
     receipt() {
       const receipt = this.$store.getters['exchange/receipt']
-      if (Object.keys(receipt).length === 0)
+      if (Object.keys(receipt).length === 0) {
+        // TODO redirect and throw error
         return false;
+      }
+        
       
       return receipt
     }
