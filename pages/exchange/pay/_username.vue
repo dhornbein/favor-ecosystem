@@ -6,12 +6,8 @@
     ref="form"
     v-slot="{ invalid }"
   >
-    <div class="loader" v-if="loading">
-      <div class="spinner"></div>
-      <div role="status">
-        Loading...
-      </div>
-    </div>
+    <BaseLoader class="loader" v-if="loading"/>
+
     <div class="pay flex my-4 justify-between">
       <MemberPortrait class="payee w-1/3 text-center" :member="from" />
       <div class="text-4xl text-purple-500 font-bold text-center">
@@ -185,13 +181,6 @@ export default {
 
 
 <style lang="scss" scoped>
-.loader {
-  @apply absolute inset-0 z-50 flex flex-col gap-4 justify-center items-center w-full h-full bg-white bg-opacity-80 text-4xl text-purple-900;
-  .spinner {
-    @apply animate-spin inline-block w-16 h-16 border-4 rounded-full border-purple-900;
-    border-right-color: transparent;
-  }
-}
 
 input {
   @apply p-2 w-full text-2xl border-b-2 border-gray-500;
