@@ -8,9 +8,9 @@
     <main>
       <div class="exchange">
         <div class="people">
-          <MemberPortrait class="payee" :member="payee"/>
+          <MemberPortrait class="payee" :member="payee" :highlight="isFocusedPayee"/>
           <div class="middle"></div>
-          <MemberPortrait class="recipient" :member="recipient"/>
+          <MemberPortrait class="recipient" :member="recipient" :highlight="isFocusedRecipient" />
         </div>
         <div class="favor">
           <div class="payee">
@@ -19,9 +19,9 @@
             <div class="total text-purple-500"><BaseFavor :num="(-fee / 2) + -trans.amount" /></div>
           </div>
           <div class="summary">
-            <div class="amount text-xl"><BaseFavor :num="trans.amount" /></div>
+            <div class="amount text-xl"><BaseFavor class="focus" :num="focusAmount" :plus="isFocusedRecipient" /></div>
             <div class="fee">
-              <BaseFavor :num="fee">
+              <BaseFavor :num="focusFee">
                 <span class="label text-sm">Fee</span>
               </BaseFavor>
               </div>
@@ -29,7 +29,7 @@
           <div class="recipient">
             <div class="amount font-bold"><BaseFavor :num="trans.amount" plus /></div>
             <div class="fee"><BaseFavor :num="-fee / 2"><span class="text-sm">fee</span></BaseFavor></div>
-            <div class="total"><BaseFavor :num="(-fee / 2) + trans.amount" /></div>
+            <div class="total"><BaseFavor :num="(-fee / 2) + trans.amount" plus /></div>
           </div>
         </div>
       </div>
@@ -89,7 +89,8 @@ export default {
         'card--full': this.currentSize == 'full',
         'card--network': this.trans.payeeUid === this.$globals.networkUid, 
         'card--payee': this.isFocusedPayee, 
-        'card--recipient': this.isFocusedRecipient 
+        'card--recipient': this.isFocusedRecipient,
+        'card--focused': this.isFocusedRecipient || this.isFocusedPayee,
       }
     },
     isFocusedPayee() {
@@ -97,6 +98,12 @@ export default {
     },
     isFocusedRecipient() {
       return this.focusUid === this.trans.recipientUid
+    },
+    focusAmount(){
+      return this.isFocusedPayee ? - this.trans.amount : this.trans.amount
+    },
+    focusFee(){
+      return this.focusUid ? - this.fee : this.fee
     },
     payee() {
       return this.$store.getters.getMemberByUid(this.trans.payeeUid)
@@ -173,4 +180,17 @@ export default {
     .people { @apply hidden }
   }
 }
+</style>
+
+<style lang="scss">
+
+  .card.card--focused {
+    .focus.favor-display .favor-display__num {
+      @apply text-green-500;
+    }
+    .focus.favor-display .favor-display__num--neg {
+      @apply text-purple-500;
+    }
+  }
+
 </style>

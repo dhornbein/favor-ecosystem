@@ -6,7 +6,7 @@
     <!-- <div v-if="mine" class="my more open-hidden">&#10225; open &#10225;</div> -->
 
     <header class="head">
-      <MemberIcon :username="member.username" />
+      <MemberIcon :username="member.username" :highlight="isCurrentUser" />
       <div class="name leading-snug">
         <MemberDisplayName class="block" :member="member" />
         <MemberUsername class="text-sm text-gray-400" noLink :username="member.username" />

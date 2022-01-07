@@ -5,7 +5,7 @@
 
     <h2 class="text-xl font-cormorant">{{ member.firstName }}'s Recent Transactions</h2>
     
-    <TransactionCard v-for="(row, idx) in memberTransactions.slice().reverse()" :key="idx" ref="card" :trans="row" size="compact" @click="clickTransaction(idx)" />
+    <TransactionCard v-for="(row, idx) in memberTransactions.slice().reverse()" :focusUid="member.uid" :key="idx" ref="card" :trans="row" size="compact" @click="clickTransaction(idx)" />
 
   </main>
 </template>

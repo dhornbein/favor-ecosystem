@@ -2,7 +2,7 @@
   <span class="favor-display">
     <slot></slot>
     <span class="favor-display__num" :class="{'favor-display__num--neg': num < 0}">
-      <span v-if="plus">&plus;</span><span class="font-normal">f</span><span>{{ normalizedNum | favor }}</span>
+      <span v-if="plus && num > 0">&plus;</span><span class="font-normal">f</span><span>{{ normalizedNum | favor }}</span>
     </span>
   </span>
 </template>

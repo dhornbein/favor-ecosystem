@@ -12,7 +12,7 @@
 
     <h2 class="text-xl font-cormorant">Your Latest Transactions</h2>
       
-    <TransactionCard v-for="(row, idx) in filteredTransactions" :key="idx" ref="card" :trans="row" @click="clickTransaction(idx)" />
+    <TransactionCard v-for="(row, idx) in filteredTransactions" :focusUid="$auth.user.uid" :key="idx" ref="card" :trans="row" @click="clickTransaction(idx)" />
 
   </main>
 </template>
