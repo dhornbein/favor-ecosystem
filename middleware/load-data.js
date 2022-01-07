@@ -1,4 +1,6 @@
 export default async function ({ store }) {
-  await store.dispatch('getAllTransactionsOnce'),
-  await store.dispatch('getAllMembersOnce')
+  await Promise.all([
+    store.dispatch('getAllTransactionsOnce'),
+    store.dispatch('getAllMembersOnce')
+  ]);
 } 

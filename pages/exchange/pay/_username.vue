@@ -152,10 +152,11 @@ export default {
         .then(async response => {
           const transaction = response.data.data
 
-          //TODO pull these in parallel
-          await this.$store.dispatch('getAllTransactions'),
-          await this.$store.dispatch('getAllMembers')
-          await this.$auth.fetchUser()
+          await Promise.all([
+            this.$store.dispatch('getAllTransactions'),
+            this.$store.dispatch('getAllMembers'),
+            this.$auth.fetchUser()
+          ]);
 
           this.$store.dispatch('chat/broadcastSuccess', { 
             title: 'Transaction Successful!',
@@ -170,8 +171,9 @@ export default {
           this.loading = false
         })
       } catch (error) {
+        console.log('error', error);
         this.$store.dispatch('chat/broadcastErrorResponse', {
-          response: error,
+          response: error.response,
         })
       }
     },
