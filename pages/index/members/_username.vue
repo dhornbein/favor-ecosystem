@@ -14,20 +14,21 @@
 import { mapState } from 'vuex'
 
 export default {
+  async asyncData({ store, route, error }) {
+    const member = await store.getters.getMemberByUsername(route.params.username);
+    if (!member) {
+      store.dispatch('chat/broadcastError', { title: `Member "${route.params.username}" not found...`} )
+      error({ statusCode: 404, message: `Member "${route.params.username}" not found...` })
+    }
+    return { member }
+  },  
   head () {
     return {
-      title: `User: ${this.fullName}`
-    }
-  },
-  data() {
-    return {
+      title: `${this.fullName} - Favor Member`
     }
   },
   computed: {
     ...mapState(['transactions','members']),
-    member() {
-      return this.$store.getters.getMemberByUsername(this.$route.params.username);
-    },
     memberTransactions() {
       return this.$store.getters.getTransactionsByMemberUid(this.member.uid);
     },

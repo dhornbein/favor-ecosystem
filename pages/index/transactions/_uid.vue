@@ -9,18 +9,13 @@
 <script>
 
 export default {
-  computed: {
-    transaction() {
-      return this.$store.getters.getTransactionsByUid(this.$route.params.uid);
+  async asyncData({ store, route, error }) {
+    const transaction = await store.getters.getTransactionsByUid(route.params.uid);
+    if (!transaction) {
+      store.dispatch('chat/broadcastError', { title: 'Transaction not found...'} )
+      error({ statusCode: 404, message: 'Transaction not found...' })
     }
-  },
-
-
-    
-
+    return { transaction }
+  },  
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

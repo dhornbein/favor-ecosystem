@@ -7,9 +7,10 @@
       :search="members.filter(m => m.uid !== $auth.user.uid)"
       @results="searchRender" 
     />
-    <h2 class="text-xl font-cormorant" v-if="searchResults.length < 1">Frequent Exchanges</h2>
+    <div class="p-2 text-sm text-red-500" v-if="searchResults.length < 1 && search.length > 0">No members found...</div>
+    <h2 class="text-xl font-cormorant my-2" v-if="searchResults.length < 1">Frequent Exchanges</h2>
     <MemberCard 
-      class="my-2"
+      class="my-2 cursor-pointer"
       v-for="(member, idx) in filteredMembers"
       :key="idx" 
       :member="member" 

@@ -130,31 +130,16 @@ export default {
         this.$axios.post('api/transactions', payload)
         .then(response => {
           this.$store.dispatch('exchange/receipt', response.data.data )
+          this.$store.dispatch('chat/broadcastSuccess', { 
+            title: 'Transaction Successful!',
+            body: `<p>You successfully paid ${to.firstName} f${receipt.amount}!</p>`,
+          })
           this.$router.push('/exchange/receipt')
         })
-        .catch(error => {
-          if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-            // http.ClientRequest in node.js
-            console.log(error.request);
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message);
-          }
-        })
-          
       } catch (error) {
-        // TODO handle error like a grown up
-        throw (error, response) 
-        console.error(error)
-        
+        this.$store.dispatch('chat/broadcastErrorResponse', {
+          response: error,
+        })
       }
     },
   },
@@ -167,9 +152,12 @@ export default {
     to() {
       const username = this.$route.params.username
       const member = this.$store.getters.getMemberByUsername(username)
-      // if (!member)
-      //   // TODO throw and error for the user "no member found"
-      //   this.$router.push('/exchange/'); // no member, go back and choose one
+
+      if (!member) {
+        this.$store.dispatch('chat/broadcastError', { title: `Member "${username}" not found!`} )
+        this.$router.push('/exchange/'); // no member, go back and choose one
+        return
+      }
       
       this.details.recipientUid = member.uid 
       return (member) ? member : false

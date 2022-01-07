@@ -15,11 +15,10 @@ export default {
     receipt() {
       const receipt = this.$store.getters['exchange/receipt']
       if (Object.keys(receipt).length === 0) {
-        // TODO redirect and throw error
+        // TODO redirect
+        this.$store.dispatch('chat/broadcastError', { title: 'No Receipt found...'} )
         return false;
       }
-        
-      
       return receipt
     }
   },

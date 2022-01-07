@@ -30,9 +30,14 @@ export default {
     async userLogin() {
       try {
         let response = await this.$auth.loginWith('local', { data: this.login })
-        console.log('login',response)
-      } catch (err) {
-        console.log('login',err)
+        this.$store.dispatch('chat/broadcastResponse', {
+          response: response,
+          title: 'login successful',
+        })
+      } catch (error) {
+        this.$store.dispatch('chat/broadcastErrorResponse', {
+          response: error,
+        })
       }
     }
   }
