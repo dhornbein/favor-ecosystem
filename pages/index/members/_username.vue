@@ -1,7 +1,9 @@
 <template>
   <main>
     
-    <MemberCard :member="member" size="open" />
+    <MemberCard :member="member" size="open">
+      <nuxt-link :to="`/exchange/pay/${member.username}`" class="btn btn-sm">Pay {{ member.firstName }}</nuxt-link>
+    </MemberCard>
 
     <h2 class="text-xl font-cormorant">{{ member.firstName }}'s Recent Transactions</h2>
     
