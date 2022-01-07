@@ -1,6 +1,6 @@
 <template>
   <span class="username" v-if="noLink">@{{ username }}</span>
-  <nuxt-link class="username" v-else :to="`/members/${username}`">@{{ username }}</nuxt-link>
+  <nuxt-link class="username" v-else :to="`/members/${username}`" @click.stop>@{{ username }}</nuxt-link>
 </template>
 
 <script>

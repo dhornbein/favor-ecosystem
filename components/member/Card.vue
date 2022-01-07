@@ -1,5 +1,5 @@
 <template>
-  <article class="card relative" :class="classes" @click="$emit('cardClick')">
+  <article class="card relative" :class="classes" @click="$emit('click')">
 
     <!-- <MemberBalanceBar class="absolute h-[80%] right-1 top-0 bottom-0" :member="member" /> -->
 
@@ -9,7 +9,7 @@
       <MemberIcon :username="member.username" />
       <div class="name leading-snug">
         <MemberDisplayName class="block" :member="member" />
-        <MemberUsername class="text-sm text-gray-400" noLink :username="member.username" @click.native="$emit('usernameClick')" />
+        <MemberUsername class="text-sm text-gray-400" noLink :username="member.username" />
       </div>
       <div v-if="mine" class="my edit ml-auto flex gap-2 items-center">
         <BaseFavor class="text-right open-hidden pr-2 border-r border-gray-400" :num="member.creditLimit + member.balance">
@@ -59,7 +59,13 @@ export default {
   },
   data() {
     return {
-      visible: {}
+      visible: {},
+      currentSize: this.size,
+    }
+  },
+  methods: {
+    setSize(size) {
+      this.currentSize = size
     }
   },
   computed: {
@@ -68,8 +74,8 @@ export default {
     },
     classes() { 
       return {
-        'card--compact': this.size == 'compact',
-        'card--open': this.size == 'open',
+        'card--compact': this.currentSize == 'compact',
+        'card--open': this.currentSize == 'open',
         'card--me': this.$auth.user.uid == this.member.uid, 
       }
     },

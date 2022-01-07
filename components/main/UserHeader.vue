@@ -1,6 +1,6 @@
 <template>
   <header v-if="$auth.user">
-    <MemberCard class="p-2 shadow-lg border-b border-gray-400" :size="view" :member="$auth.user" @cardClick="toggleView">
+    <MemberCard class="p-2 shadow-lg border-b border-gray-400 cursor-pointer" :size="view" ref="user" :member="$auth.user" @click="toggleView">
       <div class="flex justify-between">
         <button class="btn btn-sm" @click="$auth.logout()">Logout</button>
       </div>
@@ -17,7 +17,9 @@ export default {
   },
   methods: {
     toggleView() {
-      this.view = this.view == 'compact' ? 'open' : 'compact'
+      const target = this.$refs.user
+      let size = target.currentSize == 'compact' ? 'open' : 'compact'
+      target.setSize(size)
     }
   },
 }

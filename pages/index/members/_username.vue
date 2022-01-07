@@ -5,7 +5,7 @@
 
     <h2 class="text-xl font-cormorant">{{ member.firstName }}'s Recent Transactions</h2>
     
-    <TransactionCard v-for="(row, idx) in memberTransactions.slice().reverse()" :key="idx" :trans="row" />
+    <TransactionCard v-for="(row, idx) in memberTransactions.slice().reverse()" :key="idx" ref="card" :trans="row" size="compact" @click="clickTransaction(idx)" />
 
   </main>
 </template>
@@ -37,6 +37,13 @@ export default {
     },
     fullName() {
       return this.member.firstName + ' ' + this.member.lastName
+    },
+  },
+  methods: {
+    clickTransaction(idx) {
+      const target = this.$refs.card[idx]
+      let size = target.currentSize == 'compact' ? 'full' : 'compact'
+      target.setSize(size)
     },
   },
 }

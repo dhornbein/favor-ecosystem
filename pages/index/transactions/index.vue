@@ -13,7 +13,7 @@
     </header>
       
     <div>
-      <TransactionCard v-for="(row, idx) in transactions" :key="idx" :trans="row" size="compact" />
+      <TransactionCard v-for="(row, idx) in filteredTransactions" :key="idx" ref="card" :trans="row" size="compact" @click="clickTransaction(idx)" />
     </div>
 
   </main>
@@ -42,10 +42,11 @@ export default {
     searchRender(results) {
       this.searchResults = results
     },
+    clickTransaction(idx) {
+      const target = this.$refs.card[idx]
+      let size = target.currentSize == 'compact' ? 'full' : 'compact'
+      target.setSize(size)
+    },
   },
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

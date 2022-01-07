@@ -12,7 +12,7 @@
 
     <h2 class="text-xl font-cormorant">Your Latest Transactions</h2>
       
-    <TransactionCard v-for="(row, idx) in filteredTransactions" :key="idx" :trans="row" />
+    <TransactionCard v-for="(row, idx) in filteredTransactions" :key="idx" ref="card" :trans="row" @click="clickTransaction(idx)" />
 
   </main>
 </template>
@@ -42,6 +42,11 @@ export default {
   methods: {
     searchRender(results) {
       this.searchResults = results
+    },
+    clickTransaction(idx) {
+      const target = this.$refs.card[idx]
+      let size = target.currentSize == 'compact' ? 'full' : 'compact'
+      target.setSize(size)
     },
   },
 }

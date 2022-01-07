@@ -13,13 +13,13 @@
     </header>
 
     <MemberCard 
-      class="my-2 pt-2 pb-4 border-b border-gray-200" 
+      class="my-2 pt-2 pb-4 border-b border-gray-200 cursor-pointer" 
       v-for="(row, idx) in filteredMembers" 
       :key="idx" 
-      :ref="idx" 
+      ref="card" 
       :member="row" 
       :view="view" 
-      @cardClick="cardClicked"
+      @click="clickCard(row.username)"
     />
 
   </main>
@@ -45,7 +45,8 @@ export default {
     },
   },
   methods: {
-    cardClicked(row) {
+    clickCard(username) {
+      this.$router.push(`/members/${username}`)
     },
     searchRender(results) {
       this.searchResults = results

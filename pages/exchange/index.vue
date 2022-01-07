@@ -14,7 +14,7 @@
       v-for="(member, idx) in filteredMembers"
       :key="idx" 
       :member="member" 
-      @cardClick="cardClick(member.username)" 
+      @click="clickCard(member.username)" 
       view="compact"
     />
   </section>
@@ -45,7 +45,7 @@ export default {
     searchRender(results) {
       this.searchResults = results
     },
-    cardClick(username) {
+    clickCard(username) {
       this.$router.push(`/exchange/pay/${username}`)
     }
   }

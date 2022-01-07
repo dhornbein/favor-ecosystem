@@ -1,8 +1,8 @@
 <template>
-  <article class="card" :class="classes">
+  <article class="card" :class="classes" @click="$emit('click')">
 
     <header class="header">
-      <time :datetime="trans.created">{{ trans.created | formatDate }}</time>
+      <nuxt-link :to="`/transactions/${trans.uid}`" @click.stop><time :datetime="trans.created">{{ trans.created | formatDate }}</time></nuxt-link>
     </header>
 
     <main>
@@ -35,7 +35,7 @@
       </div>
       <div class="content">
         <div class="summary">
-          <nuxt-link :to="`/members/${payee.username}`" class="payee">{{ payee.firstName }}</nuxt-link> paid <nuxt-link :to="`/members/${recipient.username}`" class="recipient">{{ recipient.firstName }}</nuxt-link> for:
+          <nuxt-link :to="`/members/${payee.username}`" class="payee" @click.stop>{{ payee.firstName }}</nuxt-link> paid <nuxt-link :to="`/members/${recipient.username}`" class="recipient" @click.stop>{{ recipient.firstName }}</nuxt-link> for:
         </div>
         <h1 class="title">{{ trans.title }}</h1>
         <div class="description" :v-html="trans.description"></div>
@@ -77,16 +77,16 @@ export default {
   },
   data() {
     return {
-      slim: this.isSlim,
+      currentSize: this.size,
     }
   },
   computed: {
     classes() { 
       return {
-        'card--compact': this.size == 'compact', 
-        'card--wide': this.size == 'wide', 
-        'card--open': this.size == 'open', 
-        'card--full': this.size == 'full',
+        'card--compact': this.currentSize == 'compact', 
+        'card--wide': this.currentSize == 'wide', 
+        'card--open': this.currentSize == 'open', 
+        'card--full': this.currentSize == 'full',
         'card--network': this.trans.payeeUid === this.$globals.networkUid, 
         'card--payee': this.isFocusedPayee, 
         'card--recipient': this.isFocusedRecipient 
@@ -112,9 +112,8 @@ export default {
     }
   },
   methods: {
-    toggleSlim() {
-      this.slim = !this.slim
-      this.classes['trans-card--slim'] = this.slim
+    setSize(size) {
+      this.currentSize = size
     }
   },
   filters: {
