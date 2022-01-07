@@ -39,20 +39,30 @@ export const actions = {
     payload.type = 'success'
     commit('ADD_MESSAGE', payload)
   },
-  broadcastResponse({ commit }, { response, title, type, message } ) {
+  broadcastResponse({ commit, dispatch }, { response, title, type, message, ...rest } ) {
     if (response.status >= 200 && response.status < 300 ) {
       commit('ADD_MESSAGE', {
         title: title ? title : 'Success!',
         type: type ? type : 'success',
         // TODO maybe the success message should always state what successfully happened?
         // success message might be a string or a simple boolean
-        body: message ? message : response.data.success !== true ? response.data.success : null
+        body: message ? message : response.data.success !== true ? response.data.success : null,
+        ...rest
       })
     } else if (response.status >= 300){
       dispatch('broadcastErrorResponse', { response, title, type, message })
     }
   },
-  broadcastErrorResponse({ commit }, { response, title, type, message }) {
+  broadcastErrorResponse({ commit, dispatch }, { response, title, type, message, ...rest }) {
+    if (!response) {
+      dispatch('broadcastError', {
+        title: title ? title : 'Error!',
+        type: type ? type : 'error',
+        body: message ? message : 'An unknown error has occurred.',
+        ...rest
+      })
+      return
+    }
     let payload = {
       title: title ? title : `${response.status} Error: ${response.statusText}`,
       type: type ? type : 'error',
@@ -72,7 +82,10 @@ export const actions = {
       payload.body = response.data
     }
 
-    commit('ADD_MESSAGE', payload)
+    commit('ADD_MESSAGE', {
+      ...rest,
+      ...payload
+    })
   }
 }
 

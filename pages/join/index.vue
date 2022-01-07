@@ -15,7 +15,7 @@
       </div>
       <BaseInput label="Email" type="email" />
       <BaseInput label="Phone" type="phone" />
-      <button class="btn btn-primary text-2xl">Join Wait List</button>
+      <button class="btn is-primary text-2xl">Join Wait List</button>
     </form>
   </main>
 </template>

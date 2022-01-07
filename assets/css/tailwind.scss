@@ -13,4 +13,7 @@ body {
   &.is-active {
     @apply bg-brand-primary text-yellow-500;
   }
+  &:disabled {
+    @apply opacity-50;
+  }
 }

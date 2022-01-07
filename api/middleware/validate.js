@@ -90,6 +90,7 @@ exports.invite = [
   check('email')
     .trim()
     .escape()
+    .if(check('email').not().isEmpty())
     .custom(validateEmail)
     .withMessage('Invalid email address'),
   check('phone')
@@ -109,9 +110,7 @@ exports.invite = [
     .custom(uuidValidate)
     .withMessage('Invalid Uid')
     .custom((value, { req }) => req.user.uid == value || req.user.roles['broker'] ) // check that the auth token's owner is the same as the invitedByID
-    .withMessage('Auth token Uid must match invitedByUid!')
-    .bail()
-    .custom(validateMember), // checks for unique email & phone and if invited by ID exists
+    .withMessage('Auth token Uid must match invitedByUid!'),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())
