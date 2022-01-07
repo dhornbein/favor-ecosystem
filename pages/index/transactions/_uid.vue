@@ -1,7 +1,7 @@
 <template>
-  <main>
+  <main class="flex flex-col justify-center">
       
-    <TransactionCard v-for="(row, idx) in transaction" size="full" :key="idx" :row="row" />
+    <TransactionCard size="full" :trans="transaction" />
 
   </main>
 </template>

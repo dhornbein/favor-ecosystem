@@ -6,7 +6,12 @@
     ref="form"
     v-slot="{ invalid }"
   >
-
+    <div class="loader" v-if="loading">
+      <div class="spinner"></div>
+      <div role="status">
+        Loading...
+      </div>
+    </div>
     <div class="pay flex my-4 justify-between">
       <MemberPortrait class="payee w-1/3 text-center" :member="from" />
       <div class="text-4xl text-purple-500 font-bold text-center">
@@ -89,7 +94,7 @@
       <div class="notice text-sm bg-red-400 p-2 rounded-md absolute top-2 left-0 right-0 text-center" v-if="invalid">A valid <strong>amount</strong> and <strong>title</strong> are required</div>
       <button
         @click="submitPay"
-        :disabled="invalid"
+        :disabled="invalid || loading"
         class="text-4xl w-full flex-grow bg-purple-500 text-purple-100 font-bold px-4 py-2 rounded-full disabled:bg-gray-300"
       >Pay</button>
     </ActionButton>
@@ -105,20 +110,40 @@ export default {
     ValidationProvider,
     ValidationObserver
   },
-  // TODO use nuxt validate function https://nuxtjs.org/docs/components-glossary/validate/
-  layout: 'action',
-  data() {
+  async asyncData({ route, store, $auth, error, redirect }) {
+    const username = route.params.username
+    const to = await store.getters.getMemberByUsername(username)
+    const from = $auth.user
+    
+    if (!from) {
+      error({ statusCode: 401, message: `No authorized user to submit payment!` })
+      return
+    }
+    
+    if (!to) {
+      store.dispatch('chat/broadcastError', { title: `Member "${username}" not found!`} )
+      error({ statusCode: 404, message: `Member "${username}" not found!` })
+      return
+    }
+
     return {
-      loading: false,
-      confirm: false,
+      to: to,
+      from: from,
       details: {
-        recipientUid: '',
-        payeeUid: '',
+        recipientUid: to.uid,
+        payeeUid: from.uid,
         amount: '',
         title: '',
         description: '',
         brokerUid: '',
       }
+    }
+  },
+  // TODO use nuxt validate function https://nuxtjs.org/docs/components-glossary/validate/
+  layout: 'action',
+  data() {
+    return {
+      loading: false,
     }
   },
   methods: {
@@ -128,13 +153,25 @@ export default {
         const payload = this.details
 
         this.$axios.post('api/transactions', payload)
-        .then(response => {
-          this.$store.dispatch('exchange/receipt', response.data.data )
+        .then(async response => {
+          const transaction = response.data.data
+
+          //TODO pull these in parallel
+          await this.$store.dispatch('getAllTransactions'),
+          await this.$store.dispatch('getAllMembers')
+          await this.$auth.fetchUser()
+
           this.$store.dispatch('chat/broadcastSuccess', { 
             title: 'Transaction Successful!',
-            body: `<p>You successfully paid ${to.firstName} f${receipt.amount}!</p>`,
+            body: `<p>You successfully paid ${this.to.firstName} f${transaction.amount}!</p>`,
+            button: {
+              text: 'View Transaction',
+              url: `/transactions/${transaction.uid}`
+            }
           })
-          this.$router.push('/exchange/receipt')
+          // send to transaction
+          this.$router.push('/transactions/' + transaction.uid )
+          this.loading = false
         })
       } catch (error) {
         this.$store.dispatch('chat/broadcastErrorResponse', {
@@ -143,31 +180,19 @@ export default {
       }
     },
   },
-  computed: {
-    from() {
-      const member = this.$auth.user
-      this.details.payeeUid = member.uid
-      return this.$auth.user
-    },
-    to() {
-      const username = this.$route.params.username
-      const member = this.$store.getters.getMemberByUsername(username)
-
-      if (!member) {
-        this.$store.dispatch('chat/broadcastError', { title: `Member "${username}" not found!`} )
-        this.$router.push('/exchange/'); // no member, go back and choose one
-        return
-      }
-      
-      this.details.recipientUid = member.uid 
-      return (member) ? member : false
-    },
-  },
 }
 </script>
 
 
 <style lang="scss" scoped>
+.loader {
+  @apply absolute inset-0 z-50 flex flex-col gap-4 justify-center items-center w-full h-full bg-white bg-opacity-80 text-4xl text-purple-900;
+  .spinner {
+    @apply animate-spin inline-block w-16 h-16 border-4 rounded-full border-purple-900;
+    border-right-color: transparent;
+  }
+}
+
 input {
   @apply p-2 w-full text-2xl border-b-2 border-gray-500;
 }

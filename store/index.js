@@ -16,6 +16,9 @@ export const mutations = {
     state.transactions = transactions
     state.loaded.transactions = true
   },
+  ADD_TRANSACTION(state, transaction) {
+    state.transactions.push(transaction)
+  },
 }
 
 export const actions = {
@@ -37,6 +40,9 @@ export const actions = {
     await this.$http.$get('/api/transactions').then(({ data: transactions }) => {
       commit('SET_TRANSACTIONS', transactions)
     })
+  },
+  addTransaction({ commit }, transaction) {
+    commit('ADD_TRANSACTION', transaction)
   }
 }
 
