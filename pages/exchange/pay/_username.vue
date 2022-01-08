@@ -4,7 +4,7 @@
     tag="div"
     immediate
     ref="form"
-    v-slot="{ invalid }"
+    v-slot="{ invalid, handleSubmit, pending }"
   >
     <BaseLoader class="loader" v-if="loading"/>
 
@@ -86,11 +86,11 @@
 
 
 
-    <ActionButton class="relative">
-      <div class="notice text-sm bg-red-400 p-2 rounded-md absolute top-2 left-0 right-0 text-center" v-if="invalid">A valid <strong>amount</strong> and <strong>title</strong> are required</div>
+    <ActionButton class="relative" @click.native="needValidation = true">
+      <div class="notice text-sm bg-red-400 p-2 rounded-md absolute top-2 left-0 right-0 text-center" v-if="needValidation">A valid <strong>amount</strong> and <strong>title</strong> are required</div>
       <button
-        @click="submitPay"
-        :disabled="invalid || loading"
+        @click="handleSubmit(submitPay)"
+        :disabled="invalid || loading || pending"
         class="text-4xl w-full flex-grow bg-purple-500 text-purple-100 font-bold px-4 py-2 rounded-full disabled:bg-gray-300"
       >Pay</button>
     </ActionButton>
@@ -140,7 +140,16 @@ export default {
   data() {
     return {
       loading: false,
+      needValidation: false,
     }
+  },
+  created() {
+    this.$store.dispatch('chat/broadcastOnce', { 
+      title: 'Payment Screen',
+      type:'info',
+      quiet: true,
+      body: 'Once you add an <strong>amount</strong> and a <strong>title</strong> you can submit your payment.',
+    })
   },
   methods: {
     async submitPay () {

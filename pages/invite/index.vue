@@ -70,6 +70,14 @@ export default {
       }
     }
   },
+  created() {
+    this.$store.dispatch('chat/broadcastOnce', { 
+      title: 'Invite a Friend',
+      type:'info',
+      quiet: true,
+      body: 'Fill out a name and email to create a sharable token that is redeemable by your friend.',
+    })
+  },
   methods: {
     async handleForm() {
       this.loading = true;

@@ -21,6 +21,12 @@ export const actions = {
   removeMessage({ commit }, index) {
     commit('REMOVE_MESSAGE', index)
   },
+  broadcastOnce({ commit, state }, payload) {
+    const index = state.messages.findIndex(message => message.title === payload.title)
+    if (index === -1) {
+      commit('ADD_MESSAGE', payload)
+    }
+  },
   broadcast({ commit }, payload) {
     if (!payload.body && !payload.title)
       return;
