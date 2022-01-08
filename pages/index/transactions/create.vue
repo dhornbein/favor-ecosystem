@@ -118,7 +118,7 @@ export default {
     async sendReq() {
       this.showConfirm = false
       if (this.formValid){
-        await this.$http.$post('/api/transactions', this.form)
+        await this.$axios.$post('/api/transactions', this.form)
         .then(response => {
           this.response = response
         })

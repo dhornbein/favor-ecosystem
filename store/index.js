@@ -28,7 +28,7 @@ export const actions = {
     }
   },
   async getAllMembers({ commit }) {
-    let { data: members } = await this.$http.$get('/api/members')
+    let { data: members } = await this.$axios.$get('/api/members')
     commit('SET_MEMBERS', members)
   },
   async getAllTransactionsOnce({ dispatch, state }) {
@@ -37,7 +37,7 @@ export const actions = {
     }
   },
   async getAllTransactions({ commit }) {
-    await this.$http.$get('/api/transactions').then(({ data: transactions }) => {
+    await this.$axios.$get('/api/transactions').then(({ data: transactions }) => {
       commit('SET_TRANSACTIONS', transactions)
     })
   },
