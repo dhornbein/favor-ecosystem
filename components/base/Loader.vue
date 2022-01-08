@@ -2,7 +2,7 @@
   <div class="loader">
     <div class="spinner"></div>
     <div role="status">
-      Loading...
+      <slot>Loading...</slot>
     </div>
   </div>
 </template>

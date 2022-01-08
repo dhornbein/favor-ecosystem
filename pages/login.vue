@@ -12,7 +12,7 @@
         <button class="btn" type="submit">Submit</button>
       </div>
     </form>
-    <p>Don't have an account? <nuxt-link to="/members/join" class="font-bold text-brand-primary">Join Favor!</nuxt-link></p>
+    <p>Don't have an account? <nuxt-link to="/join" class="font-bold text-brand-primary">Join Favor!</nuxt-link></p>
   </div>
 </template>
 

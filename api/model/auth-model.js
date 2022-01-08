@@ -61,21 +61,23 @@ exports.postClaimInvite = async (token) => {
   invites.find((invite, index) => invite.includes(token) && (row = index + 1))
 
   const range = SHEET + '!' + col + row
+  const request = {
+    ...REQUEST.POST,
+    range: range,
+    valueInputOption: 'USER_ENTERED',
+    resource: {
+      "values": [['TRUE']]
+    },
+  }
 
   try {
-    const response = sheets.spreadsheets.values.update({
-      ...REQUEST.POST,
-      range: range,
-      valueInputOption: 'USER_ENTERED',
-      resource: {
-        "values": [['TRUE']]
-      },
-    })
-    console.log('postClaimInvite',response)
+    const response = (await sheets.spreadsheets.values.update(request));
+    console.log('postClaimInvite Success')
 
     return response
 
   } catch (err) {
+    console.log('postClaimInvite Error',err)
     throw new Error(err)
   }
 }

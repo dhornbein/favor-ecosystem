@@ -308,7 +308,7 @@ async function validateMember(value, { req }) {
   const { username, email, phone, invitedByUid, brokerUid } = req.body
 
   const foundEmail = members.find(member => member.email === email)
-  const foundPhone = members.find(member => member.phone === phone)
+  const foundPhone = phone ? members.find(member => member.phone === phone) : false
   const foundUsername = members.find(member => member.username === username)
   const foundInviter = members.find(member => member.uid === invitedByUid)
   const foundBroker = members.find(member => member.uid === brokerUid)

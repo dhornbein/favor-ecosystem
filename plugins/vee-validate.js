@@ -1,7 +1,11 @@
 import { extend } from "vee-validate";
-import { required, min, min_value } from "vee-validate/dist/rules";
+import { confirmed, required, min, min_value } from "vee-validate/dist/rules";
 import { validate as uuidValidate } from 'uuid'
 
+extend("confirmed", {
+  ...confirmed,
+  message: "This field must match the confirmation."
+});
 extend("required", {
   ...required,
   message: "This field is required"
