@@ -380,10 +380,47 @@ paths:
                   errors:
                     $ref: '#/components/schemas/ProcessError'
   /members/join/{token}:
+    get:
+      tags:
+        - public
+      summary: Decode invitation
+      operationId: decodeInviteToken
+      description: Open with invite token
+      parameters:
+        - in: path
+          name: token
+          required: true
+          schema:
+            $ref: '#/components/schemas/InviteTokenReturn/properties/invitation_token'
+      responses:
+        '200':
+          description: Token decoded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/InvitationDecoded'
+        '401':
+          description: token authentication error
+        '403':
+          description: Not Authorized - missing invite token
+        '422':
+          description: 'invalid input, object invalid, token invalid or claimed'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    $ref: '#/components/schemas/ProcessError'
     post:
       tags:
         - public
-      summary: Join favor via invite
+      summary: Open Invite Token
       operationId: join
       description: Join with invite token
       parameters:
@@ -550,6 +587,23 @@ components:
       required:
         - firstName
         - invitedByUid
+      properties:
+        firstName:
+          $ref: '#/components/schemas/MemberItem/properties/firstName'
+        lastName:
+          $ref: '#/components/schemas/MemberItem/properties/lastName'
+        email:
+          $ref: '#/components/schemas/MemberItem/properties/email'
+        phone:
+          $ref: '#/components/schemas/MemberItem/properties/phone'
+        amount:
+          $ref: '#/components/schemas/TransactionItem/properties/amount'
+        invitedByUid:
+          $ref: '#/components/schemas/MemberItem/properties/uid'
+        password:
+          $ref: '#/components/schemas/MemberPrivate/properties/password'
+    InvitationDecoded:
+      type: object
       properties:
         firstName:
           $ref: '#/components/schemas/MemberItem/properties/firstName'

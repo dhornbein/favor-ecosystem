@@ -84,3 +84,8 @@ exports.put = async (req, res, next) => {
   }
   
 }
+
+exports.decodeInviteToken = async (req, res, next) => {
+  const payload = req.body
+  res.status(200).json(success( payload ))
+}
