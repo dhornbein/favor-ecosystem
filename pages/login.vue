@@ -42,7 +42,7 @@ export default {
         this.loading = false
       } catch (error) {
         this.$store.dispatch('chat/broadcastErrorResponse', {
-          response: error,
+          response: error.response,
         })
         this.loading = false
       }

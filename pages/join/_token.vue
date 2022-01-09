@@ -173,8 +173,7 @@ export default {
             this.$router.push(`/onboard`)
 
           } catch (error) {
-            console.log('error logging in', error);
-            throw new Error('logging in unknown error')
+            console.log('Token error logging in:', error);
             this.$store.dispatch('chat/broadcastErrorResponse', {
               response: error.response,
             })
