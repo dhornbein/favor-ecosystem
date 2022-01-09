@@ -1,6 +1,9 @@
 <template>
   <div>
+    <BaseLoader class="loader" v-if="loading">Authenticating...</BaseLoader>
+
     <h1 class="text-2xl my-4">Log In</h1>
+
     <form @submit.prevent="userLogin">
       <div>
         <BaseInput label="Username" type="text" v-model="login.username" required />
@@ -20,6 +23,7 @@
 export default {
   data() {
     return {
+      loading: false,
       login: {
         username: 'DrewH',
         password: 'time2GO@'
@@ -29,15 +33,18 @@ export default {
   methods: {
     async userLogin() {
       try {
+        this.loading = true;
         let response = await this.$auth.loginWith('local', { data: this.login })
         this.$store.dispatch('chat/broadcastResponse', {
           response: response,
           title: 'login successful',
         })
+        this.loading = false
       } catch (error) {
         this.$store.dispatch('chat/broadcastErrorResponse', {
           response: error,
         })
+        this.loading = false
       }
     }
   }
