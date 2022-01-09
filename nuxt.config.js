@@ -110,6 +110,18 @@ export default {
   //  host: '0.0.0.0' // default: localhost
   // },
 
+  publicRuntimeConfig: {
+    axios: {
+      browserBaseURL: process.env.BASE_URL
+    }
+  },
+
+  privateRuntimeConfig: {
+    axios: {
+      baseURL: process.env.BASE_URL
+    }
+  },
+
   /*
   ** Build configuration
   ** See https://nuxtjs.org/api/configuration-build/
