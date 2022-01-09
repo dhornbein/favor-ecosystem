@@ -10,6 +10,7 @@ yarn-error.log*
 # Shhhh
 serviceaccount.json
 env.json
+.env
 
 # Runtime data
 pids
