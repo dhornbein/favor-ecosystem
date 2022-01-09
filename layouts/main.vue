@@ -2,7 +2,7 @@
   <main class="view-layout">
     <MainUserHeader class="header" />
     <nuxt class="content" />
-    <MainNav class="foot" />
+    <MainNav class="foot fixed bottom-0 left-0 right-0" />
   </main>
 </template>
 
