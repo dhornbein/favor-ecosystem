@@ -47,8 +47,8 @@
     <footer class="footer">
       <div class="broker" v-if="broker">
         <MemberIcon :username="broker.username" />
-        <div>
-          <p class="label text-xs">Broker</p>
+        <div class="broker_name">
+          <p class="label">Broker</p>
           <nuxt-link :to="`/members/${broker.username}`">
             <MemberDisplayName :member="broker" />
           </nuxt-link>
@@ -135,8 +135,8 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-  @apply flex flex-col gap-3 rounded-md border border-gray-300 shadow-md p-2 mb-5 last:mb-0
-    transition cursor-pointer hover:border-gray-500;
+  @apply flex flex-col gap-3 my-2 py-2 border-t border-gray-400 border-dotted
+    transition cursor-pointer;
   .header {}
   .exchange {
     .people {
@@ -180,6 +180,10 @@ export default {
 
     .favor .payee, .favor .recipient,
     .people { @apply hidden }
+    .broker {
+      .member-icon { @apply hidden }
+      .broker_name { @apply text-xs flex gap-2 }
+    }
   }
 }
 </style>

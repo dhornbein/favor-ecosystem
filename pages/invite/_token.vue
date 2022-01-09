@@ -1,6 +1,6 @@
 <template>
   <main class="flex flex-col justify-center">
-    <h1 class="text-2xl mb-4">Share your invite</h1>
+    <h1 class="text-2xl my-4">Share your invite</h1>
 
     <BaseInput label="URL" type="text" readonly :value="tokenUrl" @focus="selectAll" />
 
@@ -26,7 +26,7 @@
 import QRCode from 'qrcode'
 
 export default {
-  layout: 'action',
+  layout: 'main',
   created() {
     const qrOptions = {
       color: {

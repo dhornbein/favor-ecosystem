@@ -57,7 +57,7 @@ export default {
     ValidationProvider,
     ValidationObserver
   },
-  layout: 'action',
+  layout: 'main',
   data() {
     return {
       loading: false,
@@ -82,7 +82,6 @@ export default {
     async handleForm() {
       this.loading = true;
       this.$refs.form.validate().then(async success => {
-        console.log(success);
         if (!success) {
           this.loading = false;
           return;
@@ -105,7 +104,7 @@ export default {
           this.$router.push(`/invite/${data.invitation_token}`)
           this.loading = false
         } catch (error) {
-          console.log('why here',error);
+          console.error('Invite submission error', error.response);
           this.$store.dispatch('chat/broadcastErrorResponse', {
             response: error.response,
           })

@@ -3,13 +3,13 @@
     
     <header>
       <ActionSearch 
-        placeholder="Search Members" 
+        placeholder="Search Members"
+        class="search-field"
         v-model="search" 
         :keys="searchKeys"
         :search="members"
         @results="searchRender" 
       />
-      <h2>Members</h2>
     </header>
 
     <MemberCard 
@@ -46,7 +46,11 @@ export default {
   },
   methods: {
     clickCard(username) {
-      this.$router.push(`/members/${username}`)
+      if (username == this.$auth.user.username) {
+        this.$router.push(`/`)
+      } else {
+        this.$router.push(`/members/${username}`)
+      }
     },
     searchRender(results) {
       this.searchResults = results

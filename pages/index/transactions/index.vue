@@ -3,13 +3,13 @@
     
     <header>
       <ActionSearch 
-        placeholder="Search Transactions" 
+        placeholder="Search Network Transactions"
+        class="search-field"
         v-model="search" 
         :keys="searchKeys"
         :search="transactions"
         @results="searchRender" 
       />
-      <h2>Transactions</h2>
     </header>
       
     <div>

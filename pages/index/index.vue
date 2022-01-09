@@ -1,18 +1,26 @@
 <template>
   <main>
 
+    <MainUserHeader class="header" />
     
     <ActionSearch 
-      placeholder="Search Transactions" 
+      placeholder="Search Your Transactions" 
+      class="search-field"
       v-model="search" 
       :keys="searchKeys"
       :search="myTransactions"
       @results="searchRender" 
     />
 
-    <h2 class="text-xl font-cormorant">Your Latest Transactions</h2>
+    <h2 class="page-title">Your Latest Transactions</h2>
       
-    <TransactionCard v-for="(row, idx) in filteredTransactions" :focusUid="$auth.user.uid" :key="idx" ref="card" :trans="row" @click="clickTransaction(idx)" />
+    <TransactionCard 
+      v-for="(row, idx) in filteredTransactions" 
+      :focusUid="$auth.user.uid" 
+      :key="idx" ref="card"
+      :trans="row" 
+      @click="clickTransaction(idx)"
+    />
 
   </main>
 </template>
@@ -52,6 +60,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+
+.search-field {
+  @apply my-2;
+}
+
+.page-title {
+  @apply text-xl my-2 font-cormorant;
+}
 
 </style>
