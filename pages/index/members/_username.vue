@@ -2,7 +2,7 @@
   <main>
     
     <MemberCard :member="member" size="open">
-      <nuxt-link :to="`/exchange/pay/${member.username}`" class="btn btn-sm">Pay {{ member.firstName }}</nuxt-link>
+      <nuxt-link :to="`/exchange/pay/${member.username}`" class="btn btn-sm" v-if="!isMe">Pay {{ member.firstName }}</nuxt-link>
     </MemberCard>
 
     <h2 class="text-xl font-cormorant">{{ member.firstName }}'s Recent Transactions</h2>
@@ -40,6 +40,9 @@ export default {
     fullName() {
       return this.member.firstName + ' ' + this.member.lastName
     },
+    isMe() {
+      return this.member.uid === this.$auth.user.uid
+    }
   },
   methods: {
     clickTransaction(idx) {
