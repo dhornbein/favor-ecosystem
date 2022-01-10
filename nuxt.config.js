@@ -128,6 +128,11 @@ export default {
   */
   build: {
     transpile: ["vee-validate/dist/rules"],
+    extend(config, ctx) {
+      if (ctx.isDev) {
+        config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
+      }
+    }
   },
 
   // Cormorant+SC:300,700
