@@ -42,19 +42,18 @@ export default {
         title: 'Hello!',
         type: 'info',
         body: "I'm a super dumb chat bot, I mostly keep a record of things (like errors) that happen. Eventually I'll be able to do more. If you have any issues please reach out to my creator <a href='mailto:webmaster@dhornbein.com' target='_blank'>Drew Hornbein</a>",
-      },
-      unsubscribe: null,
+      }
     }
   },
   created() {
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+    this.$store.subscribe((mutation) => {
       if (mutation.type === 'chat/ADD_MESSAGE' ) {
         !mutation.payload.quiet ? this.triggerPeek() : this.triggerPing()
       }
     })
   },
   destroyed() {
-    this.unsubscribe
+    // TODO do I need to unsubscribe ?
   },
   updated() {
     this.isOverflown = this.$refs.chatBox.scrollHeight > this.$refs.chatBox.clientHeight;
