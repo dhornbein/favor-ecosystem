@@ -5,9 +5,3 @@
     <ChatBot class="fixed bottom-2 right-2 w-12 h-12" />
   </div>
 </template>
-
-<script>
-export default {
-  middleware: 'load-data'
-}
-</script>

@@ -13,7 +13,6 @@
 
 <script>
 export default {
-  middleware: 'load-data',
   data() {
     return {
       navHeight: 90,
