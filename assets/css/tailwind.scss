@@ -13,6 +13,12 @@ body {
   &.is-active {
     @apply bg-brand-primary text-yellow-500;
   }
+  &.has-text-sm {
+    @apply text-sm;
+  }
+  &.is-rounded-full {
+    @apply rounded-full;
+  }
   &:disabled {
     @apply opacity-50;
   }
