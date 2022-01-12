@@ -51,7 +51,7 @@ exports.getInvites = async (format = true) => {
   }
 }
 
-exports.postClaimInvite = async (token) => {
+exports.postClaimInvite = async (token,uid) => {
   
   const invites = await this.getInvites(false)
   const col = columnToLetter(invites[0].indexOf('claimed') + 1)
@@ -66,7 +66,7 @@ exports.postClaimInvite = async (token) => {
     range: range,
     valueInputOption: 'USER_ENTERED',
     resource: {
-      "values": [['TRUE']]
+      "values": [[uid]]
     },
   }
 

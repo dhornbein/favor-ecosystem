@@ -58,15 +58,15 @@ exports.post = async (req, res, next) => {
 
     const { response, payload } = await membersModel.post(newMember)
 
-    req.success = true
+    req.newMember = payload
     
-    res.status(201).json(success(payload, {msg: 'Member created successfully'}))
+    res.status(201).json(success(payload, { msg: 'Member created successfully' }))
+    next()
 
   } catch (err) {
     console.error('Controller Error', err)
     res.status(500).json(error(err))
   }
-  next()
 }
 
 exports.put = async (req, res, next) => {

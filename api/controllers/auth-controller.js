@@ -39,11 +39,13 @@ exports.getMember = async (req, res, next) => {
 exports.claimInvite = async (req, res, next) => {
   const token = req.params.token
   
-  if (!token || !req.success) return next() // no token or no success, nothing to claim
+  if (!token || !req.newMember) return next() // no token or no newMember, nothing to claim
+  
+  const newUserUid = req.newMember.uid
  
   try {
 
-    const response = await authModel.postClaimInvite(token)
+    const response = await authModel.postClaimInvite(token, newUserUid)
     if (response.status != 200) {
       console.error('Issue claiming update',response)
     }
