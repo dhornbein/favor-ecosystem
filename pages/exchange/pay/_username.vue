@@ -40,12 +40,14 @@
             type="number"
             placeholder="0.000"
             min="0.001"
+            :max="maxAmount"
             required
             name="amount"
             class="amount"
           >
           <div class="input-meta">
             <span class=errors>{{ errors[0] }}</span>
+            <span class="detail is-hidden-on-error">Available: <BaseFavor :num="maxAmount" :sup="false" /></span>
           </div>
         </div>
       </ValidationProvider>
@@ -148,6 +150,11 @@ export default {
       body: 'Once you add an <strong>amount</strong> and a <strong>title</strong> you can submit your payment.',
     })
   },
+  computed: {
+    maxAmount() {
+      return this.$auth.user.creditLimit + this.$auth.user.balance
+    }
+  },
   methods: {
     async submitPay () {
       this.loading = true;
@@ -204,6 +211,9 @@ export default {
   .control {
     &.invalid input {
       @apply border-red-500;
+    }
+    &.invalid .is-hidden-on-error {
+      @apply hidden;
     }
   }
 

@@ -1,5 +1,5 @@
 import { extend } from "vee-validate";
-import { confirmed, required, min, min_value } from "vee-validate/dist/rules";
+import { confirmed, required, min, min_value, max_value } from "vee-validate/dist/rules";
 import { validate as uuidValidate } from 'uuid'
 
 extend("confirmed", {
@@ -14,6 +14,11 @@ extend("required", {
 extend("min_value", {
   ...min_value,
   message: "The {_field_} must be at greater than {min}"
+});
+
+extend("max_value", {
+  ...max_value,
+  message: "The {_field_} must be at less than {max}"
 });
 
 extend("min", {
