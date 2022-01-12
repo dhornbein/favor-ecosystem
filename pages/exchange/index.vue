@@ -15,6 +15,7 @@
       v-for="(member, idx) in filteredMembers"
       :key="idx" 
       :member="member" 
+      size="mini"
       @click="clickCard(member.username)" 
       view="compact"
     />

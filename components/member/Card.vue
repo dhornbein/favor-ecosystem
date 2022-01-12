@@ -3,7 +3,7 @@
 
     <!-- <MemberBalanceBar class="absolute h-[80%] right-1 top-0 bottom-0" :member="member" /> -->
 
-    <!-- <div v-if="mine" class="my more open-hidden">&#10225; open &#10225;</div> -->
+    <!-- <div v-if="mine" class="my more is-hidden-open">&#10225; open &#10225;</div> -->
 
     <header class="head">
       <MemberIcon :username="member.username" :highlight="isCurrentUser" />
@@ -11,9 +11,12 @@
         <MemberDisplayName class="block" :member="member" />
         <MemberUsername class="text-sm text-gray-400" noLink :username="member.username" />
       </div>
-      <div v-if="mine" class="my edit ml-auto flex gap-2 items-center">
-        <BaseFavor class="text-right open-hidden pr-2 border-r border-gray-400" :num="member.creditLimit + member.balance">
+      <div class="quick-look is-hidden-open">
+        <BaseFavor class="text-right pr-2 border-r border-gray-400" :num="member.creditLimit + member.balance" v-if="mine" >
           <div class="label text-xs">Available</div>
+        </BaseFavor>
+        <BaseFavor class="text-right pr-2" :num="member.transactionTotal" v-else-if="member.transactionTotal > 0">
+          <div class="label text-xs">Total Transactions</div>
         </BaseFavor>
       </div>
     </header>
@@ -79,6 +82,7 @@ export default {
       return {
         'card--compact': this.currentSize == 'compact',
         'card--open': this.currentSize == 'open',
+        'card--mini': this.currentSize == 'mini',
         'card--me': this.$auth.user.uid == this.member.uid, 
       }
     },
@@ -105,6 +109,10 @@ export default {
   }
   .head {
     @apply flex gap-2 items-center;
+
+    .quick-look {
+      @apply ml-auto flex gap-2 items-center
+    }
   }
   .body {
     @apply flex gap-2 justify-between mt-2;
@@ -113,6 +121,7 @@ export default {
     }
   }
 
+  &.card--mini,
   &.card--compact {
     .body,
     .footer {
@@ -120,8 +129,14 @@ export default {
     }
   }
 
+  &.card--mini {
+    .quick-look {
+      @apply hidden;
+    }
+  }
+
   &.card--open {
-    .open-hidden {
+    .is-hidden-open {
       @apply hidden;
     }
   }
