@@ -1,14 +1,13 @@
 <template>
   <ValidationObserver 
-    class="flex flex-col justify-between"
+    class="transaction-form"
     tag="div"
-    immediate
     ref="form"
-    v-slot="{ invalid, handleSubmit, pending }"
+    v-slot="{ handleSubmit }"
   >
     <BaseLoader class="loader" v-if="loading"/>
 
-    <div class="pay flex my-4 justify-between">
+    <div class="transaction-form__portraits">
       <MemberPortrait class="payee w-1/3 text-center" :member="from" />
       <div class="text-4xl text-purple-500 font-bold text-center">
         <p class="mb-2">&rAarr;</p>
@@ -17,7 +16,7 @@
       <MemberPortrait class="recipient w-1/3 text-center" :member="to" />
     </div>
 
-    <div class="my-4 flex-grow flex flex-col">
+    <div class="transaction-form__inputs">
       <ValidationProvider immediate rules="uid|unique:@recipient,Recipient" v-slot="{ errors }">
           <input
             v-model="details.payeeUid"
@@ -64,7 +63,7 @@
           >
           <div class="input-meta">
             <span class=errors>{{ errors[0] }}</span>
-            <span class="detail text-right text-sm text-gray-400">{{ details.title.length }}/140</span>
+            <span class="detail">{{ details.title.length }}/140</span>
           </div>
         </div>
       </ValidationProvider>
@@ -87,10 +86,8 @@
 
 
     <ActionButton class="relative" @click.native="needValidation = true">
-      <div class="notice text-sm bg-red-400 p-2 rounded-md absolute top-2 left-0 right-0 text-center" v-if="needValidation">A valid <strong>amount</strong> and <strong>title</strong> are required</div>
       <button
         @click="handleSubmit(submitPay)"
-        :disabled="invalid || loading || pending"
         class="text-4xl w-full flex-grow bg-purple-500 text-purple-100 font-bold px-4 py-2 rounded-full disabled:bg-gray-300"
       >Pay</button>
     </ActionButton>
@@ -193,26 +190,45 @@ export default {
 
 <style lang="scss" scoped>
 
-input {
-  @apply p-2 w-full text-2xl border-b-2 border-gray-500;
+.transaction-form {
+  @apply flex flex-col gap-4;
+
+  .transaction-form__portraits {
+    @apply flex my-4 justify-between;
+  }
+
+  .transaction-form__inputs {
+    @apply flex flex-col gap-4;
+  }
+
+  .control {
+    &.invalid input {
+      @apply border-red-500;
+    }
+  }
+
+  input {
+    @apply p-2 w-full text-2xl border-b-2 border-gray-500;
+  }
+
+  .input-meta {
+    @apply text-sm flex justify-between min-h-[1.25rem];
+    .detail {
+      @apply text-right text-gray-400;
+    }
+  }
+
+  .errors {
+    @apply text-red-500;
+  }
+
+  .amount {
+    @apply text-4xl text-center;
+  }
+
+  .description {
+    @apply w-full max-w-prose mx-auto min-h-[6rem] shadow-md rounded-md p-2 border border-gray-100;
+  }
 }
 
-.control {
-  @apply my-4;
-}
-
-.errors {
-  @apply text-red-500 text-sm;
-}
-
-.amount {
-  @apply text-4xl text-center;
-}
-
-.title {
-}
-
-.description {
-  @apply w-full max-w-prose mx-auto min-h-[2rem] shadow-md rounded-md p-2 border border-gray-100;
-}
 </style>
