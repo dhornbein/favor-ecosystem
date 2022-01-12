@@ -150,7 +150,7 @@ export default {
     .favor {
       @apply flex gap-1 justify-around items-center text-right;
       .summary { @apply hidden }
-      .fee { @apply text-gray-400; }
+      .fee { @apply text-gray-400 whitespace-nowrap; }
       .total { @apply pt-1 mt-1 border-t border-gray-400; }
     }
   }
