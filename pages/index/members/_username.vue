@@ -26,10 +26,10 @@ export default {
       error({ statusCode: 404, message: `Member "${route.params.username}" not found...` })
     }
     return { member }
-  },  
+  },
   head () {
     return {
-      title: `${this.fullName} - Favor Member`
+      title: `${this.fullName} | Member`
     }
   },
   computed: {

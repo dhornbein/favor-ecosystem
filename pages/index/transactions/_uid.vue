@@ -9,6 +9,11 @@
 <script>
 
 export default {
+  head() {
+    return {
+      title: `${transaction.title} | Transaction`
+    }
+  },
   async asyncData({ store, route, error }) {
     const transaction = await store.getters.getTransactionsByUid(route.params.uid);
     if (!transaction) {

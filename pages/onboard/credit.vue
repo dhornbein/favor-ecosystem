@@ -17,6 +17,14 @@
   </article>
 </template>
 
+<script>
+export default {
+  head: {
+    title: 'Line of Credit | Onboarding'
+  },
+}
+</script>
+
 <style lang="scss">
 .onboard__credit {
   .edit .btn,

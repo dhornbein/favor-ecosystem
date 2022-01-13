@@ -9,3 +9,11 @@
     <p>Unlike most money Favor doesn't do usury, meaning you don't pay interest to the network when you have a negative balance.</p>
   </article>
 </template>
+
+<script>
+export default {
+  head: {
+    title: 'Favor is Money | Onboarding'
+  },
+}
+</script>

@@ -22,6 +22,9 @@
 
 <script>
 export default {
-  auth: false
+  auth: false,
+  head: {
+    title: 'Join'
+  },
 }
 </script>

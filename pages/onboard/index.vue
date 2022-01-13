@@ -15,3 +15,11 @@
       </p>
   </article>
 </template>
+
+<script>
+export default {
+  head: {
+    title: 'Onboarding'
+  },
+}
+</script>

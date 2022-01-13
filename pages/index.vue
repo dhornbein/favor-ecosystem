@@ -9,6 +9,9 @@ export default {
   layout ({ $auth }) {
     return ($auth.user) ? 'main' : 'default'
   },
+  head: {
+    title: 'Home'
+  },
   computed: {
     ...mapState(['transactions','members'])
   },

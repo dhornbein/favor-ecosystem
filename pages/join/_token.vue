@@ -95,6 +95,9 @@ export default {
     ValidationObserver
   },
   auth: false,
+  head: {
+    title: 'You\'r invited'
+  },
   async asyncData({ route, $axios }) {
     try {
       const response = await $axios.get(`api/members/join/${route.params.token}`);

@@ -58,6 +58,9 @@ export default {
     ValidationObserver
   },
   layout: 'main',
+  head: {
+    title: 'Invite Your Friend'
+  },
   data() {
     return {
       loading: false,

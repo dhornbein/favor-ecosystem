@@ -27,6 +27,9 @@ import { mapState } from 'vuex'
 
 export default {
   layout: 'action',
+  head: {
+    title: 'Exchange'
+  },
   data() {
     return {
       search: '',

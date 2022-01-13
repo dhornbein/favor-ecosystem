@@ -19,6 +19,9 @@
 
 <script>
 export default {
+  head: {
+    title: 'About Fees | Onboarding'
+  },
   computed: {
     exampleTrans() {
       return this.$store.getters.getTransactionsByUid('e691d7ed-c7f4-456e-b77a-89f8c8532221')

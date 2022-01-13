@@ -15,3 +15,11 @@
     <MainNav ref="nav" class="mt-4 w-full -m-2 shadow-none" />
   </article>
 </template>
+
+<script>
+export default {
+  head: {
+    title: 'Last Thing | Onboarding'
+  },
+}
+</script>

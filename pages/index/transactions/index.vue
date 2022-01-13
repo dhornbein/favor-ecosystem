@@ -23,6 +23,9 @@
 import { mapState } from 'vuex'
 
 export default {
+  head: {
+    title: 'Network Transactions'
+  },
   data() {
     return {
       search: '',

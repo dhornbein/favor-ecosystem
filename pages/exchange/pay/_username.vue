@@ -105,6 +105,11 @@ export default {
     ValidationProvider,
     ValidationObserver
   },
+  head () {
+    return {
+      title: `Pay ${this.to.firstName} ${this.to.lastName}`
+    }
+  },
   async asyncData({ route, store, $auth, error, redirect }) {
     const username = route.params.username
     const to = await store.getters.getMemberByUsername(username)

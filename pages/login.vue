@@ -21,6 +21,9 @@
 
 <script>
 export default {
+  head: {
+    title: 'Log In'
+  },
   data() {
     return {
       loading: false,

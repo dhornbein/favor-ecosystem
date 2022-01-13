@@ -29,6 +29,9 @@
 import { mapState } from 'vuex'
 
 export default {
+  head: {
+    title: 'Your Account'
+  },
   data() {
     return {
       search: '',

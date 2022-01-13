@@ -29,6 +29,9 @@
 import { mapState } from 'vuex'
 
 export default {
+  head: {
+    title: 'Network Members'
+  },
   data() {
     return {
       search: '',

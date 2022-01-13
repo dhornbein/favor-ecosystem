@@ -27,6 +27,9 @@ import QRCode from 'qrcode'
 
 export default {
   layout: 'main',
+  head: {
+    title: 'Share Your Invite'
+  },
   created() {
     const qrOptions = {
       color: {
