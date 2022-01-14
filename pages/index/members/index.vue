@@ -13,7 +13,7 @@
     </header>
 
     <MemberCard 
-      class="my-2 pt-2 pb-4 border-b border-gray-200 cursor-pointer" 
+      class="my-2 pt-2 pb-4 border-b border-brand-gray-200 cursor-pointer" 
       v-for="(row, idx) in filteredMembers" 
       :key="idx" 
       ref="card" 

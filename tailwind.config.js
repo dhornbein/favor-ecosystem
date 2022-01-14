@@ -5,6 +5,10 @@ module.exports = {
     extend: {
       colors: {
         'brand-primary': '#601d46',
+        'brand-gray-800': '#424242',
+        'brand-gray-400': '#747C81',
+        'brand-gray-200': '#C1D1E1',
+        'brand-gold': '#E79F39',
       },
       fontFamily: {
         logo: ['"Cormorant+SC"', 'Garamond', 'serif'],

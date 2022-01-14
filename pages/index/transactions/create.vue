@@ -150,7 +150,7 @@ export default {
 @import "vue-select/src/scss/vue-select.scss";
 
 .v-select .vs__dropdown-toggle {
-  @apply border border-gray-200 shadow-inner rounded-lg p-2;
+  @apply border border-brand-gray-200 shadow-inner rounded-lg p-2;
   &[aria-expanded="true"] {
     @apply border-t-blue-200 border-l-blue-200 border-r-blue-200 rounded-b-none;
   }

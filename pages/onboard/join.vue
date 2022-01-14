@@ -8,7 +8,7 @@
 
     <p>Head over to the exchange to send someone some Favor!</p>
 
-    <nuxt-link to="/exchange" class="text-center inline-block my-4 rounded-full bg-brand-primary text-yellow-500 font-bold px-4 py-2 text-2xl">Send Favor</nuxt-link>
+    <nuxt-link to="/exchange" class="text-center inline-block my-4 rounded-full bg-brand-primary text-brand-gold font-bold px-4 py-2 text-2xl">Send Favor</nuxt-link>
 
     <p>Or just start poking around!</p>
 

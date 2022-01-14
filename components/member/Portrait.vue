@@ -2,7 +2,7 @@
   <div class="member-portrait">
     <MemberIcon class="mx-auto" :username="member.username" :highlight="highlight" />
     <MemberDisplayName class="block mt-2" :member="member" />
-    <MemberUsername class="text-sm text-gray-400" :username="member.username" />
+    <MemberUsername class="text-sm text-brand-gray-400" :username="member.username" />
   </div>
 </template>
 

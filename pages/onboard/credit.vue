@@ -4,7 +4,7 @@
 
     <p>This is you:</p>
 
-    <MemberCard :member="$auth.user" size="open" class="p-2 my-2 border border-gray-200 rounded-md" />
+    <MemberCard :member="$auth.user" size="open" class="p-2 my-2 border border-brand-gray-200 rounded-md" />
 
     <p>Right now you have a <strong>balance</strong> of <BaseFavor :num="$auth.user.balance" />, that might seem low but you
     have a line of <strong>credit</strong> of <BaseFavor :num="$auth.user.creditLimit" />. That's why your <strong>available balance</strong> is 

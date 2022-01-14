@@ -7,7 +7,7 @@
     </thead>
     <tbody>
       <tr v-for="(row) in filtered" :key="row.id" :id="`row-${row.id}`" :title="row.created"
-        class="odd:bg-gray-100"
+        class="odd:bg-brand-gray-200"
       >
         <td v-for="(cell, col) in row" :key="row.id + '-' + col"
           :class="col"
@@ -69,7 +69,7 @@ export default {
         @apply text-right font-mono;
       }
       &.fee {
-        @apply text-gray-600;
+        @apply text-brand-gray-400;
       }
     }
   }

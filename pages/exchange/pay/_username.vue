@@ -90,7 +90,7 @@
     <ActionButton class="relative" @click.native="needValidation = true">
       <button
         @click="handleSubmit(submitPay)"
-        class="text-4xl w-full flex-grow bg-purple-500 text-purple-100 font-bold px-4 py-2 rounded-full disabled:bg-gray-300"
+        class="text-4xl w-full flex-grow bg-purple-500 text-purple-100 font-bold px-4 py-2 rounded-full disabled:bg-brand-gray-200"
       >Pay</button>
     </ActionButton>
 
@@ -223,13 +223,13 @@ export default {
   }
 
   input {
-    @apply p-2 w-full text-2xl border-b-2 border-gray-500;
+    @apply p-2 w-full text-2xl border-b-2 border-brand-gray-400;
   }
 
   .input-meta {
     @apply text-sm flex justify-between min-h-[1.25rem];
     .detail {
-      @apply text-right text-gray-400;
+      @apply text-right text-brand-gray-400;
     }
   }
 
@@ -242,7 +242,7 @@ export default {
   }
 
   .description {
-    @apply w-full max-w-prose mx-auto min-h-[6rem] shadow-md rounded-md p-2 border border-gray-100;
+    @apply w-full max-w-prose mx-auto min-h-[6rem] shadow-md rounded-md p-2 border border-brand-gray-200;
   }
 }
 

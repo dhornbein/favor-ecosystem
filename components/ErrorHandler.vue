@@ -3,7 +3,7 @@
     <h1 class="text-4xl text-brand-primary font-mono my-2">
       {{ error.code }}
     </h1>
-    <h2 class="text-lg text-gray-700 font-mono">
+    <h2 class="text-lg text-brand-gray-800 font-mono">
       {{ error.message }}
     </h2>
     <div @click="moreError = !moreError" class="cursor-pointer">

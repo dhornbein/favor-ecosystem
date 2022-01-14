@@ -135,7 +135,7 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-  @apply flex flex-col gap-3 my-2 py-2 border-t border-gray-400 border-dotted
+  @apply flex flex-col gap-3 my-2 py-2 border-t border-brand-gray-400 border-dotted
     transition cursor-pointer;
   .header {}
   .exchange {
@@ -150,8 +150,8 @@ export default {
     .favor {
       @apply flex gap-1 justify-around items-center text-right;
       .summary { @apply hidden }
-      .fee { @apply text-gray-400 whitespace-nowrap; }
-      .total { @apply pt-1 mt-1 border-t border-gray-400; }
+      .fee { @apply text-brand-gray-400 whitespace-nowrap; }
+      .total { @apply pt-1 mt-1 border-t border-brand-gray-400; }
     }
   }
   .content {

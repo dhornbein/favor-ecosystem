@@ -167,7 +167,7 @@ export default {
     @apply bg-white border border-yellow-200 shadow-lg rounded-md p-4 max-h-[60vh] overflow-y-scroll flex flex-col-reverse;
   }
   .chat__message {
-    @apply border-gray-500 bg-white border-l-2 p-2 rounded-r-md shadow-sm mb-2 last:mb-0 relative;
+    @apply border-brand-gray-400 bg-white border-l-2 p-2 rounded-r-md shadow-sm mb-2 last:mb-0 relative;
     &.info {
       @apply border-blue-500 bg-blue-100 text-blue-900
     }
@@ -210,7 +210,7 @@ export default {
 
 
 .chat-btn {
-  @apply cursor-pointer rounded-full bg-yellow-500 p-1 w-full h-full;
+  @apply cursor-pointer rounded-full bg-brand-gold p-1 w-full h-full;
 
   svg {
     @apply m-auto;

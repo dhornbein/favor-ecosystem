@@ -6,7 +6,7 @@
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
       </nuxt-link>
       <div v-else>
-        <svg class="w-6 h-6 stroke-current text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        <svg class="w-6 h-6 stroke-current text-brand-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
       </div>
       <nuxt-link :to="step" class="dot" v-for="step in steps" :key="step" :class="{ current: step == $route.path }"></nuxt-link>
       <nuxt-link :to="next">
@@ -69,7 +69,7 @@ export default {
     @apply flex justify-around items-center px-2 py-6;
   }
   .dot {
-    @apply w-4 h-4 rounded-full bg-gray-200;
+    @apply w-4 h-4 rounded-full bg-brand-gray-200;
     &.current { @apply bg-purple-500}
   }
 }

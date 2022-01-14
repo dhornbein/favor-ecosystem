@@ -41,7 +41,7 @@ export default {
   .search__field {
     @apply flex-grow; 
     .vs__dropdown-toggle {
-      @apply px-4 py-2 shadow-inner rounded-md border border-gray-400 focus:border-brand-primary;
+      @apply px-4 py-2 shadow-inner rounded-md border border-brand-gray-400 focus:border-brand-primary;
     }
   }
 }
