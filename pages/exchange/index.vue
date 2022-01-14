@@ -2,7 +2,7 @@
   <section>
     <ActionTitle>Exchange</ActionTitle>
     <ActionSearch 
-      placeholder="Search" 
+      placeholder="Search for Member" 
       v-model="search" 
       :keys="searchKeys"
       :search="members.filter(m => m.uid !== $auth.user.uid)"
