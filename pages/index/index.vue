@@ -22,6 +22,14 @@
       @click="clickTransaction(idx)"
     />
 
+    <div class="empty-search text-2xl text-center py-10" v-if="search.length > 0 && searchResults.length == 0">
+      😳 Transactions not found!
+    </div>
+
+    <div class="empty-state text-2xl text-center py-10" v-if="search.length == 0 && myTransactions.length <= 0">
+      😶 You haven't made any transactions yet.
+    </div>
+
   </main>
 </template>
 
@@ -66,7 +74,7 @@ export default {
 <style lang="scss">
 
 .search-field {
-  @apply my-2;
+  @apply my-4 px-0;
 }
 
 .page-title {

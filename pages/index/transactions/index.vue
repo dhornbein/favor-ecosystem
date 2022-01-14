@@ -12,8 +12,10 @@
       />
     </header>
       
-    <div>
-      <TransactionCard v-for="(row, idx) in filteredTransactions" :key="idx" ref="card" :trans="row" size="compact" @click="clickTransaction(idx)" />
+    <TransactionCard v-for="(row, idx) in filteredTransactions" :key="idx" ref="card" :trans="row" size="compact" @click="clickTransaction(idx)" />
+    
+    <div class="empty-search text-2xl text-center py-10" v-if="search.length > 0 && searchResults.length == 0">
+      😢 No Transactions found!
     </div>
 
   </main>
@@ -37,7 +39,7 @@ export default {
     ...mapState(['transactions']),
     filteredTransactions() {
       let transactions = this.transactions
-      transactions = (this.searchResults.length > 0) ? this.searchResults : transactions
+      transactions = (this.search.length > 0) ? this.searchResults : transactions
       return transactions.slice().reverse()
     },
   },

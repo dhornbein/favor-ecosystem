@@ -22,6 +22,10 @@
       @click="clickCard(row.username)"
     />
 
+    <div class="empty-search text-2xl text-center py-10" v-if="search.length > 0 && searchResults.length == 0">
+      🧐 No members found!
+    </div>
+
   </main>
 </template>
 
@@ -44,7 +48,7 @@ export default {
   computed: {
     ...mapState(['members']),
     filteredMembers() {
-      return (this.searchResults.length > 0) ? this.searchResults : this.members
+      return (this.search.length > 0) ? this.searchResults : this.members
     },
   },
   methods: {
