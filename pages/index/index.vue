@@ -6,6 +6,7 @@
     <ActionSearch 
       placeholder="Search Your Transactions" 
       class="search-field"
+      v-if="myTransactions.length > 5"
       v-model="search" 
       :keys="searchKeys"
       :search="myTransactions"
