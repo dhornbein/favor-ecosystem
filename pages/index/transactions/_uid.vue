@@ -11,7 +11,7 @@
 export default {
   head() {
     return {
-      title: `${transaction.title} | Transaction`
+      title: `${this.transaction.title} | Transaction`
     }
   },
   async asyncData({ store, route, error }) {
