@@ -5,7 +5,7 @@
     ref="form"
     v-slot="{ handleSubmit }"
   >
-    <BaseLoader class="loader" v-if="loading"/>
+    <BaseLoader class="loader" v-if="loading">{{ status }}</BaseLoader>
 
     <div class="transaction-form__portraits">
       <MemberPortrait class="payee w-1/3 text-center" :member="from" />
@@ -144,6 +144,7 @@ export default {
   data() {
     return {
       loading: false,
+      status: 'sending payment...',
       needValidation: false,
     }
   },
@@ -170,6 +171,7 @@ export default {
         .then(async response => {
           const transaction = response.data.data
 
+          this.status = 'Refreshing data...'
           await Promise.all([
             this.$store.dispatch('getAllTransactions'),
             this.$store.dispatch('getAllMembers'),
