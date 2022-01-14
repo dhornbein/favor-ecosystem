@@ -76,6 +76,25 @@ exports.isBroker =  (req, res, next) => {
   }))
 }
 
+// validate if request target matches token uid OR if token user is broker
+exports.isSelfOrBroker = (req, res, next) => {
+  const targetUid = req.params.uid
+  const user = req.user
+
+  if (user.uid === targetUid || isBroker(user)) {
+    next();
+    return true
+  }
+
+  return res.status(403).json(error({
+    title: "Not Authorized",
+    detail: 'You must be the member or broker to perform this action',
+    status: 403,
+    path: req.originalUrl,
+    timestamp: new Date(),
+  }))
+}
+
 // firstName, lastName, email, phone, favor, invitedByUid
 exports.invite = [
   check('firstName')
@@ -361,7 +380,8 @@ exports.memberUpdate = [
     .withMessage('username must be more than 4 characters')
     .custom(value => value.length <= 20) // TODO move this to a config file
     .withMessage('username must be less than 20 characters')
-    .bail()
+    .bail(),
+  check('username')
     .custom(validateMemberUpdate),
   check('creditLimit')
     .if(check('creditLimit').exists())
@@ -381,13 +401,17 @@ exports.memberUpdate = [
     .default(new Date().toISOString()),
   (req, res, next) => {
     const errors = validationResult(req)
-    const schema = ['username', 'firstName', 'lastName', 'BrokerUid', 'phone', 'email', 'password','creditLimit','updated']
+    const schema = ['username', 'firstName', 'lastName', 'brokerUid', 'phone', 'email', 'password', 'creditLimit','updated']
 
     req.body = filterObjKeys(req.body, schema)
     req.body = removeObjBlanks(req.body)
 
     if (!errors.isEmpty())
       return res.status(422).json(this.error(errors.array()));
+    
+    // if the only key is 'updated' then there is nothing to update...
+    if (Object.keys(req.body).length < 2)
+      return res.status(422).json(this.error({ msg: 'No fields to update'}))
     next();
   },
 ];
@@ -398,10 +422,10 @@ async function validateMemberUpdate(value, { req }) {
 
   const { username, email, phone, brokerUid } = req.body
 
-  const foundEmail = members.find(member => member.email === email && member.uid !== req.params.uid)
-  const foundPhone = members.find(member => member.phone === phone && member.uid !== req.params.uid)
-  const foundUsername = members.find(member => member.username === username && member.uid !== req.params.uid)
-  const foundBroker = members.find(member => member.uid === brokerUid)
+  const foundEmail = email && members.find(member => member.email === email && member.uid !== req.params.uid)
+  const foundPhone = phone && members.find(member => member.phone === phone && member.uid !== req.params.uid)
+  const foundUsername = username && members.find(member => member.username === username && member.uid !== req.params.uid)
+  const foundBroker = brokerUid && members.find(member => member.uid === brokerUid)
   
   if (foundEmail)
     throw new Error('Email is already in use')
