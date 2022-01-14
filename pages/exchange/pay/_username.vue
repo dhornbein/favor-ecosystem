@@ -5,6 +5,7 @@
     ref="form"
     v-slot="{ handleSubmit }"
   >
+    <ActionTitle>Pay {{ to.firstName }}</ActionTitle>
     <BaseLoader class="loader" v-if="loading">{{ status }}</BaseLoader>
 
     <div class="transaction-form__portraits">
@@ -107,7 +108,7 @@ export default {
   },
   head () {
     return {
-      title: `Pay ${this.to.firstName} ${this.to.lastName}`
+      title: `Pay ${this.to.firstName}`
     }
   },
   async asyncData({ route, store, $auth, error, redirect }) {

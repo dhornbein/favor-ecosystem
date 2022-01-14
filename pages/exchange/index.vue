@@ -1,5 +1,6 @@
 <template>
   <section>
+    <ActionTitle>Exchange</ActionTitle>
     <ActionSearch 
       placeholder="Search" 
       v-model="search" 
