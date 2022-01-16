@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col justify-center gap-4 items-center">
+  <div class="min-h-screen flex flex-col gap-4 items-center pt-6">
 
     <Logo class="flex-col items-center" />
     <Nuxt class="default-container" />

@@ -1,7 +1,7 @@
 <template>
   <main>
 
-    <MainUserHeader class="header" />
+    <MainUserHeader class="header" v-if="$auth.loggedIn" />
     
     <ActionSearch 
       placeholder="Search Your Transactions" 
