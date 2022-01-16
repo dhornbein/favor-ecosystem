@@ -16,7 +16,6 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Favor Solutions Network web app for exchanging Favor' },
-      { name: 'theme-color', content: '#601d46'}
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -55,7 +54,9 @@ export default {
     // see https://tailwindcss.nuxtjs.org/
     '@nuxtjs/tailwindcss',
     // see: https://google-fonts.nuxtjs.org/
-    '@nuxtjs/google-fonts'
+    '@nuxtjs/google-fonts',
+    // see: https://pwa.nuxtjs.org/
+    '@nuxtjs/pwa',
   ],
 
   /*
@@ -95,6 +96,18 @@ export default {
       logout: '/login',
       callback: '/login',
       home: '/'
+    }
+  },
+
+  pwa: {
+    meta: {
+      theme_color: '#601d46',
+    },
+    manifest: {
+      background_color: "#601d46",
+      short_name: "Favor",
+      name: "Favor Solutions Network Exchange",
+      description: "Make your own money with Favor",
     }
   },
 

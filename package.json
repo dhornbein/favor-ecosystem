@@ -42,5 +42,8 @@
     "vue-no-ssr": "^1.1.1",
     "vue-router": "^3.5.3",
     "vue-select": "^3.16.0"
+  },
+  "devDependencies": {
+    "@nuxtjs/pwa": "^3.3.5"
   }
 }
