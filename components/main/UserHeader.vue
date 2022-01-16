@@ -1,46 +1,49 @@
 <template>
-  <article class="mt-6">
-    <header>
-      <div class="flex gap-4 items-center">
-        <MemberIcon :username="member.username" highlight />
-        <div class="name leading-snug">
-          <MemberDisplayName class="block" :member="member" />
-          <MemberUsername class="text-sm text-brand-gray-400" noLink :username="member.username" />
-        </div>
+  <article class="grid grid-cols-2 items-center">
 
-        <BaseFavor class="text-2xl text-right ml-auto" :sup="false" :num="member.creditLimit + member.balance">
-          <div class="text-base">Available Favor</div>
-        </BaseFavor>
+    <div class="col-span-2 items-center text-center flex flex-col gap-4 justify-center pt-6 pb-4">
 
+      <MemberIcon :username="member.username" highlight />
+
+      <div class="name leading-snug">
+        <MemberDisplayName class="block" :member="member" />
+        <MemberUsername class="text-sm text-brand-gray-400" noLink :username="member.username" />
       </div>
-    </header>
-    <div class="body flex justify-between py-4">
-      <nav class="nav flex flex-col gap-2 items-start">
-        <nuxt-link to="/onboard">
-          <svg class="w-6 h-6 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          Onboarding
-        </nuxt-link>
-        <nuxt-link to="/my/settings" class="cursor-pointer">
-          <svg class="w-6 h-6 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-          Edit Profile
-        </nuxt-link>
-        <button @click="$auth.logout()">
-          <svg class="w-6 h-6 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-          Logout
-        </button>
-      </nav>
-      <div class="balance text-right">
-        <BaseFavor class="" :num="member.balance">
-          <div class="label text-xs">Balance</div>
-        </BaseFavor>
-        <BaseFavor class="" :num="member.creditLimit">
-          <div class="label text-xs">Credit Limit</div>
-        </BaseFavor>
-        <BaseFavor class="" :num="member.transactionTotal">
-          <div class="label text-xs">Total Transactions</div>
-        </BaseFavor>
-      </div>
+
     </div>
+
+    <BaseFavor class="w-auto col-span-2 text-3xl text-right py-4 px-2 mb-4 -mx-2 bg-brand-primary text-brand-gold" :sup="false" :num="member.creditLimit + member.balance">
+      <div class="text-base">Available</div>
+    </BaseFavor>
+
+
+    <nuxt-link to="/onboard">
+      <svg class="w-6 h-6 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      Onboarding
+    </nuxt-link>
+
+    <BaseFavor class="text-right" :num="member.balance">
+      <div class="label text-xs">Balance</div>
+    </BaseFavor>
+    
+    <nuxt-link to="/my/settings" class="cursor-pointer">
+      <svg class="w-6 h-6 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+      Edit Profile
+    </nuxt-link>
+
+    <BaseFavor class="text-right" :num="member.creditLimit">
+      <div class="label text-xs">Credit Limit</div>
+    </BaseFavor>
+    
+    <button class="text-left" @click="$auth.logout()">
+      <svg class="w-6 h-6 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+      Logout
+    </button>
+
+    <BaseFavor class="text-right" :num="member.transactionTotal">
+      <div class="label text-xs">Total Transactions</div>
+    </BaseFavor>
+
   </article>
 </template>
 
