@@ -53,11 +53,7 @@ export default {
   },
   methods: {
     clickCard(username) {
-      if (username == this.$auth.user.username) {
-        this.$router.push(`/`)
-      } else {
-        this.$router.push(`/members/${username}`)
-      }
+      this.$router.push(`/members/${username}`)
     },
     searchRender(results) {
       this.searchResults = results

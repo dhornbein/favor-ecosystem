@@ -7,6 +7,10 @@
     
     <TransactionCard v-for="(row, idx) in memberTransactions.slice().reverse()" :focusUid="member.uid" :key="idx" ref="card" :trans="row" size="compact" @click="clickTransaction(idx)" />
 
+    <div class="empty-state text-2xl text-center py-10" v-if="memberTransactions.length <= 0">
+      😶 {{ member.firstName }} hasn't made any transactions yet.
+    </div>
+
   </main>
 </template>
 
@@ -14,6 +18,7 @@
 import { mapState } from 'vuex'
 
 export default {
+  middleware: ['redirect-user'],
   async asyncData({ store, route, error }) {
     const member = await store.getters.getMemberByUsername(route.params.username);
     if (!member) {
