@@ -22,11 +22,6 @@
           </div>
           <div class="summary">
             <div class="amount text-xl"><BaseFavor class="focus" :num="focusAmount" :plus="isFocusedRecipient" /></div>
-            <div class="fee">
-              <BaseFavor :num="focusFee">
-                <span class="label text-sm">Fee</span>
-              </BaseFavor>
-              </div>
           </div>
           <div class="recipient">
             <div class="amount font-bold"><BaseFavor :num="trans.amount" plus /></div>
@@ -102,10 +97,10 @@ export default {
       return this.focusUid === this.trans.recipientUid
     },
     focusAmount(){
-      return this.isFocusedPayee ? - this.trans.amount : this.trans.amount
+      return this.focusUid ? this.focusFee + (this.isFocusedPayee ? - this.trans.amount : this.trans.amount) : this.trans.amount
     },
     focusFee(){
-      return this.focusUid ? - this.fee : this.fee
+      return this.focusUid ? - this.fee / 2 : this.fee
     },
     payee() {
       return this.$store.getters.getMemberByUid(this.trans.payeeUid)
