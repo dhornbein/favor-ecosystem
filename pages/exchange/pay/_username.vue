@@ -34,13 +34,14 @@
           ><span class=errors>{{ errors[0] }}</span>
       </ValidationProvider>
 
-      <ValidationProvider slim v-slot="{ errors, classes }">
+      <ValidationProvider slim rules="min_value:0.001" v-slot="{ errors, classes }">
         <div class="control" :class="classes">
           <input
             v-model="details.amount"
             type="number"
             placeholder="0.000"
-            min="0.001"
+            min="0.000"
+            step="1"
             :max="maxAmount"
             required
             name="amount"
