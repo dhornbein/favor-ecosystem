@@ -3,7 +3,7 @@ const { get: getTransactions } = require('../model/transactions-model')
 const { get: getMembers, auth: authMembers } = require('../model/members-model')
 const { getInvites } = require('../model/auth-model')
 const { v4: uuidv4, validate: uuidValidate } = require('uuid')
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const defaultCreditLimit = 1000
 const saltRounds = 12
