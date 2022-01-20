@@ -64,7 +64,7 @@ export default {
   */
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth-next',
   ],
 
   router: {
@@ -108,6 +108,14 @@ export default {
       short_name: "Favor",
       name: "Favor Solutions Network Exchange",
       description: "Make your own money with Favor",
+      start_url: '/',
+      lang: 'en',
+      display: 'standalone',
+    },
+    workbox: {
+      enabled: true,
+      dev: true,
+      debug: true
     }
   },
 
