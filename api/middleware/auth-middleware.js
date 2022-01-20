@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const env = require('../env.json')
 const { error } = require('../middleware/validate')
 
 const message = {
@@ -31,7 +30,7 @@ exports.requireToken = (req, res, next) => {
 
   try {
     const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, env.JWT_AUTH_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_AUTH_SECRET);
     
     req.user = decoded;
 
@@ -50,7 +49,7 @@ exports.checkToken = (req, res, next) => {
 
   try {
     const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, env.JWT_AUTH_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_AUTH_SECRET);
 
     // add the decoded token to the request
     req.user = decoded;
@@ -70,7 +69,7 @@ exports.requireInviteToken = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, env.JWT_INVITE_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_INVITE_SECRET);
     req.invite = decoded;
     req.body = {
       'firstName': decoded.invitation.firstName,

@@ -1,7 +1,6 @@
 const membersModel = require('../model/members-model')
 const authModel = require('../model/auth-model')
 const { error, success } = require('../middleware/validate')
-const env = require('../env.json')
 var jwt = require('jsonwebtoken');
 
 exports.get = async (req, res, next) => {
@@ -72,7 +71,7 @@ exports.invite = async (req, res, next) => {
         payeeUid: req.body.invitedByUid,
         amount: req.body.favor,
       } : false,
-    }, env.JWT_INVITE_SECRET, {
+    }, process.env.JWT_INVITE_SECRET, {
       expiresIn
     })
 
@@ -113,7 +112,7 @@ exports.post = async (req, res, next) => {
       username: req.member.username,
       id: req.member.id,
       roles: req.member.roles //TODO turn this into an array?
-    }, env.JWT_AUTH_SECRET, {
+    }, process.env.JWT_AUTH_SECRET, {
       expiresIn
     })
 

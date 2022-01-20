@@ -1,10 +1,9 @@
 const { response } = require('express');
 const { google } = require('googleapis');
 const sheets = google.sheets('v4');
-const env = require('../env.json');
 const auth = require('./google-auth');
 
-const SPREADSHEET_ID = env.SPREADSHEET_ID
+const SPREADSHEET_ID = process.env.SPREADSHEET_ID
 const MEMBERS_RANGE = 'members!A:AA'
 const SHEET = 'members'
 

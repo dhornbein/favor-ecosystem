@@ -1,9 +1,8 @@
 const { google } = require('googleapis');
 const sheets = google.sheets('v4');
-const env = require('../env.json');
 const auth = require('./google-auth');
 
-const SPREADSHEET_ID = env.SPREADSHEET_ID
+const SPREADSHEET_ID = process.env.SPREADSHEET_ID
 const SHEET = 'invitations'
 const INVITE_RANGE = 'invitations!A:AA'
 const INVITE_HEADER_RANGE = 'invitations!1:1'
