@@ -28,8 +28,8 @@ export default {
     return {
       loading: false,
       login: {
-        username: 'DrewH',
-        password: 'time2GO@'
+        username: '',
+        password: ''
       }
     }
   },
