@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "NODE_ENV=dev nuxt",
     "dev:host": "nuxt --hostname '0'",
     "build": "nuxt build",
-    "start": "nuxt start",
+    "start": "NODE_ENV=dev nuxt start",
     "start:host": "nuxt start --hostname '0'",
     "generate": "nuxt generate",
     "lint": "yarn lint:js",

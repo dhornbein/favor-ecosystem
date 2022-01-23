@@ -134,17 +134,27 @@ export default {
   //  host: '0.0.0.0' // default: localhost
   // },
 
-  publicRuntimeConfig: {
-    axios: {
-      browserBaseURL: process.env.BASE_URL
-    }
-  },
-
-  privateRuntimeConfig: {
-    axios: {
-      baseURL: process.env.BASE_URL
-    }
-  },
+  // config for server and client
+  publicRuntimeConfig:
+    process.env.NODE_ENV === 'dev'
+    ? { // dev env
+        axios: {
+          baseURL: process.env.LOCAL_URL
+        }
+      }
+    : { // production env
+        axios: {
+          baseURL: process.env.BASE_URL
+        }
+      },
+  
+  // config for server only
+  privateRuntimeConfig:
+    process.env.NODE_ENV === 'dev'
+    ? { // dev env
+      }
+    : { // production env
+      },
 
   /*
   ** Build configuration
