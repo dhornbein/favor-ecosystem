@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     tokenUrl() {
-      return `https://app.favor.solutions/join/${this.$route.params.token}`;
+      return `${this.$axios.defaults.baseURL}/join/${this.$route.params.token}`;
     },
     // showCopy() {
     //   return navigator && !!navigator.clipboard
