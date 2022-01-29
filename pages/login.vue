@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BaseLoader class="loader" v-if="loading">Authenticating...</BaseLoader>
+    <BaseLoader class="loader" v-if="loading">{{ status }}</BaseLoader>
 
     <h1 class="text-2xl my-4">Log In</h1>
 
@@ -52,6 +52,7 @@ export default {
   data() {
     return {
       loading: false,
+      status: 'Authenticating...',
       login: {
         username: '',
         password: ''
@@ -70,7 +71,7 @@ export default {
           title: 'login successful',
         })
 
-        this.loading = false
+        this.status = 'Success, redirecting...'
       } catch (error) {
         if (error.response.data.error) {
           this.loginError = error.response.data.error[0].msg
