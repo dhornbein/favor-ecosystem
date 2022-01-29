@@ -176,14 +176,14 @@ export default {
             this.$router.push(`/onboard`)
 
           } catch (error) {
-            console.log('Token error logging in:', error);
+            console.error('Token error logging in:', error);
             this.$store.dispatch('chat/broadcastErrorResponse', {
               response: error.response,
             })
           }
           this.loading = false
         } catch (error) {
-          console.log('error creating account', error);
+          console.error('error creating account', error);
           this.$store.dispatch('chat/broadcastErrorResponse', {
             response: error.response,
           })

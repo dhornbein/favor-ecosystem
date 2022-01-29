@@ -63,7 +63,6 @@ const AUTH_KEYS = [
 exports.get = async (format = true) => {
   try {
     const response = (await sheets.spreadsheets.values.get(REQUEST.GET)).data;
-    console.log('MEMBERS GET GOTTEN');
     return format ? deserializeMembers(response.values,KEYS) : response.values
   } catch (err) {
     throw err

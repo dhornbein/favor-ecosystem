@@ -93,7 +93,6 @@ export default {
         try {
           const response = await this.$axios.post('/api/auth/invite', this.details)
           const data = response.data.data
-          console.log(response);
           this.$store.dispatch('chat/broadcastResponse', { 
             response: response,
             title: 'Invitation Created!',

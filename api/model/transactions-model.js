@@ -37,7 +37,6 @@ const KEYS = [
 exports.get = async () => {
   try {
     const response = (await sheets.spreadsheets.values.get(REQUEST.GET)).data;
-    console.log('TRANSACTIONS GET GOTTEN');
     return deserializeTransactions(response.values);
   } catch (err) {
     throw err

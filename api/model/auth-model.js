@@ -71,12 +71,11 @@ exports.postClaimInvite = async (token,uid) => {
 
   try {
     const response = (await sheets.spreadsheets.values.update(request));
-    console.log('postClaimInvite Success')
 
     return response
 
   } catch (err) {
-    console.log('postClaimInvite Error',err)
+    console.error('postClaimInvite Error',err)
     throw new Error(err)
   }
 }

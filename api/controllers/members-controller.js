@@ -75,7 +75,6 @@ exports.put = async (req, res, next) => {
 
     const { response, payload } = await membersModel.put(uid, req.body)
     
-    console.log('membersController.put',response.data,payload);
     res.status(200).json(success(payload, {msg: 'Member updated successfully'}))
 
   } catch (err) {

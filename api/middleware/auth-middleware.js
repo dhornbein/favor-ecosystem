@@ -55,7 +55,7 @@ exports.checkToken = (req, res, next) => {
     req.user = decoded;
 
   } catch (err) {
-    console.log('checkToken:', err);
+    console.error('checkToken:', err);
   }
   return next();
   

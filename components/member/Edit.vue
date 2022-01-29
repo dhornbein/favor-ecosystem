@@ -130,7 +130,6 @@ export default {
       } catch (error) {
         this.loading = false
         this.status = "Error"
-        console.log('Update:', error);
         this.$store.dispatch('chat/broadcastErrorResponse', {
           response: error.response,
         })

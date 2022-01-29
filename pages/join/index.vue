@@ -109,7 +109,7 @@ export default {
           this.loading = false
           this.showThankYou = true;
         } catch (error) {
-          console.log('error creating account', error);
+          console.error('error creating account', error);
           this.$store.dispatch('chat/broadcastErrorResponse', {
             response: error.response,
           })

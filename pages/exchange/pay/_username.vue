@@ -193,7 +193,7 @@ export default {
           this.loading = false
         })
       } catch (error) {
-        console.log('error', error);
+        console.error('submit payment error', error);
         this.$store.dispatch('chat/broadcastErrorResponse', {
           response: error.response,
         })
