@@ -1,6 +1,6 @@
 <template>
   <ValidationObserver 
-    class="transaction-form"
+    class="transaction-form form"
     tag="div"
     ref="form"
     v-slot="{ handleSubmit }"
@@ -230,16 +230,7 @@ export default {
     @apply p-2 w-full text-2xl border-b-2 border-brand-gray-400;
   }
 
-  .input-meta {
-    @apply text-sm flex justify-between min-h-[1.25rem];
-    .detail {
-      @apply text-right text-brand-gray-400;
-    }
-  }
-
-  .errors {
-    @apply text-red-500;
-  }
+  
 
   .amount {
     @apply text-4xl text-center;

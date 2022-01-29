@@ -9,7 +9,7 @@
       <nuxt-link to="/join" class="btn mt-4 text-brand-primary">Join Wait list</nuxt-link>
     </div>
     <ValidationObserver 
-      class="flex flex-col gap-2 justify-between max-w-prose mx-auto"
+      class="form flex flex-col gap-2 justify-between max-w-prose mx-auto"
       tag="form"
       ref="form"
       v-else-if="member"

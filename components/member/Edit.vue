@@ -166,8 +166,5 @@ export default {
       content: ' (unsaved edit)';
     }
   }
-  .errors {
-    @apply text-red-500 text-sm;
-  }
 }
 </style>

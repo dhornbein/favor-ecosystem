@@ -4,7 +4,7 @@
     <BaseLoader class="loader" v-if="loading"/>
 
     <ValidationObserver 
-      class="flex flex-col justify-between max-w-prose mx-auto"
+      class="form flex flex-col justify-between max-w-prose mx-auto"
       tag="form"
       ref="form"
       v-slot="{ invalid, handleSubmit }"

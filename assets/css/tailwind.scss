@@ -23,3 +23,19 @@ body {
     @apply opacity-50;
   }
 }
+
+form,
+.form {
+  .invalid .input input {
+    @apply border-red-400;
+  }
+  .errors {
+    @apply text-red-500 text-sm;
+  }
+  .input-meta {
+    @apply text-sm flex justify-between min-h-[1.25rem];
+    .detail {
+      @apply text-right text-brand-gray-400;
+    }
+  }
+}
