@@ -101,6 +101,11 @@
 </template>
 
 <script>
+/**
+ * Pay Member page
+ * Allows a member to send favor to another
+ * takes the recipient's uid as a param
+ */
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 export default {
   components: {

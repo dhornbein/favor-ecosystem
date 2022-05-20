@@ -70,6 +70,10 @@
 </template>
 
 <script>
+/**
+ * Add transaction page
+ * This page is used by brokers to add new transactions to the network.
+ */
 import { mapState } from 'vuex'
 import vSelect from 'vue-select'
 

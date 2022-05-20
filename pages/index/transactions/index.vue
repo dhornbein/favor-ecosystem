@@ -22,6 +22,10 @@
 </template>
 
 <script>
+/**
+ * Transaction page
+ * Lists recent transactions in the whole network
+ */
 import { mapState } from 'vuex'
 
 export default {

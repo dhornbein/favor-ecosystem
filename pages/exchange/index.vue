@@ -24,6 +24,12 @@
 </template>
 
 <script>
+/**
+ * Exchange page
+ * the first step in exchanging money
+ * lists recent members the logged in member has transacted with
+ * also allows for searching members
+ */
 import { mapState } from 'vuex'
 
 export default {

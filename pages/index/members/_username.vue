@@ -15,6 +15,10 @@
 </template>
 
 <script>
+/**
+ * Single member page
+ * Shows individual member information based on the member Username
+ */
 import { mapState } from 'vuex'
 
 export default {

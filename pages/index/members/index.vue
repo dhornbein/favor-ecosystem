@@ -30,6 +30,10 @@
 </template>
 
 <script>
+/**
+ * Member page
+ * Lists all network members
+ */
 import { mapState } from 'vuex'
 
 export default {

@@ -68,6 +68,10 @@
 </template>
 
 <script>
+/**
+ * The Join page
+ * Invites visitors to join a wait list
+ */
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 export default {
   components: {

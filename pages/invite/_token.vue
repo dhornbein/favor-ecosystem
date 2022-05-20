@@ -23,6 +23,11 @@
 </template>
 
 <script>
+/**
+ * The invite Token Share page
+ * Once an invitation is created, the member can 
+ * access the token URL and QR code for sharing the token
+ */
 import QRCode from 'qrcode'
 
 export default {

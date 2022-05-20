@@ -17,6 +17,10 @@
 </template>
 
 <script>
+/**
+ * Onboarding parent page
+ * This page is used to display and navigate through onboarding steps
+ */
 export default {
   layout: 'blank',
   data() {

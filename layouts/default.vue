@@ -7,6 +7,8 @@
   </div>
 </template>
 
+<!-- Default layout, used for pages outside of the member area -->
+
 <style lang="scss">
 .default-container{
   @apply container mx-auto px-5;

@@ -15,6 +15,10 @@
 </template>
 
 <script>
+/**
+ * The main layout
+ * has the main nav, content, send favor, and chat bot
+ */
 export default {
   data() {
     return {
