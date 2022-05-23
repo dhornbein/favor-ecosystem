@@ -50,7 +50,7 @@ exports.post = async (req, res, next) => {
 
   const authMember = req.user;
   // TODO better role validation
-  const isBroker = authMember.roles && authMember.roles['broker']
+  const isBroker = authMember.roles && authMember.roles.includes('broker')
 
   if (!isBroker && req.body.payeeUid !== authMember.uid) {
     res.status(403).json(error({
