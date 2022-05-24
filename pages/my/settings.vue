@@ -6,6 +6,10 @@
 </template>
 
 <script>
+/**
+ * Member edit page
+ * This page is used to edit a member's profile
+ */
 export default {
   layout: 'action',
   head: {

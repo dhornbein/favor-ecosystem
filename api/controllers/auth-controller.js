@@ -56,7 +56,7 @@ exports.claimInvite = async (req, res, next) => {
 
 exports.invite = async (req, res, next) => {
   try {
-    let expiresIn = '14d'
+    let expiresIn = '2m'
 
     // invitation_token
     const token = jwt.sign({
@@ -104,7 +104,7 @@ exports.invite = async (req, res, next) => {
 
 exports.post = async (req, res, next) => {
   try {
-    let expiresIn = '1h'
+    let expiresIn = '14d'
 
     // access_token
     const token = jwt.sign({

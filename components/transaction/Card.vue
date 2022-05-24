@@ -35,7 +35,7 @@
           <nuxt-link :to="`/members/${payee.username}`" class="payee" @click.stop>{{ payee.firstName }}</nuxt-link> paid <nuxt-link :to="`/members/${recipient.username}`" class="recipient" @click.stop>{{ recipient.firstName }}</nuxt-link> for:
         </div>
         <h1 class="title">{{ trans.title }}</h1>
-        <div class="description" :v-html="trans.description"></div>
+        <div class="description">{{ trans.description }}</div>
       </div>
     </main>
 

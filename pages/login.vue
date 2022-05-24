@@ -61,6 +61,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * Attempt to log in the user
+     */
     async userLogin() {
       try {
         this.loading = true;

@@ -113,8 +113,6 @@ export default {
     },
     workbox: {
       enabled: true,
-      dev: true,
-      debug: true
     }
   },
 

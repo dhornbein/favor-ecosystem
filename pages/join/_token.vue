@@ -88,6 +88,13 @@
 </template>
 
 <script>
+/**
+ * Join via Token
+ * This page handles token invites
+ * A member shares an invitation URL with an invite token
+ * Once the page is loaded the token is validated
+ * then the member add's their information and submits the form to join
+ */
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 export default {
   components: {
@@ -98,8 +105,16 @@ export default {
   head: {
     title: 'You\'r invited'
   },
+  /**
+   * Confirms the token from the route param is valid
+   * On success, returns an object with the token and member object (to pre-fill the form)
+   */
   async asyncData({ route, $axios }) {
     try {
+      /**
+       * GET /api/join/token/:token
+       * Returns the member object and the token
+       */
       const response = await $axios.get(`api/members/join/${route.params.token}`);
       if (response.data.success) {
         return {
@@ -143,6 +158,10 @@ export default {
 
         try {
           this.status = 'Creating Account...';
+          /**
+           * POST /api/members/join/:token
+           * Creates a new member and returns the member object
+           */
           const response = await this.$axios.post(`api/members/join/${this.token}`, this.member)
           
           if (response.status != 201) {
@@ -172,7 +191,7 @@ export default {
               title: 'login successful',
             })
 
-            // send to ionboarding
+            // send to onboarding
             this.$router.push(`/onboard`)
 
           } catch (error) {

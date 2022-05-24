@@ -1,3 +1,6 @@
+/**
+ * Extentions for vee-validate rules
+ */
 import { extend } from "vee-validate";
 import { confirmed, required, min, min_value, max_value } from "vee-validate/dist/rules";
 import { validate as uuidValidate } from 'uuid'

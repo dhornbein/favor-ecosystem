@@ -7,7 +7,10 @@
 </template>
 
 <script>
-
+/**
+ * Single transaction page
+ * Looks up a transaction by uid and displays it
+ */
 export default {
   head() {
     return {

@@ -21,6 +21,11 @@
 </template>
 
 <script>
+/**
+ * Error layout
+ * when an error occurs, this layout is displayed
+ * begging users to submit the error to the webmaster
+ */
 export default {
   layout: 'main',
   props: {

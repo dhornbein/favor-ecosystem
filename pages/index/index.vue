@@ -35,6 +35,11 @@
 </template>
 
 <script>
+/**
+ * The front page
+ * This page shows the logged in member's latest transactions
+ * and account information
+ */
 import { mapState } from 'vuex'
 
 export default {

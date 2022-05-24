@@ -51,6 +51,11 @@
 </template>
 
 <script>
+/**
+ * The invite page
+ * Allows members to invite their friends to Favor
+ * Creates a JWT token for the invited user
+ */
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 export default {
   components: {
