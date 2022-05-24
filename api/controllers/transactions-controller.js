@@ -52,19 +52,22 @@ exports.post = async (req, res, next) => {
   // TODO better role validation
   const isBroker = authMember.roles && authMember.roles.includes('broker')
 
-  if (!isBroker && req.body.payeeUid !== authMember.uid) {
-    res.status(403).json(error({
-      title: "Not Authorized",
-      detail: `You do not have permission to create transactions for anyone other than yourself!`,
-      status: 403,
-      path: req.originalUrl,
-      timestamp: new Date(),
-    }))
-    return null
-  }
+  // If the authorized user is NOT the payee
+  if (req.body.payeeUid !== authMember.uid) {
+    
+    // if the user is not a broker, bail
+    if (!isBroker) {
+      res.status(403).json(error({
+        title: "Not Authorized",
+        detail: `You do not have permission to create transactions for anyone other than yourself!`,
+        status: 403,
+        path: req.originalUrl,
+        timestamp: new Date(),
+      }))
+      return null
+    }
 
-  if (isBroker) {
-    // if no brokerUid is set, set it to the current broker
+    // if the user is a broker and the brokerUid isn't set, add the authorized user's uid as broker
     if (!req.body.brokerUid) req.body.brokerUid = authMember.uid
   }
     
