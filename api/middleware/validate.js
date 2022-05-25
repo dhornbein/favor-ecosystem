@@ -5,15 +5,26 @@ const { getInvites } = require('../model/auth-model')
 const { v4: uuidv4, validate: uuidValidate } = require('uuid')
 const bcrypt = require('bcryptjs');
 
-const defaultCreditLimit = 1000
+const defaultCreditLimit = 1000 // sets the default credit limit for new members
 const saltRounds = 12
 
+/**
+ * Function to normalize errors across the app
+ * @param {Object} data error Object
+ * @returns {Object} normalized error object
+ */
 exports.error = data => {
   return {
     error: data
   }
 }
 
+/**
+ * Function to normalize success responses across the app
+ * @param {Object} data The data from the request
+ * @param {Object} params optional params passed from the request  
+ * @returns {Object} Normalized success data
+ */
 exports.success = (data, { params, query, body, msg } = {} ) => {
   return {
     success: (msg) ? msg : true,
@@ -24,6 +35,9 @@ exports.success = (data, { params, query, body, msg } = {} ) => {
   }
 }
 
+/**
+ * Authenticate user
+ */
 exports.auth = [
   check('username')
     .trim()
@@ -40,6 +54,13 @@ exports.auth = [
   },
 ]
 
+/**
+ * Takes the username and password from request body and validates them against member list
+ * if there is a match, it will add the member to the request object
+ * @param {*} value 
+ * @param {*} request 
+ * @returns {Boolean} if the user and password are in the database
+ */
 async function validateAuth(value, { req }) {
 
   const { username, password } = req.body
@@ -61,7 +82,10 @@ async function validateAuth(value, { req }) {
 
 }
 
-exports.isBroker =  (req, res, next) => {
+/**
+ * Middleware to validate if the user is a broker
+ */
+exports.isBroker = (req, res, next) => {
   if (isBroker(req.user)) {
     next();
     return true
@@ -76,7 +100,9 @@ exports.isBroker =  (req, res, next) => {
   }))
 }
 
-// validate if request target matches token uid OR if token user is broker
+/**
+ * Validate if request target matches token uid OR if token user is broker
+ */
 exports.isSelfOrBroker = (req, res, next) => {
   const targetUid = req.params.uid
   const user = req.user
@@ -95,7 +121,9 @@ exports.isSelfOrBroker = (req, res, next) => {
   }))
 }
 
-// firstName, lastName, email, phone, favor, invitedByUid
+/**
+ * Validates invitation
+ */
 exports.invite = [
   check('firstName')
     .trim()
@@ -138,6 +166,9 @@ exports.invite = [
   },
 ]
 
+/**
+ * Validates transaction
+ */
 exports.transaction = [
   check('recipientUid')
     .trim()
@@ -204,6 +235,10 @@ exports.transaction = [
   },
 ];
 
+/**
+ * Validates transaction
+ * @returns {Boolean} if the transaction is valid
+ */
 async function validateTransaction(value, { req }) {
   // fetch members from database
   const members = await getMembers()
@@ -213,23 +248,28 @@ async function validateTransaction(value, { req }) {
   const recipient = members.find(member => member.uid === recipientUid)
   const broker = (brokerUid) ? members.find(member => member.uid === brokerUid) : null
 
+  // if payee and recipient are the same member, throw error
   if (payeeUid === recipientUid)
     throw new Error('Payee and recipient can not be the same!')
 
   // if payee or recipient is not found, throw error
   if (payee === undefined)
-    throw new Error('Payee does not match an existing a member');
+    throw new Error('Payee does not match an existing a member')
 
+  // if recipient is not found, throw error
   if (recipient === undefined)
-    throw new Error('Recipient does not match an existing a member');
+    throw new Error('Recipient does not match an existing a member')
 
+  // if broker is not found, throw error
   if (brokerUid && broker === undefined)
-    throw new Error('Broker does not match an existing a member');
-  // check if payeeUid and recipientUid are the same person
+    throw new Error('Broker does not match an existing a member')
 
   return true
 }
 
+/**
+ * Validates invite token
+ */
 exports.inviteToken = [
   check('token')
     .trim()
@@ -246,6 +286,11 @@ exports.inviteToken = [
   },
 ];
 
+/**
+ * Tests the token against the database
+ * throws error if it is not found or is claimed/revoked
+ * @param {String} value The token to validate
+ */
 async function validateInviteToken(value, { req }){
   // get list of invite tokens
   const invites = await getInvites()
@@ -258,6 +303,9 @@ async function validateInviteToken(value, { req }){
     throw new Error('Token has already been claimed')
 }
 
+/**
+ * Validates member creation
+ */
 exports.member = [
   check('brokerUid')
     .trim()
@@ -319,7 +367,11 @@ exports.member = [
   },
 ];
 
-// used with validate invite as well!
+/**
+ * Validates new member
+ * @param {Object} req request object 
+ * @returns 
+ */
 async function validateMember(value, { req }) {
   // fetch members from database
   const members = await getMembers()
@@ -353,6 +405,9 @@ async function validateMember(value, { req }) {
   return true
 }
 
+/**
+ * Validates member update
+ */
 exports.memberUpdate = [
   check('brokerUid')
     .trim()
@@ -416,6 +471,11 @@ exports.memberUpdate = [
   },
 ];
 
+/**
+ * Validates member update data
+ * @param {Object} req request object 
+ * @returns 
+ */
 async function validateMemberUpdate(value, { req }) {
   // fetch members from database
   const members = await getMembers()
@@ -442,11 +502,20 @@ async function validateMemberUpdate(value, { req }) {
   return true
 }
 
-
+/**
+ * Tests if user is a Broker
+ * @param {Object} user user object
+ * @returns {Boolean} true if user is a Broker
+ */
 function isBroker(user) {
   return user.roles && user.roles.includes('broker')
 }
 
+/**
+ * Takes Object and returns a new object with only the keys that are not blank
+ * @param {Object} obj object to filter
+ * @returns {Object} new filtered object
+ */
 function removeObjBlanks(obj) {
   return Object.keys(obj).reduce((acc, key) => {
     if (obj[key] !== '')
@@ -455,6 +524,13 @@ function removeObjBlanks(obj) {
   }, {})
 }
 
+/**
+ * Takes and Object and array of key names
+ * returns a new Object with only the keys that are in the schema array
+ * @param {Object} obj object to filter
+ * @param {Array} schema list of keys to keep
+ * @returns {Object} new filtered object
+ */
 function filterObjKeys(obj, schema) {
   return Object.keys(obj).reduce((acc, key) => {
     if (schema.includes(key))
@@ -463,6 +539,12 @@ function filterObjKeys(obj, schema) {
   }, {})
 }
 
+/**
+ * Takes and Object and Array of keys to delete from the object
+ * @param {Object} obj object to sanitize
+ * @param {Array} schema list of keys to remove
+ * @returns {Object} new sanitized object
+ */
 function removeObjKeys(obj, schema) {
   return Object.keys(obj).reduce((acc, key) => {
     if (!schema.includes(key))
@@ -471,11 +553,20 @@ function removeObjKeys(obj, schema) {
   }, {})
 }
 
-// round to 3 decimal places 0.001
+/**
+ * Takes number and rounds to 3 decimal places 0.001
+ * @param {Integer} value value to sanitize
+ * @returns {Integer} sanitized value
+ */
 function sanitizeFavor(value) {
   return Math.round(parseFloat(value) * 1000) / 1000
 }
 
+/**
+ * Takes a phone number and returns a normalized phone number
+ * @param {String} number phone number to normalize
+ * @returns {String} normalized phone number +1(555)555-5555
+ */
 function normalizePhone(number) {
   if (!number) return ''
   number = number.replace(/[^\d+]+/g, '')
@@ -485,6 +576,12 @@ function normalizePhone(number) {
   return number
 }
 
+/**
+ * Validates email addresses
+ * https://gist.github.com/webosk/5675087
+ * @param {String} email email address to validate
+ * @returns {Boolean} true if email is valid
+ */
 function validateEmail(email) {
   return email.match(
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/

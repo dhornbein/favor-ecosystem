@@ -2,6 +2,10 @@ const membersModel = require('../model/members-model')
 const { v4: uuidv4 } = require('uuid')
 const { error, success } = require('../middleware/validate')
 
+/**
+ * Gets all members
+ * TODO: implement query logic
+ */
 exports.get = async (req, res, next) => {
 
   try {
@@ -39,6 +43,9 @@ exports.get = async (req, res, next) => {
 
 }
 
+/**
+ * Creates a new member
+ */
 exports.post = async (req, res, next) => {
 
   const authMember = req.user;
@@ -69,6 +76,9 @@ exports.post = async (req, res, next) => {
   }
 }
 
+/**
+ * Updates a member
+ */
 exports.put = async (req, res, next) => {
   try {
     const uid = req.params.uid
@@ -84,6 +94,9 @@ exports.put = async (req, res, next) => {
   
 }
 
+/**
+ * Decodes invitation token
+ */
 exports.decodeInviteToken = async (req, res, next) => {
   const payload = req.body
   res.status(200).json(success( payload ))

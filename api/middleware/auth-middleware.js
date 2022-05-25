@@ -1,6 +1,9 @@
 const jwt = require('jsonwebtoken');
 const { error } = require('../middleware/validate')
 
+/**
+ * Message patterns
+ */
 const message = {
   noToken: {
     title: 'Not Authorized',
@@ -22,6 +25,9 @@ const message = {
   }
 }
 
+/**
+ * Tests if request header contains a valid token
+ */
 exports.requireToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -41,6 +47,9 @@ exports.requireToken = (req, res, next) => {
 
 }
 
+/**
+ * Checks if auth token is valid
+ */
 exports.checkToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -61,6 +70,9 @@ exports.checkToken = (req, res, next) => {
   
 }
 
+/**
+ * Checks for valid invitation token
+ */
 exports.requireInviteToken = (req, res, next) => {
   const token = req.params.token;
 

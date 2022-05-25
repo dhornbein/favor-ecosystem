@@ -3,6 +3,11 @@ const authModel = require('../model/auth-model')
 const { error, success } = require('../middleware/validate')
 var jwt = require('jsonwebtoken');
 
+/**
+ * Checks if the request user is present
+ * It will be validated at this point, if it is present
+ * we can assume it is authenticated
+ */
 exports.get = async (req, res, next) => {
 
   try {
@@ -22,6 +27,10 @@ exports.get = async (req, res, next) => {
   }
 
 }
+
+/**
+ * Searches member list for a member with the given UUID
+ */
 exports.getMember = async (req, res, next) => {
 
   try {
@@ -35,6 +44,11 @@ exports.getMember = async (req, res, next) => {
 
 }
 
+/**
+ * Claims invitation
+ * if there is a token and a new member has been created in the request
+ * take the new member UID and token to update the invitation in the database
+ */
 exports.claimInvite = async (req, res, next) => {
   const token = req.params.token
   
@@ -54,6 +68,9 @@ exports.claimInvite = async (req, res, next) => {
   }
 }
 
+/**
+ * Creates new invitation
+ */
 exports.invite = async (req, res, next) => {
   try {
     let expiresIn = '2m'
@@ -67,6 +84,7 @@ exports.invite = async (req, res, next) => {
         phone: req.body.phone,
       },
       invitedByUid: req.body.invitedByUid,
+      // TODO: add feature to accept a favor amount to attach to the invitation
       transaction: (req.body.favor) ? {
         payeeUid: req.body.invitedByUid,
         amount: req.body.favor,
@@ -102,6 +120,9 @@ exports.invite = async (req, res, next) => {
   }
 }
 
+/**
+ * creates auth token for user
+ */
 exports.post = async (req, res, next) => {
   try {
     let expiresIn = '14d'
