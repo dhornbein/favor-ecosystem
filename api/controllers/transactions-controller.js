@@ -3,6 +3,9 @@ const { v4: uuidv4 } = require('uuid')
 const { error, success } = require('../middleware/validate')
 const { query } = require('express')
 
+/**
+ * Gets all transactions
+ */
 exports.get = async (req, res, next) => {
 
   try {
@@ -46,6 +49,9 @@ exports.get = async (req, res, next) => {
   
 }
 
+/**
+ * Creates a new transaction
+ */
 exports.post = async (req, res, next) => {
 
   const authMember = req.user;
