@@ -57,7 +57,7 @@ export default {
   },
   computed: {
     tokenUrl() {
-      return `${this.$axios.defaults.baseURL}/join/${this.$route.params.token}`;
+      return `${this.$axios.defaults.baseURL}join/${this.$route.params.token}`;
     },
     // showCopy() {
     //   return navigator && !!navigator.clipboard
