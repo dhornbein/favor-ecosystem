@@ -153,9 +153,9 @@ exports.invite = [
   check('invitedByUid')
     .not()
     .isEmpty()
-    .withMessage('Must include a Uid of the inviting member')
+    .withMessage('Must include a Uid of the inviting member').bail()
     .custom(uuidValidate)
-    .withMessage('Invalid Uid')
+    .withMessage('Invalid Uid').bail()
     .custom((value, { req }) => req.user.uid == value || req.user.roles['broker'] ) // check that the auth token's owner is the same as the invitedByID
     .withMessage('Auth token Uid must match invitedByUid!'),
   (req, res, next) => {
