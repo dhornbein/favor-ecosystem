@@ -19,7 +19,10 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-    ]
+    ],
+    bodyAttrs: {
+      class: process.env.NODE_ENV === 'dev' ? 'development' : 'production',
+    }
   },
 
   /*
